@@ -1,6 +1,6 @@
 ﻿# Life Is Strange: True Colors Ultrawide Fix
  
- This tool will enable Life Is Strange: True Colors to support your ultrawide (and super ultrawide!) monitors.
+ This tool will enable Life Is Strange: True Colors to support your ultrawide (and super ultrawide!) monitors. The menus are not rendered in ultrawide, so you will not see the change until you enter the game.
  
  Download the release [here.](https://github.com/ibarczewski/truecolors-ultrawide-fix/releases) 
  
@@ -23,6 +23,7 @@
 * 7680x1440
 
 # Known Issues:
+* When loading in a new scene, the sides of the scene will display, but the middle will be a black box as that part of the scene fades in. Not sure if I can fix this, but it's a relatively small issue.
 * There is no error handling. If you do something wrong, the application will crash.
 * You will have to rerun this each time the game is updated. The updates from Steam overwrite the binary file.
 * You cannot revert this change, so either have a backup prepared or delete the exe and repair the game through Steam.
