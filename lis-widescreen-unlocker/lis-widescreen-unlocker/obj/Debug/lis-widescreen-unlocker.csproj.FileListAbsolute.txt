@@ -1,0 +1,10 @@
+C:\workspace\lis-widescreen-unlocker\lis-widescreen-unlocker\lis-widescreen-unlocker\bin\Debug\lis-widescreen-unlocker.exe.config
+C:\workspace\lis-widescreen-unlocker\lis-widescreen-unlocker\lis-widescreen-unlocker\bin\Debug\lis-widescreen-unlocker.exe
+C:\workspace\lis-widescreen-unlocker\lis-widescreen-unlocker\lis-widescreen-unlocker\bin\Debug\lis-widescreen-unlocker.pdb
+C:\workspace\lis-widescreen-unlocker\lis-widescreen-unlocker\lis-widescreen-unlocker\obj\Debug\lis-widescreen-unlocker.csproj.AssemblyReference.cache
+C:\workspace\lis-widescreen-unlocker\lis-widescreen-unlocker\lis-widescreen-unlocker\obj\Debug\lis_widescreen_unlocker.Form1.resources
+C:\workspace\lis-widescreen-unlocker\lis-widescreen-unlocker\lis-widescreen-unlocker\obj\Debug\lis_widescreen_unlocker.Properties.Resources.resources
+C:\workspace\lis-widescreen-unlocker\lis-widescreen-unlocker\lis-widescreen-unlocker\obj\Debug\lis-widescreen-unlocker.csproj.GenerateResource.cache
+C:\workspace\lis-widescreen-unlocker\lis-widescreen-unlocker\lis-widescreen-unlocker\obj\Debug\lis-widescreen-unlocker.csproj.CoreCompileInputs.cache
+C:\workspace\lis-widescreen-unlocker\lis-widescreen-unlocker\lis-widescreen-unlocker\obj\Debug\lis-widescreen-unlocker.exe
+C:\workspace\lis-widescreen-unlocker\lis-widescreen-unlocker\lis-widescreen-unlocker\obj\Debug\lis-widescreen-unlocker.pdb
