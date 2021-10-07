@@ -9,7 +9,7 @@
  2) Browse to the executable. This is found at <InstallPath>/LifeIsStrange3/Siren/Binaries/Win64/Siren-Win64-Shipping.exe - MAKE A BACKUP OF THIS.
  3) Choose whether or not to apply the field of vision fix (fixes the FoV for ultrawide monitors - recommended and selected by default) and click patch.
  
- Supported Resolutions:
+ # Supported Resolutions:
  
 * 1440x900
 * 1280x1024
@@ -22,7 +22,7 @@
 * 5292x1050
 * 7680x1440
 
-Known Issues:
+# Known Issues:
 * There is no error handling. If you do something wrong, the application will crash.
 * You will have to rerun this each time the game is updated. The updates from Steam overwrite the binary file.
 * You cannot revert this change, so either have a backup prepared or delete the exe and repair the game through Steam.
