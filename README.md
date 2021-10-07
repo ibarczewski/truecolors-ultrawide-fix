@@ -4,6 +4,8 @@
  
  Download the release [here.](https://github.com/ibarczewski/truecolors-ultrawide-fix/releases) 
  
+ ![Ultrawide preview](https://re-actor.net/wp-content/uploads/2021/09/6-5-1024x429.jpg)
+ 
  # Steps:
  1) Pick a resolution. This will be the resolution that the game will use moving forward.
  2) Browse to the executable. This is found at <InstallPath>/LifeIsStrange3/Siren/Binaries/Win64/Siren-Win64-Shipping.exe - MAKE A BACKUP OF THIS.
