@@ -41,3 +41,5 @@ config.json
 
 #DS Store
 .DS_Store
+
+dist

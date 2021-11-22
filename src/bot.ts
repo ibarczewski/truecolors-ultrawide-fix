@@ -1,28 +1,35 @@
-//Webex Bot Starter - featuring the webex-node-bot-framework - https://www.npmjs.com/package/webex-node-bot-framework
+import Framework from 'webex-node-bot-framework';
+import webhook from 'webex-node-bot-framework/webhook';
+import express from 'express';
+import config from '../config.json';
+import {
+  IssueAssignedNotification,
+  IssueAssignedNotificationData
+} from './cards/IssueAssignedNotification/IssueAssignedNotification';
 
-var framework = require("webex-node-bot-framework");
-var webhook = require("webex-node-bot-framework/webhook");
-var express = require("express");
-var bodyParser = require("body-parser");
-var app = express();
-app.use(bodyParser.json());
-app.use(express.static("images"));
-const config = require("./config.json");
+export type Bot = {
+  sendCard(template: string): () => void;
+};
+
+const app = express();
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // init framework
-var framework = new framework(config);
+const framework = new Framework(config);
 framework.start();
 
-console.log("Starting framework, please wait...");
+console.log('Starting framework, please wait....');
 
-framework.on("initialized", function () {
-  console.log("framework is all fired up! [Press CTRL-C to quit]");
+framework.on('initialized', () => {
+  console.log('framework is all fired up! [Press CTRL-C to quit]');
 });
 
 // A spawn event is generated when the framework finds a space with your bot in it
 // If actorId is set, it means that user has just added your bot to a new space
 // If not, the framework has discovered your bot in an existing space
-framework.on("spawn", (bot, id, actorId) => {
+framework.on('spawn', (bot, id, actorId) => {
   if (!actorId) {
     // don't say anything here or your bot's spaces will get
     // spammed every time your server is restarted
@@ -32,8 +39,8 @@ framework.on("spawn", (bot, id, actorId) => {
   } else {
     // When actorId is present it means someone added your bot got added to a new space
     // Lets find out more about them..
-    var msg =
-      "You can say `help` to get the list of words I am able to respond to.";
+    let msg =
+      'You can say `help` to get the list of words I am able to respond to.';
     bot.webex.people
       .get(actorId)
       .then((user) => {
@@ -48,35 +55,45 @@ framework.on("spawn", (bot, id, actorId) => {
       .finally(() => {
         // Say hello, and tell users what you do!
         if (bot.isDirect) {
-          bot.say("markdown", msg);
+          bot.say('markdown', msg);
         } else {
-          let botName = bot.person.displayName;
+          const botName = bot.person.displayName;
           msg += `\n\nDon't forget, in order for me to see your messages in this group space, be sure to *@mention* ${botName}.`;
-          bot.say("markdown", msg);
+          bot.say('markdown', msg);
         }
       });
   }
 });
 
-//Process incoming messages
+// Process incoming messages
 
 let responded = false;
 
-framework.hears("get webhook url", function (bot, trigger) {
+framework.hears('get webhook url', (bot) => {
   try {
     responded = true;
-    bot.say("your webhook url is " + config.webhookUrl + "/" + bot.room.id);
+    bot.say(`your webhook url is ${config.webhookUrl}/${bot.room.id}`);
   } catch (error) {
     console.log(error);
   }
 });
+
+function sendHelp(bot) {
+  bot.say(
+    'markdown',
+    'These are the commands I can respond to:',
+    '\n\n ' +
+      '1. **get webhook url**   (get your webhook url) \n' +
+      '2. **help** (what you are reading now)'
+  );
+}
 
 /* On mention with command
 ex User enters @botname help, the bot will write back in markdown
 */
 framework.hears(
   /help|what can i (do|say)|what (can|do) you do/i,
-  function (bot, trigger) {
+  (bot, trigger) => {
     console.log(`someone needs help! They asked ${trigger.text}`);
     responded = true;
     bot
@@ -89,7 +106,7 @@ framework.hears(
 /* On mention with unexpected bot command
    Its a good practice is to gracefully handle unexpected input
 */
-framework.hears(/.*/, function (bot, trigger) {
+framework.hears(/.*/, (bot, trigger) => {
   // This will fire for any input so only respond if we haven't already
   if (!responded) {
     console.log(`catch-all handler fired for user input: ${trigger.text}`);
@@ -103,45 +120,41 @@ framework.hears(/.*/, function (bot, trigger) {
   responded = false;
 });
 
-function sendHelp(bot) {
-  bot.say(
-    "markdown",
-    "These are the commands I can respond to:",
-    "\n\n " +
-      "1. **get webhook url**   (get your webhook url) \n" +
-      "2. **help** (what you are reading now)"
-  );
-}
-
-//Server config & housekeeping
+// Server config & housekeeping
 // Health Check
-app.get("/", function (req, res) {
+app.get('/', (req, res) => {
   res.send(`I'm alive.`);
 });
 
-app.post("/:roomId", (req, res) => {
-  const bot = framework.getBotByRoomId(req.params.roomId);
+const issueAssignedNotification = new IssueAssignedNotification();
+
+app.post('/:roomId', (req, res) => {
+  const bot: Bot = framework.getBotByRoomId(req.params.roomId);
   if (bot) {
-    // TODO: handle github payloads
-    bot.say(req.body.action + " happened in " + req.body.repository.html_url);
+    try {
+      const { issue, sender, assignee, repository } = req.body;
+      issueAssignedNotification.send(bot, {
+        assignedByName: sender.login,
+        assignedByURL: sender.html_url,
+        assigneeName: assignee.login,
+        assigneeURL: assignee.html_url,
+        issueNumber: issue.number,
+        issueTitle: issue.title,
+        issueURL: issue.html_url,
+        repositoryURL: repository.html_url,
+        repositoryName: repository.name
+      } as IssueAssignedNotificationData);
+    } catch (e) {
+      console.log(e);
+    }
   } else {
-    console.log("could not find bot", roomId);
+    console.log('could not find bot');
   }
 
   res.end();
 });
 
-app.post("/", webhook(framework));
+app.post('/', webhook(framework));
 
-var server = app.listen(config.port, function () {
-  framework.debug("framework listening on port %s", config.port);
-});
-
-// gracefully shutdown (ctrl-c)
-process.on("SIGINT", function () {
-  framework.debug("stoppping...");
-  server.close();
-  framework.stop().then(function () {
-    process.exit();
-  });
-});
+export default app;
+export { framework };

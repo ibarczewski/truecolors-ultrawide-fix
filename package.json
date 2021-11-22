@@ -1,33 +1,54 @@
 {
-  "name": "Webex-Bot-Starter",
-  "version": "1.0.0",
-  "description": "Starter template for creating a Webex Teams bot",
-  "main": "index.js",
+  "name": "webex-bot-github-enterprise",
+  "version": "0.0.1",
+  "description": "Github Enterprise Webex bot",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "npm install && nodemon --use_strict index.js"
+    "start": "node dist/src/index.js",
+    "start-qa": "concurrently \"npm:start\" \"npx localtunnel --port 7001 --subdomain wwt-githubqa\"",
+    "build": "rm -rf dist && tsc",
+    "test": "jest",
+    "dev": "nodemon -e ts --exec \"npm run build && npm run start\"",
+    "lint": "eslint --fix src"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tbd/webexbotstarter.git"
+    "url": "git+https://sqbu-github.cisco.com/ibarczew/github-bot.git"
   },
   "keywords": [
     "Cisco",
     "Webex",
     "webex-bot-framework"
   ],
-  "author": "Phil Bellanti",
+  "author": "WWT Integrations team",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/tbd/webexbotstarter/issues"
+    "url": "https://sqbu-github.cisco.com/ibarczew/github-bot/issues"
   },
-  "homepage": "https://github.com/tbd/webexbotstarter#readme",
+  "homepage": "https://sqbu-github.cisco.com/ibarczew/github-bot#readme",
   "dependencies": {
-    "body-parser": "^1.15.2",
+    "eslint-plugin-jest": "^25.2.4",
     "express": "^4.14.0",
+    "json-templates": "^4.2.0",
     "webex-node-bot-framework": "^2.3.1"
   },
   "devDependencies": {
-    "crypto": "^1.0.1",
-    "nodemon": "^2.0.15"
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/node": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "@types/jest": "^27.0.2",
+    "babel-jest": "^27.3.1",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.3.1",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.4.1",
+    "supertest": "^6.1.6",
+    "ts-jest": "^27.0.7",
+    "typescript": "^4.4.4"
   }
 }
