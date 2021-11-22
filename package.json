@@ -4,12 +4,15 @@
   "description": "Github Enterprise Webex bot",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node dist/src/index.js",
+    "start": "node dist/index.js",
     "start-qa": "concurrently \"npm:start\" \"npx localtunnel --port 7001 --subdomain wwt-githubqa\"",
     "build": "rm -rf dist && tsc",
     "test": "jest",
     "dev": "nodemon -e ts --exec \"npm run build && npm run start\"",
-    "lint": "eslint --fix src"
+    "lint": "eslint --fix src",
+    "deploy:ec2:dev": "sh ./deploy/ec2/deploy_ec2.sh dev",
+    "deploy:ec2:qa": "sh ./deploy/ec2/deploy_ec2.sh qa",
+    "bundle": "cp package.json dist/package.json && cp package-lock.json dist/package-lock.json && cd dist && npm ci --production"
   },
   "repository": {
     "type": "git",
@@ -27,6 +30,7 @@
   },
   "homepage": "https://sqbu-github.cisco.com/ibarczew/github-bot#readme",
   "dependencies": {
+    "dotenv": "^10.0.0",
     "eslint-plugin-jest": "^25.2.4",
     "express": "^4.14.0",
     "json-templates": "^4.2.0",

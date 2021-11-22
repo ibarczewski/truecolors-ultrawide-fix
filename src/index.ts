@@ -1,8 +1,8 @@
+require('dotenv').config();
 import app, { framework } from './bot';
-import config from '../config.json';
 
-const server = app.listen(config.port, () => {
-  framework.debug('framework listening on port %s', config.port);
+const server = app.listen(process.env.PORT, () => {
+  framework.debug('framework listening on port %s', process.env.PORT);
 });
 
 // gracefully shutdown (ctrl-c)

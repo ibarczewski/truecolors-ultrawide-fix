@@ -97,8 +97,8 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "outDir": "dist/",
-    "sourceMap": true
+    "sourceMap": true,
+    "rootDir": "src/"
   },
-  "exclude": ["**/*.test.ts"],
-  "include": ["config.json", "src/"]
+  "exclude": ["**/*.test.ts"]
 }
