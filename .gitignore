@@ -43,3 +43,6 @@ config.json
 .DS_Store
 
 dist
+*.pem
+
+.env

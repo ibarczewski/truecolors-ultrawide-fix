@@ -1,7 +1,6 @@
 import Framework from 'webex-node-bot-framework';
 import webhook from 'webex-node-bot-framework/webhook';
 import express from 'express';
-import config from '../config.json';
 import {
   IssueAssignedNotification,
   IssueAssignedNotificationData
@@ -17,7 +16,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // init framework
-const framework = new Framework(config);
+const framework = new Framework({
+  webhookUrl: process.env.FRAMEWORK_WEBHOOK_URL,
+  token: process.env.FRAMEWORK_TOKEN,
+  port: process.env.PORT
+});
 framework.start();
 
 console.log('Starting framework, please wait....');
@@ -72,7 +75,9 @@ let responded = false;
 framework.hears('get webhook url', (bot) => {
   try {
     responded = true;
-    bot.say(`your webhook url is ${config.webhookUrl}/${bot.room.id}`);
+    bot.say(
+      `your webhook url is ${process.env.FRAMEWORK_WEBHOOK_URL}/${bot.room.id}`
+    );
   } catch (error) {
     console.log(error);
   }

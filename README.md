@@ -15,13 +15,13 @@
  
 3. Copy the ip address displayed in the localtunnel window, ie: https://[yoursubdomain].local.lt
 
-4. Copy the `config-template.json` file to a file called `config.json`
+4. Copy the `.env.example` file to a file called `.env`
 
-5. Edit  `config.json` with the following values:
+5. Edit `.env` with the following values:
 
-* token - Set this to the token for your bot that you got in step 1
-* port - Set this to the port you set when you started localtunnel in step 3 (ie: 7001)
-* webhookUrl - Set this to the ip address that you copied in step 4
+* FRAMEWORK_TOKEN - Set this to the token for your bot that you got in step 1
+* PORT - Set this to the port you set when you started localtunnel in step 3 (ie: 7001)
+* FRAMEWORK_WEBHOOK_URL - Set this to the ip address that you copied in step 4
 
 6. Turn on your bot server with ```npm start```
 
@@ -32,3 +32,20 @@
 9. `@[yourbotname] get webhook url` in the space to get the webhook url
 
 10. set that webhook url in github enterprise
+
+
+## Deploy to vm (ec2)
+
+- copy Bot-PoC.pem to deploy/ec2 folder
+- git pull latest code from master
+- run `nvm use` to set your runtime
+- `npm run deploy:ec2:dev` or `npm run deploy:ec2:qa
+
+The ec2 is a vm running pm2 and the localtunnel services should be running.
+- qa domain is ghbotqa.loca.lt port is 8001
+- dev domain is ghbotdev.loca.lt port is 7001
+
+ssh to vm with `ssh -i ./deploy/ec2/Bot-PoC.pem ec2-user@ec2-18-235-1-183.compute-1.amazonaws.com`
+### Some helpful commands when ssh'd into the vm
+- `pm2 list` -> get all the running services
+- `pm2 restart github-bot-dev-localtunnel` -> restarts the localtunnel service (only needed if something is not working)
