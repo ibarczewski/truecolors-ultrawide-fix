@@ -5,7 +5,7 @@ import config from '../config.json';
 import {
   IssueAssignedNotification,
   IssueAssignedNotificationData
-} from './cards/IssueAssignedNotification';
+} from './cards/IssueAssignedNotification/IssueAssignedNotification';
 
 export type Bot = {
   sendCard(template: string): () => void;
