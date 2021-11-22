@@ -12,7 +12,7 @@
     "lint": "eslint --fix src",
     "deploy:ec2:dev": "sh ./deploy/ec2/deploy_ec2.sh dev",
     "deploy:ec2:qa": "sh ./deploy/ec2/deploy_ec2.sh qa",
-    "postbuild": "cp package.json dist/package.json && cp package-lock.json dist/package-lock.json && cd dist && npm ci --production"
+    "bundle": "cp package.json dist/package.json && cp package-lock.json dist/package-lock.json && cd dist && npm ci --production"
   },
   "repository": {
     "type": "git",

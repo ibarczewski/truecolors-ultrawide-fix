@@ -8,6 +8,7 @@ fi
 
 npm install
 npm run build
+npm run bundle
 rsync -azp --delete --progress -e 'ssh -i ./deploy/ec2/Bot-PoC.pem' ./dist/ ec2-user@ec2-18-235-1-183.compute-1.amazonaws.com:/home/ec2-user/github-bot/$1 --exclude=.env 
 
 # restart if running, otherwise start it
