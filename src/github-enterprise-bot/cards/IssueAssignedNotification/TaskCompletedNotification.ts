@@ -5,10 +5,17 @@ export type Metadata = {
   value: string;
 };
 
+export type Action = {
+  type: string;
+  title: string;
+  url: string;
+};
+
 export type TaskCompletedNotificationData = {
   projectName: string;
   title: string;
   metadata: Metadata[];
+  actions?: Action[];
 };
 
 export function sendTaskCompletedNotification(
@@ -77,7 +84,19 @@ export function sendTaskCompletedNotification(
           spacing: 'Padding',
           horizontalAlignment: 'Center'
         }
-      ])
+      ]),
+      ...(data.actions?.length > 0
+        ? [
+            {
+              type: 'ActionSet',
+              actions: data.actions.map(({ type, title, url }) => ({
+                type,
+                title,
+                url
+              }))
+            }
+          ]
+        : [])
     ],
     $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',
     version: '1.2'

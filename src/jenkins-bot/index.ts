@@ -6,6 +6,10 @@ import {
   JobCompletedNotificationData
 } from './JobCompletedNotification/JobCompletedNotification';
 import fetch from 'node-fetch';
+import {
+  sendTaskCompletedNotification,
+  TaskCompletedNotificationData
+} from '../github-enterprise-bot/cards/IssueAssignedNotification/TaskCompletedNotification';
 
 const router = Router();
 
@@ -40,20 +44,29 @@ framework.hears('demo job completed', (bot) => {
   }
 });
 
-const jobCompletedNotification = new JobCompletedNotification();
-
 router.post('/:roomId', (req, res) => {
   const bot: Bot = framework.getBotByRoomId(req.params.roomId);
   if (bot) {
     try {
       const { name, build } = req.body;
-      jobCompletedNotification.send(bot, {
-        buildUrl: build.full_url,
-        jobName: name,
-        number: build.number,
-        phase: build.phase,
-        status: build.status
-      } as JobCompletedNotificationData);
+      sendTaskCompletedNotification(bot, {
+        projectName: name,
+        title: `Job ${build.phase}`,
+        metadata: [
+          {
+            key: 'Build number:',
+            value: `[${build.number}](${build.full_url})`
+          },
+          { key: 'Status:', value: build.status }
+        ],
+        actions: [
+          {
+            type: 'Action.OpenUrl',
+            title: 'Open in Jenkins',
+            url: build.full_url
+          }
+        ]
+      } as TaskCompletedNotificationData);
     } catch (e) {
       console.log(e);
     }

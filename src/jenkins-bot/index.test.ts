@@ -15,7 +15,7 @@ jest.mock('webex-node-bot-framework', () =>
   }))
 );
 
-test('when issue is assigned, posts a card', async () => {
+test('when task is completed, posts a card', async () => {
   await request(app)
     .post('/jenkins/foo')
     .send({
@@ -56,7 +56,7 @@ test('when issue is assigned, posts a card', async () => {
                 Object {
                   "items": Array [
                     Object {
-                      "color": "Light",
+                      "color": "Accent",
                       "text": "asgard",
                       "type": "TextBlock",
                       "weight": "Lighter",
@@ -91,7 +91,6 @@ test('when issue is assigned, posts a card', async () => {
                       "spacing": "Small",
                       "text": "Status:",
                       "type": "TextBlock",
-                      "weight": "Lighter",
                     },
                   ],
                   "type": "Column",
@@ -109,7 +108,6 @@ test('when issue is assigned, posts a card', async () => {
                       "spacing": "Small",
                       "text": "SUCCESS",
                       "type": "TextBlock",
-                      "weight": "Lighter",
                     },
                   ],
                   "type": "Column",
