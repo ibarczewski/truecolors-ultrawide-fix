@@ -1,5 +1,6 @@
 import request from 'supertest';
-import botApp from './bot';
+
+import app from '../app';
 
 const mockBot = {
   sendCard: jest.fn()
@@ -15,8 +16,8 @@ jest.mock('webex-node-bot-framework', () =>
 );
 
 test('when issue is assigned, posts a card', async () => {
-  await request(botApp)
-    .post('/foo')
+  await request(app)
+    .post('/github/foo')
     .send({
       issue: {
         title: 'fooTitle',

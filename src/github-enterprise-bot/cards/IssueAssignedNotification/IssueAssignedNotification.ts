@@ -1,4 +1,4 @@
-import { BaseCard } from '../BaseCard';
+import { BaseCard } from '../../../common/BaseCard';
 import IssueAssignedNotificationTemplate from './IssueAssignedNotificationTemplate.json';
 
 export type IssueAssignedNotificationData = {

@@ -1,6 +1,5 @@
 import parse from 'json-templates';
-import { Bot } from '../bot';
-
+import { Bot } from './Bot';
 export class BaseCard<DataType> {
   private buildCard;
   protected static template;
