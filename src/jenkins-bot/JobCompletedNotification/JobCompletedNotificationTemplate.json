@@ -1,0 +1,77 @@
+{
+    "type": "AdaptiveCard",
+    "body": [{
+            "type": "ColumnSet",
+            "columns": [{
+                "type": "Column",
+                "items": [{
+                        "type": "TextBlock",
+                        "text": "{{jobName}}",
+                        "weight": "Lighter",
+                        "color": "Light"
+                    },
+                    {
+                        "type": "TextBlock",
+                        "weight": "Bolder",
+                        "text": "Job {{phase}}",
+                        "wrap": true,
+                        "color": "Light",
+                        "size": "Large",
+                        "spacing": "Small"
+                    }
+                ],
+                "width": "stretch"
+            }]
+        },
+        {
+            "type": "ColumnSet",
+            "columns": [{
+                    "type": "Column",
+                    "width": 35,
+                    "items": [{
+                            "type": "TextBlock",
+                            "text": "Build number:",
+                            "color": "Light"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "Status:",
+                            "weight": "Lighter",
+                            "color": "Light",
+                            "spacing": "Small"
+                        }
+                    ]
+                },
+                {
+                    "type": "Column",
+                    "width": 65,
+                    "items": [{
+                            "type": "TextBlock",
+                            "text": "[{{number}}]({{buildUrl}})",
+                            "color": "Light"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "{{status}}",
+                            "color": "Light",
+                            "weight": "Lighter",
+                            "spacing": "Small"
+                        }
+                    ]
+                }
+            ],
+            "spacing": "Padding",
+            "horizontalAlignment": "Center"
+        },
+        {
+            "type": "ActionSet",
+            "actions": [{
+                "type": "Action.OpenUrl",
+                "title": "Open in Jenkins",
+                "url": "{{buildUrl}}"
+            }]
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.2"
+}
