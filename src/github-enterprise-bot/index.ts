@@ -1,12 +1,10 @@
 import { Router } from 'express';
-import {
-  IssueAssignedNotification,
-  IssueAssignedNotificationData
-} from './cards/IssueAssignedNotification/IssueAssignedNotification';
 import { BotFramework } from '../common/BotFramework';
 import { Bot } from '../common/Bot';
-
-// import { commonHelpFunction } from '../common/handlers';
+import {
+  sendTaskCompletedNotification,
+  TaskCompletedNotificationData
+} from './cards/IssueAssignedNotification/TaskCompletedNotification';
 
 const router = Router();
 
@@ -33,24 +31,26 @@ framework.hears('get webhook url', (bot) => {
   }
 });
 
-const issueAssignedNotification = new IssueAssignedNotification();
-
 router.post('/:roomId', (req, res) => {
   const bot: Bot = framework.getBotByRoomId(req.params.roomId);
   if (bot) {
     try {
       const { issue, sender, assignee, repository } = req.body;
-      issueAssignedNotification.send(bot, {
-        assignedByName: sender.login,
-        assignedByURL: sender.html_url,
-        assigneeName: assignee.login,
-        assigneeURL: assignee.html_url,
-        issueNumber: issue.number,
-        issueTitle: issue.title,
-        issueURL: issue.html_url,
-        repositoryURL: repository.html_url,
-        repositoryName: repository.name
-      } as IssueAssignedNotificationData);
+
+      sendTaskCompletedNotification(bot, {
+        projectName: `[${repository.name}](${repository.html_url})`,
+        title: `Issue assigned to [${assignee.login}](${assignee.html_url})`,
+        metadata: [
+          {
+            key: 'Assigned by:',
+            value: `[${sender.login}](${sender.html_url})`
+          },
+          {
+            key: 'Issue:',
+            value: `[#${issue.number} - ${issue.title}](${issue.html_url})`
+          }
+        ]
+      } as TaskCompletedNotificationData);
     } catch (e) {
       console.log(e);
     }
