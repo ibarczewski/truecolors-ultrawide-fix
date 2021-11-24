@@ -7,7 +7,7 @@ class FrameworksCollection {
     return this.value;
   }
   add(framework) {
-    this.value = [...this.value, framework];
+    this.value.push(framework);
   }
 }
 
