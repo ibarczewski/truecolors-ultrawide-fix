@@ -1,15 +1,17 @@
 import Framework from 'webex-node-bot-framework';
 import webhook from 'webex-node-bot-framework/webhook';
 import { Router } from 'express';
-// todo - this should probably be a constructor argument
-import { frameworks } from '../frameworks';
-
+import frameworksCollection from '../frameworksCollection';
 export class BotFramework {
-  private framework;
-  private responded;
-  private slug;
-  constructor(slug: string, token: string, router: Router) {
+  private framework: Framework;
+  private responded: boolean;
+  private slug: string;
+  private commands: string[];
+  public router: Router;
+  constructor(slug: string, token: string) {
+    this.router = Router();
     this.slug = slug;
+    this.commands = [];
     this.responded = false;
     this.framework = new Framework({
       webhookUrl: process.env.FRAMEWORK_WEBHOOK_URL + '/' + slug,
@@ -17,15 +19,12 @@ export class BotFramework {
       port: process.env.PORT
     });
 
-    frameworks.add(this.framework);
+    frameworksCollection.add(this.framework);
 
-    this.framework.start();
-
-    this.catchAll();
     this.initializer();
 
-    router.post('/', webhook(this.framework));
-    router.get('/', (req, res) => {
+    this.router.post('/', webhook(this.framework));
+    this.router.get('/', (req, res) => {
       res.send(this.slug + 'is alive.');
     });
   }
@@ -40,6 +39,11 @@ export class BotFramework {
     });
   }
 
+  public start() {
+    this.catchAll();
+    this.framework.start();
+  }
+
   private catchAll() {
     this.framework.hears(/.*/, (bot, trigger) => {
       // This will fire for any input so only respond if we haven't already
@@ -47,7 +51,14 @@ export class BotFramework {
         console.log(`catch-all handler fired for user input: ${trigger.text}`);
         bot
           .say(`Sorry, I don't know how to respond to "${trigger.text}"`)
-          // .then(() => sendHelp(bot))
+          .then(() =>
+            bot.say(
+              'markdown',
+              `but I do know how to respond to \n${this.commands
+                .map((command) => `* ${command}\n`)
+                .join('')}`
+            )
+          )
           .catch((e) =>
             console.error(
               `Problem in the unexepected command hander: ${e.message}`
@@ -58,11 +69,17 @@ export class BotFramework {
     });
   }
 
-  public hears(...args) {
-    this.responded = true;
-    this.framework.hears(...args);
+  public hears(command, fn, ...rest) {
+    this.commands.push(command);
+    this.framework.hears(
+      command,
+      (...args) => {
+        this.responded = true;
+        fn(...args);
+      },
+      ...rest
+    );
   }
-
   public getBotByRoomId(...args) {
     return this.framework.getBotByRoomId(...args);
   }
@@ -71,7 +88,6 @@ export class BotFramework {
     this.framework.debug(...args);
   }
   public stop() {
-    console.log('stopping');
     return this.framework.stop();
   }
 }

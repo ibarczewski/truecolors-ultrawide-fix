@@ -1,4 +1,4 @@
-export default class FrameworksCollection {
+class FrameworksCollection {
   private value;
   constructor(value = []) {
     this.value = value;
@@ -10,3 +10,5 @@ export default class FrameworksCollection {
     this.value = [...this.value, framework];
   }
 }
+
+export default new FrameworksCollection();

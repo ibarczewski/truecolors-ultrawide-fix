@@ -1,4 +1,3 @@
-import { Router } from 'express';
 import { Bot } from '../common/Bot';
 import { BotFramework } from '../common/BotFramework';
 import fetch from 'node-fetch';
@@ -8,13 +7,7 @@ import {
 } from '../common/templates/TaskCreated';
 import { WebexCard } from '../common/WebexCard';
 
-const router = Router();
-
-const framework = new BotFramework(
-  'jenkins',
-  process.env.JENKINS_BOT_TOKEN,
-  router
-);
+const framework = new BotFramework('jenkins', process.env.JENKINS_BOT_TOKEN);
 
 framework.hears('hello', (bot) => {
   bot.say('world');
@@ -41,7 +34,7 @@ framework.hears('demo job completed', (bot) => {
   }
 });
 
-router.post('/:roomId', (req, res) => {
+framework.router.post('/:roomId', (req, res) => {
   const bot: Bot = framework.getBotByRoomId(req.params.roomId);
   if (bot) {
     try {
@@ -80,4 +73,4 @@ router.post('/:roomId', (req, res) => {
   res.end();
 });
 
-export { router, framework };
+export default framework;

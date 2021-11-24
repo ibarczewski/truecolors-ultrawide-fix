@@ -1,4 +1,3 @@
-import { Router } from 'express';
 import { BotFramework } from '../common/BotFramework';
 import { Bot } from '../common/Bot';
 import {
@@ -7,16 +6,7 @@ import {
 } from '../common/templates/TaskCreated';
 import { WebexCard } from '../common/WebexCard';
 
-const router = Router();
-
-const framework = new BotFramework(
-  'github',
-  process.env.GITHUB_BOT_TOKEN,
-  router
-);
-
-// example shared handler
-// framework.use(commonHelpFunction('please'));
+const framework = new BotFramework('github', process.env.GITHUB_BOT_TOKEN);
 
 framework.hears('hello', (bot) => {
   bot.say('world');
@@ -32,7 +22,7 @@ framework.hears('get webhook url', (bot) => {
   }
 });
 
-router.post('/:roomId', (req, res) => {
+framework.router.post('/:roomId', (req, res) => {
   const bot: Bot = framework.getBotByRoomId(req.params.roomId);
   if (bot) {
     try {
@@ -68,4 +58,4 @@ router.post('/:roomId', (req, res) => {
   res.end();
 });
 
-export { router };
+export default framework;

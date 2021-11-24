@@ -1,12 +1,15 @@
 import express from 'express';
-import { router as jenkinsBot } from './jenkins-bot';
-import { router as githubBot } from './github-enterprise-bot';
+import jenkinsBot from './jenkins-bot';
+import githubBot from './github-enterprise-bot';
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use('/jenkins', jenkinsBot);
-app.use('/github', githubBot);
+jenkinsBot.start();
+githubBot.start();
+
+app.use('/jenkins', jenkinsBot.router);
+app.use('/github', githubBot.router);
 
 export default app;
