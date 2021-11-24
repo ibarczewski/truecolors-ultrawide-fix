@@ -12,6 +12,7 @@
     "lint": "eslint --fix src",
     "deploy:ec2:dev": "sh ./deploy/ec2/deploy_ec2.sh dev",
     "deploy:ec2:qa": "sh ./deploy/ec2/deploy_ec2.sh qa",
+    "deploy:ec2:demo": "sh ./deploy/ec2/deploy_ec2.sh demo",
     "bundle": "cp package.json dist/package.json && cp package-lock.json dist/package-lock.json && cd dist && npm ci --production",
     "preinstall": "source $HOME/.nvm/nvm.sh; nvm use"
   },
