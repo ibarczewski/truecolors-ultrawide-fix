@@ -12,7 +12,8 @@
     "lint": "eslint --fix src",
     "deploy:ec2:dev": "sh ./deploy/ec2/deploy_ec2.sh dev",
     "deploy:ec2:qa": "sh ./deploy/ec2/deploy_ec2.sh qa",
-    "bundle": "cp package.json dist/package.json && cp package-lock.json dist/package-lock.json && cd dist && npm ci --production"
+    "bundle": "cp package.json dist/package.json && cp package-lock.json dist/package-lock.json && cd dist && npm ci --production",
+    "preinstall": "source $HOME/.nvm/nvm.sh; nvm use"
   },
   "repository": {
     "type": "git",
@@ -33,7 +34,6 @@
     "dotenv": "^10.0.0",
     "eslint-plugin-jest": "^25.2.4",
     "express": "^4.14.0",
-    "json-templates": "^4.2.0",
     "node-fetch": "^2.6.6",
     "webex-node-bot-framework": "^2.3.1"
   },
