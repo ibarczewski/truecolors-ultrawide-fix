@@ -36,6 +36,12 @@ export const taskCreatedTemplate: Template<TaskCreatedTemplateData> = (
     { leftSide: [], rightSide: [] }
   );
 
+  const actions = data.actions?.map(({ type, title, url }) => ({
+    type,
+    title,
+    url
+  }));
+
   const card = {
     type: 'AdaptiveCard',
     body: [
@@ -84,15 +90,11 @@ export const taskCreatedTemplate: Template<TaskCreatedTemplateData> = (
           horizontalAlignment: 'Center'
         }
       ]),
-      ...(data.actions?.length > 0
+      ...(data.actions
         ? [
             {
               type: 'ActionSet',
-              actions: data.actions.map(({ type, title, url }) => ({
-                type,
-                title,
-                url
-              }))
+              actions
             }
           ]
         : [])
