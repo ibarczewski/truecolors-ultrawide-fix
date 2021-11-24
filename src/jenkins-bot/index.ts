@@ -1,15 +1,12 @@
 import { Router } from 'express';
 import { Bot } from '../common/Bot';
 import { BotFramework } from '../common/BotFramework';
-import {
-  JobCompletedNotification,
-  JobCompletedNotificationData
-} from './JobCompletedNotification/JobCompletedNotification';
 import fetch from 'node-fetch';
 import {
-  sendTaskCompletedNotification,
-  TaskCompletedNotificationData
-} from '../github-enterprise-bot/cards/IssueAssignedNotification/TaskCompletedNotification';
+  taskCreatedTemplate,
+  TaskCreatedTemplateData
+} from '../common/templates/TaskCreated';
+import { WebexCard } from '../common/WebexCard';
 
 const router = Router();
 
@@ -49,7 +46,7 @@ router.post('/:roomId', (req, res) => {
   if (bot) {
     try {
       const { name, build } = req.body;
-      sendTaskCompletedNotification(bot, {
+      const data = {
         projectName: name,
         title: `Job ${build.phase}`,
         metadata: [
@@ -66,7 +63,13 @@ router.post('/:roomId', (req, res) => {
             url: build.full_url
           }
         ]
-      } as TaskCompletedNotificationData);
+      } as TaskCreatedTemplateData;
+      const jobCompletedNotification = new WebexCard(
+        taskCreatedTemplate,
+        data,
+        bot
+      );
+      jobCompletedNotification.send();
     } catch (e) {
       console.log(e);
     }

@@ -2,9 +2,10 @@ import { Router } from 'express';
 import { BotFramework } from '../common/BotFramework';
 import { Bot } from '../common/Bot';
 import {
-  sendTaskCompletedNotification,
-  TaskCompletedNotificationData
-} from './cards/IssueAssignedNotification/TaskCompletedNotification';
+  taskCreatedTemplate,
+  TaskCreatedTemplateData
+} from '../common/templates/TaskCreated';
+import { WebexCard } from '../common/WebexCard';
 
 const router = Router();
 
@@ -36,8 +37,7 @@ router.post('/:roomId', (req, res) => {
   if (bot) {
     try {
       const { issue, sender, assignee, repository } = req.body;
-
-      sendTaskCompletedNotification(bot, {
+      const data = {
         projectName: `[${repository.name}](${repository.html_url})`,
         title: `Issue assigned to [${assignee.login}](${assignee.html_url})`,
         metadata: [
@@ -50,7 +50,14 @@ router.post('/:roomId', (req, res) => {
             value: `[#${issue.number} - ${issue.title}](${issue.html_url})`
           }
         ]
-      } as TaskCompletedNotificationData);
+      } as TaskCreatedTemplateData;
+
+      const issueAssignedNotification = new WebexCard(
+        taskCreatedTemplate,
+        data,
+        bot
+      );
+      issueAssignedNotification.send();
     } catch (e) {
       console.log(e);
     }

@@ -1,4 +1,4 @@
-import { Bot } from '../../../common/Bot';
+import { Template } from './Template';
 
 export type Metadata = {
   key: string;
@@ -11,17 +11,16 @@ export type Action = {
   url: string;
 };
 
-export type TaskCompletedNotificationData = {
+export type TaskCreatedTemplateData = {
   projectName: string;
   title: string;
   metadata: Metadata[];
   actions?: Action[];
 };
 
-export function sendTaskCompletedNotification(
-  bot: Bot,
-  data: TaskCompletedNotificationData
-) {
+export const taskCreatedTemplate: Template<TaskCreatedTemplateData> = (
+  data
+) => {
   const metadataTable = data.metadata.reduce(
     (previousRows, { key, value }, index) => {
       const metadataTemplate = {
@@ -102,5 +101,5 @@ export function sendTaskCompletedNotification(
     version: '1.2'
   };
 
-  bot.sendCard(card);
-}
+  return card;
+};
