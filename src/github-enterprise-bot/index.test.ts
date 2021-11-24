@@ -15,28 +15,62 @@ jest.mock('webex-node-bot-framework', () =>
   }))
 );
 
-test('when issue is assigned, posts a card', async () => {
-  await request(app)
-    .post('/github/foo')
-    .send({
-      issue: {
-        title: 'fooTitle',
-        html_url: 'fooHtml',
-        number: 5
-      },
-      repository: {
-        name: 'fooRepoName',
-        html_url: 'fooURL'
-      },
-      assignee: {
-        login: 'fooUser',
-        html_url: 'fooUserUrl'
-      },
-      sender: {
-        login: 'barUser',
-        html_url: 'barUserUrl'
-      }
-    });
+describe('issue assigned notification', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-  expect(mockBot.sendCard.mock.calls).toMatchSnapshot();
+  test('when issue is assigned, posts an issue assigned notification card', async () => {
+    await request(app)
+      .post('/github/foo')
+      .send({
+        action: 'assigned',
+        issue: {
+          title: 'fooTitle',
+          html_url: 'fooHtml',
+          number: 5
+        },
+        repository: {
+          name: 'fooRepoName',
+          html_url: 'fooURL'
+        },
+        assignee: {
+          login: 'fooUser',
+          html_url: 'fooUserUrl'
+        },
+        sender: {
+          login: 'barUser',
+          html_url: 'barUserUrl'
+        }
+      });
+
+    expect(mockBot.sendCard.mock.calls).toMatchSnapshot();
+  });
+
+  test('to be deprecated: when issue is unassigned, does not post issue assigned', async () => {
+    await request(app)
+      .post('/github/foo')
+      .send({
+        action: 'unassigned',
+        issue: {
+          title: 'fooTitle',
+          html_url: 'fooHtml',
+          number: 5
+        },
+        repository: {
+          name: 'fooRepoName',
+          html_url: 'fooURL'
+        },
+        assignee: {
+          login: 'fooUser',
+          html_url: 'fooUserUrl'
+        },
+        sender: {
+          login: 'barUser',
+          html_url: 'barUserUrl'
+        }
+      });
+
+    expect(mockBot.sendCard).not.toHaveBeenCalled();
+  });
 });
