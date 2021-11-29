@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`when issue is assigned, posts a card 1`] = `
+exports[`issue assigned notification when issue is assigned, posts an issue assigned notification card 1`] = `
 Array [
   Array [
     Object {

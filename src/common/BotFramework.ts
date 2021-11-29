@@ -1,14 +1,35 @@
 import Framework from 'webex-node-bot-framework';
 import webhook from 'webex-node-bot-framework/webhook';
-import { Router } from 'express';
+import { Request, Response, Router } from 'express';
 import frameworksCollection from '../frameworksCollection';
+import { Bot } from './Bot';
+
+export interface BotRoute {
+  action: 'get' | 'post';
+  path: string;
+  controller: BotRouteController;
+}
+
+export interface BotRouteController {
+  execute: (req: Request, res: Response, framework: BotFramework) => void;
+}
+
+export interface BotHandler {
+  command: string;
+  handler: (bot: Bot, ...rest) => void;
+}
 export class BotFramework {
   private framework: Framework;
   private responded: boolean;
   private slug: string;
   private commands: string[];
   public router: Router;
-  constructor(slug: string, token: string) {
+  constructor(
+    slug: string,
+    token: string,
+    routes?: BotRoute[],
+    handlers?: BotHandler[]
+  ) {
     this.router = Router();
     this.slug = slug;
     this.commands = [];
@@ -26,6 +47,16 @@ export class BotFramework {
     this.router.post('/', webhook(this.framework));
     this.router.get('/', (req, res) => {
       res.send(this.slug + 'is alive.');
+    });
+
+    routes.forEach((route) => {
+      this.router[route.action](route.path, (req, res) => {
+        route.controller.execute(req, res, this);
+      });
+    });
+
+    handlers.forEach((handler) => {
+      this.hears(handler.command, handler.handler);
     });
   }
 
@@ -69,7 +100,7 @@ export class BotFramework {
     });
   }
 
-  public hears(command, fn, ...rest) {
+  private hears(command, fn, ...rest) {
     this.commands.push(command);
     this.framework.hears(
       command,
