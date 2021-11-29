@@ -57,12 +57,8 @@ framework.router.post('/:roomId', (req, res) => {
           }
         ]
       } as TaskCreatedTemplateData;
-      const jobCompletedNotification = new WebexCard(
-        taskCreatedTemplate,
-        data,
-        bot
-      );
-      jobCompletedNotification.send();
+      const jobCompletedNotification = new WebexCard(taskCreatedTemplate, data);
+      jobCompletedNotification.send(bot);
     } catch (e) {
       console.log(e);
     }

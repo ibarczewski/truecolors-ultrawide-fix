@@ -1,6 +1,7 @@
-import SendIssueAssignedNotificationUseCase from './sendIssueAssignedNotification';
+import { taskCreatedTemplate } from '../../common/templates/TaskCreated';
+import SendIssueAssignedNotificationUseCase from './SendIssueAssignedNotification';
 
 const sendIssueAssignedNotificationUseCase =
-  new SendIssueAssignedNotificationUseCase();
+  new SendIssueAssignedNotificationUseCase(taskCreatedTemplate);
 
 export { sendIssueAssignedNotificationUseCase };
