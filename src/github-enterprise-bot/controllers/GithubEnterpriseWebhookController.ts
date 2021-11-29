@@ -1,36 +1,29 @@
 import { Bot } from '../../common/Bot';
-import { BotFramework } from '../../common/BotFramework';
+import { BotFramework, BotRouteController } from '../../common/BotFramework';
 import { Request, Response } from 'express';
-import { WebhookEvent } from '@octokit/webhooks-types';
+import { WebhookEvent as GithubWebhookEvent } from '@octokit/webhooks-types';
 
-type GithubWebhookRequest = Request<{ roomId: string }, {}, WebhookEvent>;
+type GithubWebhookRequest = Request<{ roomId: string }, {}, GithubWebhookEvent>;
 
-enum GithubEventType {
-  ISSUE_ASSIGNED
-}
-
-export default class GithubEnterpriseWebhookController {
-  private framework;
+export default class GithubEnterpriseWebhookController
+  implements BotRouteController
+{
   private issueAssignedEventController;
 
-  constructor(framework: BotFramework, issueAssignedEventController) {
-    this.framework = framework;
+  constructor(issueAssignedEventController) {
     this.issueAssignedEventController = issueAssignedEventController;
   }
 
-  private getEventType(req) {
-    if (!!req.body.issue && req.body.action === 'assigned') {
-      return GithubEventType.ISSUE_ASSIGNED;
-    }
-  }
+  private isIssueAssignedEvent = (event: GithubWebhookEvent): boolean => {
+    return 'action' in event && 'issue' in event && event.action === 'assigned';
+  };
 
-  execute(req: GithubWebhookRequest, res: Response) {
-    const bot: Bot = this.framework.getBotByRoomId(req.params.roomId);
+  execute(req: GithubWebhookRequest, res: Response, framework: BotFramework) {
+    const bot: Bot = framework.getBotByRoomId(req.params.roomId);
     if (bot) {
       try {
-        const eventType = this.getEventType(req);
-        switch (eventType) {
-          case GithubEventType.ISSUE_ASSIGNED:
+        switch (true) {
+          case this.isIssueAssignedEvent(req.body):
             this.issueAssignedEventController.execute(req, res, bot);
             break;
           default:

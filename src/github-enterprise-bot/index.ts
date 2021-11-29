@@ -1,30 +1,40 @@
-import { BotFramework } from '../common/BotFramework';
-import { issueAssignedEventController } from './controllers';
-import GithubEnterpriseWebhookController from './controllers/GithubEnterpriseWebhookController';
+import { BotFramework, BotHandler, BotRoute } from '../common/BotFramework';
+import { githubEnterpriseWebhookController } from './controllers';
 
-const framework = new BotFramework('github', process.env.GITHUB_BOT_TOKEN);
-
-framework.hears('hello', (bot) => {
-  bot.say('world');
-});
-
-framework.hears('get webhook url', (bot) => {
-  try {
-    bot.say(
-      `your webhook url is ${process.env.FRAMEWORK_WEBHOOK_URL}/github/${bot.room.id}`
-    );
-  } catch (error) {
-    console.log(error);
+const routes: BotRoute[] = [
+  {
+    action: 'post',
+    path: '/:roomId',
+    controller: githubEnterpriseWebhookController
   }
-});
+];
 
-const githubEnterpriseWebhookController = new GithubEnterpriseWebhookController(
-  framework,
-  issueAssignedEventController
-);
+const handlers: BotHandler[] = [
+  {
+    command: 'hello',
+    handler: (bot) => {
+      bot.say('world');
+    }
+  },
+  {
+    command: 'get webhook url',
+    handler: (bot) => {
+      try {
+        bot.say(
+          `your webhook url is ${process.env.FRAMEWORK_WEBHOOK_URL}/github/${bot.room.id}`
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+];
 
-framework.router.post('/:roomId', (req, res) =>
-  githubEnterpriseWebhookController.execute(req, res)
+const framework = new BotFramework(
+  'github',
+  process.env.GITHUB_BOT_TOKEN,
+  routes,
+  handlers
 );
 
 export default framework;
