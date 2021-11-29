@@ -9,13 +9,13 @@ fi
 npm install
 npm run build
 npm run bundle
-rsync -azp --delete --progress -e 'ssh -i ./deploy/ec2/Bot-PoC.pem' ./dist/ ec2-user@ec2-18-235-1-183.compute-1.amazonaws.com:/home/ec2-user/github-bot/$1 --exclude=.env 
+rsync -azp --delete --progress -e 'ssh -i ./deploy/ec2/Bot-PoC.pem' ./dist/ ec2-user@ec2-3-231-214-65.compute-1.amazonaws.com:/home/ec2-user/wwt-webex-bots/$1 --exclude=.env 
 
 # restart if running, otherwise start it
-if ssh -i ./deploy/ec2/Bot-PoC.pem ec2-user@ec2-18-235-1-183.compute-1.amazonaws.com "pm2 restart github-bot-$1"; then
+if ssh -i ./deploy/ec2/Bot-PoC.pem ec2-user@ec2-3-231-214-65.compute-1.amazonaws.com "pm2 restart wwt-webex-bots-$1"; then
     echo "$1 restarted";
 else
-    ssh -i ./deploy/ec2/Bot-PoC.pem ec2-user@ec2-18-235-1-183.compute-1.amazonaws.com "cd github-bot/$1; pm2 start 'node index.js' --name github-bot-$1";
+    ssh -i ./deploy/ec2/Bot-PoC.pem ec2-user@ec2-3-231-214-65.compute-1.amazonaws.com "cd wwt-webex-bots/$1; pm2 start 'node index.js' --name wwt-webex-bots-$1";
     echo "$1 started"
 fi;
 
