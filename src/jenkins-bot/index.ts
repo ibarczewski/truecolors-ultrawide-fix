@@ -1,11 +1,8 @@
 import { Bot } from '../common/Bot';
 import { BotFramework, BotHandler, BotRoute } from '../common/BotFramework';
 import fetch from 'node-fetch';
-import {
-  taskCreatedTemplate,
-  TaskCreatedTemplateData
-} from '../common/templates/TaskCreated';
-import { WebexCard } from '../common/WebexCard';
+import { TaskCreatedTemplateData } from '../common/templates/TaskCreated';
+import { taskCreatedTemplate } from '../common/templates';
 
 const jenkinsEventController = {
   execute: (req, res, framework) => {
@@ -13,7 +10,7 @@ const jenkinsEventController = {
     if (bot) {
       try {
         const { name, build } = req.body;
-        const data = {
+        const data: TaskCreatedTemplateData = {
           projectName: name,
           title: `Job ${build.phase}`,
           metadata: [
@@ -30,12 +27,10 @@ const jenkinsEventController = {
               url: build.full_url
             }
           ]
-        } as TaskCreatedTemplateData;
-        const jobCompletedNotification = new WebexCard(
-          taskCreatedTemplate,
-          data
-        );
-        jobCompletedNotification.send(bot);
+        };
+
+        const jobCompletedCard = taskCreatedTemplate.buildCard(data);
+        bot.sendCard(jobCompletedCard);
       } catch (e) {
         console.log(e);
       }

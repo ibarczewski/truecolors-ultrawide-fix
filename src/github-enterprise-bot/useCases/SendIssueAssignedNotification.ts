@@ -1,7 +1,8 @@
 import { Bot } from '../../common/Bot';
-import { TaskCreatedTemplateData } from '../../common/templates/TaskCreated';
-import { Template } from '../../common/templates/Template';
-import { WebexCard } from '../../common/WebexCard';
+import {
+  TaskCreatedTemplate,
+  TaskCreatedTemplateData
+} from '../../common/templates/TaskCreated';
 
 export interface SendIssueAssignedNotificationDTO {
   repositoryName: string;
@@ -16,12 +17,12 @@ export interface SendIssueAssignedNotificationDTO {
 }
 
 export default class SendIssueAssignedNotificationUseCase {
-  private template;
-  constructor(template: Template<TaskCreatedTemplateData>) {
+  private template: TaskCreatedTemplate;
+  constructor(template: TaskCreatedTemplate) {
     this.template = template;
   }
   execute(request: SendIssueAssignedNotificationDTO, bot: Bot) {
-    const data = {
+    const data: TaskCreatedTemplateData = {
       projectName: `[${request.repositoryName}](${request.repositoryUrl})`,
       title: `Issue assigned to [${request.assigneeName}](${request.assigneeUrl})`,
       metadata: [
@@ -34,9 +35,9 @@ export default class SendIssueAssignedNotificationUseCase {
           value: `[#${request.issueNumber} - ${request.issueTitle}](${request.issueUrl})`
         }
       ]
-    } as TaskCreatedTemplateData;
+    };
 
-    const issueAssignedNotification = new WebexCard(this.template, data);
-    issueAssignedNotification.send(bot);
+    const issueAssignedCard = this.template.buildCard(data);
+    bot.sendCard(issueAssignedCard);
   }
 }

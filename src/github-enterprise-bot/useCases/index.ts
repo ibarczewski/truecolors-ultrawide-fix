@@ -1,4 +1,4 @@
-import { taskCreatedTemplate } from '../../common/templates/TaskCreated';
+import { taskCreatedTemplate } from '../../common/templates';
 import SendIssueAssignedNotificationUseCase from './SendIssueAssignedNotification';
 
 const sendIssueAssignedNotificationUseCase =

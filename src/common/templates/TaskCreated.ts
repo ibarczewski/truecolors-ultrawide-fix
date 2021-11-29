@@ -17,91 +17,90 @@ export type TaskCreatedTemplateData = {
   metadata: Metadata[];
   actions?: Action[];
 };
+export class TaskCreatedTemplate implements Template<TaskCreatedTemplateData> {
+  public buildCard(data: TaskCreatedTemplateData) {
+    const metadataTable = data.metadata.reduce(
+      (previousRows, { key, value }, index) => {
+        const metadataTemplate = {
+          type: 'TextBlock',
+          color: 'Light',
+          ...(index > 0 && { spacing: 'Small' })
+        };
 
-export const taskCreatedTemplate: Template<TaskCreatedTemplateData> = (
-  data
-) => {
-  const metadataTable = data.metadata.reduce(
-    (previousRows, { key, value }, index) => {
-      const metadataTemplate = {
-        type: 'TextBlock',
-        color: 'Light',
-        ...(index > 0 && { spacing: 'Small' })
-      };
-
-      previousRows.leftSide.push({ ...metadataTemplate, text: key });
-      previousRows.rightSide.push({ ...metadataTemplate, text: value });
-      return previousRows;
-    },
-    { leftSide: [], rightSide: [] }
-  );
-
-  const actions = data.actions?.map(({ type, title, url }) => ({
-    type,
-    title,
-    url
-  }));
-
-  const card = {
-    type: 'AdaptiveCard',
-    body: [
-      {
-        type: 'ColumnSet',
-        columns: [
-          {
-            type: 'Column',
-            items: [
-              {
-                type: 'TextBlock',
-                text: data.projectName,
-                weight: 'Lighter',
-                color: 'Accent'
-              },
-              {
-                type: 'TextBlock',
-                weight: 'Bolder',
-                text: data.title,
-                wrap: true,
-                color: 'Light',
-                size: 'Large',
-                spacing: 'Small'
-              }
-            ],
-            width: 'stretch'
-          }
-        ]
+        previousRows.leftSide.push({ ...metadataTemplate, text: key });
+        previousRows.rightSide.push({ ...metadataTemplate, text: value });
+        return previousRows;
       },
-      ...(data.metadata.length > 0 && [
+      { leftSide: [], rightSide: [] }
+    );
+
+    const actions = data.actions?.map(({ type, title, url }) => ({
+      type,
+      title,
+      url
+    }));
+
+    const card = {
+      type: 'AdaptiveCard',
+      body: [
         {
           type: 'ColumnSet',
           columns: [
             {
               type: 'Column',
-              width: 35,
-              items: metadataTable.leftSide
-            },
-            {
-              type: 'Column',
-              width: 65,
-              items: metadataTable.rightSide
-            }
-          ],
-          spacing: 'Padding',
-          horizontalAlignment: 'Center'
-        }
-      ]),
-      ...(data.actions
-        ? [
-            {
-              type: 'ActionSet',
-              actions
+              items: [
+                {
+                  type: 'TextBlock',
+                  text: data.projectName,
+                  weight: 'Lighter',
+                  color: 'Accent'
+                },
+                {
+                  type: 'TextBlock',
+                  weight: 'Bolder',
+                  text: data.title,
+                  wrap: true,
+                  color: 'Light',
+                  size: 'Large',
+                  spacing: 'Small'
+                }
+              ],
+              width: 'stretch'
             }
           ]
-        : [])
-    ],
-    $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',
-    version: '1.2'
-  };
+        },
+        ...(data.metadata.length > 0 && [
+          {
+            type: 'ColumnSet',
+            columns: [
+              {
+                type: 'Column',
+                width: 35,
+                items: metadataTable.leftSide
+              },
+              {
+                type: 'Column',
+                width: 65,
+                items: metadataTable.rightSide
+              }
+            ],
+            spacing: 'Padding',
+            horizontalAlignment: 'Center'
+          }
+        ]),
+        ...(data.actions
+          ? [
+              {
+                type: 'ActionSet',
+                actions
+              }
+            ]
+          : [])
+      ],
+      $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',
+      version: '1.2'
+    };
 
-  return card;
-};
+    return card;
+  }
+}

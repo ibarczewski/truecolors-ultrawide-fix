@@ -2,6 +2,7 @@ import Framework from 'webex-node-bot-framework';
 import webhook from 'webex-node-bot-framework/webhook';
 import { Request, Response, Router } from 'express';
 import frameworksCollection from '../frameworksCollection';
+import { Bot } from './Bot';
 
 export interface BotRoute {
   action: 'get' | 'post';
@@ -15,7 +16,7 @@ export interface BotRouteController {
 
 export interface BotHandler {
   command: string;
-  handler: (bot, ...rest) => void;
+  handler: (bot: Bot, ...rest) => void;
 }
 export class BotFramework {
   private framework: Framework;

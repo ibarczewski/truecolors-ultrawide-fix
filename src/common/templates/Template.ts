@@ -1,1 +1,3 @@
-export type Template<Data> = (data: Data) => any;
+export interface Template<Data> {
+  buildCard(data: Data): any;
+}
