@@ -80,3 +80,94 @@ Array [
   ],
 ]
 `;
+
+exports[`issue assigned notification when pull request opened, posts a pull request notification card 1`] = `
+Array [
+  Array [
+    Object {
+      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+      "body": Array [
+        Object {
+          "columns": Array [
+            Object {
+              "items": Array [
+                Object {
+                  "color": "Accent",
+                  "text": "[fooRepoName](fooURL)",
+                  "type": "TextBlock",
+                  "weight": "Lighter",
+                },
+                Object {
+                  "color": "Light",
+                  "size": "Large",
+                  "spacing": "Small",
+                  "text": "Pull Request opened: [fooTitle](fooHtml)",
+                  "type": "TextBlock",
+                  "weight": "Bolder",
+                  "wrap": true,
+                },
+              ],
+              "type": "Column",
+              "width": "stretch",
+            },
+          ],
+          "type": "ColumnSet",
+        },
+        Object {
+          "columns": Array [
+            Object {
+              "items": Array [
+                Object {
+                  "color": "Light",
+                  "text": "Opened by:",
+                  "type": "TextBlock",
+                },
+                Object {
+                  "color": "Light",
+                  "spacing": "Small",
+                  "text": "PR#:",
+                  "type": "TextBlock",
+                },
+              ],
+              "type": "Column",
+              "width": 35,
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "color": "Light",
+                  "text": "[barUser](barUserUrl)",
+                  "type": "TextBlock",
+                },
+                Object {
+                  "color": "Light",
+                  "spacing": "Small",
+                  "text": "5",
+                  "type": "TextBlock",
+                },
+              ],
+              "type": "Column",
+              "width": 65,
+            },
+          ],
+          "horizontalAlignment": "Center",
+          "spacing": "Padding",
+          "type": "ColumnSet",
+        },
+        Object {
+          "actions": Array [
+            Object {
+              "title": "Open in Github Enterprise",
+              "type": "Action.OpenUrl",
+              "url": "fooHtml",
+            },
+          ],
+          "type": "ActionSet",
+        },
+      ],
+      "type": "AdaptiveCard",
+      "version": "1.2",
+    },
+  ],
+]
+`;
