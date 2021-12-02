@@ -7,14 +7,17 @@
     "start": "node dist/index.js",
     "start-qa": "concurrently \"npm:start\" \"npx localtunnel --port 7001 --subdomain wwt-githubqa\"",
     "build": "rm -rf dist && tsc",
+    "build:test-utils": "rm -rf ./test-utils/dist && tsc -p ./test-utils",
     "test": "jest",
     "dev": "nodemon -e ts --exec \"npm run build && npm run start\"",
+    "dev:test-utils": "nodemon -w ./test-utils/ -e ts --exec \"npm run build:test-utils\"",
     "lint": "eslint --fix src",
     "deploy:ec2:dev": "sh ./deploy/ec2/deploy_ec2.sh dev",
     "deploy:ec2:qa": "sh ./deploy/ec2/deploy_ec2.sh qa",
     "deploy:ec2:demo": "sh ./deploy/ec2/deploy_ec2.sh demo",
     "bundle": "cp package.json dist/package.json && cp package-lock.json dist/package-lock.json && cd dist && npm ci --production",
-    "preinstall": "source $HOME/.nvm/nvm.sh; nvm use"
+    "preinstall": "source $HOME/.nvm/nvm.sh; nvm use && cd test-utils && npm install",
+    "test-util": "npm run build:test-utils && node test-utils/dist/index.js"
   },
   "repository": {
     "type": "git",

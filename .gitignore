@@ -46,3 +46,4 @@ dist
 *.pem
 
 .env
+tmp-git

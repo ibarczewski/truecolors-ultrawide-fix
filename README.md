@@ -50,3 +50,19 @@ ssh to vm with `ssh -i ./deploy/ec2/Bot-PoC.pem ec2-user@ec2-18-235-1-183.comput
 - `pm2 list` -> get all the running services
 - `pm2 restart github-bot-dev-localtunnel` -> restarts the localtunnel service (only needed if something is not working)
 - `pm2 logs {name_of_service}` -> displays the logs of the service currently running in real time. PID will also work instead of the service name.
+
+
+## Test Utils
+`npm run test-util "{command}"` 
+- e.g. `npm run test-util "open pull request"`
+
+### Prerequisites
+
+- environment variables in .env
+- - GITHUB_ACCESS_TOKEN={personal access token from [access token settings](https://sqbu-github.cisco.com/settings/tokens/new?scopes=repo) }
+- - TEST_GIT_REPO={ssh address of github enterprise repo for testing}
+- ssh access to TEST_GIT_REPO
+
+### Development
+
+`npm run dev:test-utils`
