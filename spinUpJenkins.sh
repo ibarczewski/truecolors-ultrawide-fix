@@ -1,4 +1,8 @@
 #!/bin/bash
+WEBHOOK=$1
+cp seedjob-template.groovy seedjob.groovy
+sed -i "" "s|WEBHOOK_URL|$1|g" seedjob.groovy
+
 docker network rm jenkins || true
 docker network create jenkins
 
@@ -22,5 +26,4 @@ docker run --name jenkins-blueocean --rm --detach \
   --volume jenkins-docker-certs:/certs/client:ro \
   myjenkins-blueocean:1.1
 
-unlockCode=`docker exec jenkins-docker cat /var/jenkins_home/secrets/initialAdminPassword`
-echo "The unlock code for Jenkins is ${unlockCode}"
+echo "Jenkins has been deployed, open http://localhost:8080 to access the instance."
