@@ -12,7 +12,7 @@ job('Job Completed Test') {
                     'format'('JSON')
                     'protocol'('HTTP')
                     urlInfo {
-                        'urlOrId'('http://ididit.com')
+                        'urlOrId'('WEBHOOK_URL')
                         'urlType'('PUBLIC')
                     }
                 }
