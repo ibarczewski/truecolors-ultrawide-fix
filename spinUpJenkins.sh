@@ -1,7 +1,17 @@
 #!/bin/bash
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied to the spin up script. You must pass in a webhook url to inject into the Jenkins Notification plugin."
+    exit 1
+  elif [ -z "$1" ]
+    then
+    echo "Empty argument provided for the webhook URL. You must pass in a valid webhook url to inject into the Jenkins Notification plugin."
+    exit 1
+fi
+
 WEBHOOK=$1
 cp seedjob-template.groovy seedjob.groovy
-sed -i "" "s|WEBHOOK_URL|$1|g" seedjob.groovy
+sed -i "" -e "s|WEBHOOK_URL|$1|g" seedjob.groovy
 
 docker network rm jenkins || true
 docker network create jenkins
