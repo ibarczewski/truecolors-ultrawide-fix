@@ -42,17 +42,21 @@ export class JenkinsNotificationController {
           metadata: [
             {
               key: 'Build number:',
-              value: `[${build.number}](${build.full_url})`
+              value: !!build.full_url
+                ? `[${build.number}](${build.full_url})`
+                : `${build.number}`
             },
             { key: 'Status:', value: build.status }
           ],
-          actions: [
-            {
-              type: 'Action.OpenUrl',
-              title: 'Open in Jenkins',
-              url: build.full_url
-            }
-          ]
+          ...(build.full_url && {
+            actions: [
+              {
+                type: 'Action.OpenUrl',
+                title: 'Open in Jenkins',
+                url: build.full_url
+              }
+            ]
+          })
         };
 
         const jobCompletedCard = taskCreatedTemplate.buildCard(data);
