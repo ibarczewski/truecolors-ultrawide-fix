@@ -1,5 +1,7 @@
 import { Bot } from '../../common/Bot';
-import { BotFramework, BotRouteController } from '../../common/BotFramework';
+import BotApplication, {
+  BotRouteController
+} from '../../common/BotApplication';
 import { Request, Response } from 'express';
 import {
   IssuesAssignedEvent,
@@ -39,8 +41,12 @@ export default class GithubEnterpriseWebhookController
     return 'pull_request' in event;
   };
 
-  execute(req: GithubWebhookRequest, res: Response, framework: BotFramework) {
-    const bot: Bot = framework.getBotByRoomId(req.params.roomId);
+  execute(
+    req: GithubWebhookRequest,
+    res: Response,
+    botApplication: BotApplication
+  ) {
+    const bot: Bot = botApplication.getBotByRoomId(req.params.roomId);
     if (bot) {
       try {
         switch (true) {

@@ -100,5 +100,5 @@
     "sourceMap": true,
     "rootDir": "src/"
   },
-  "exclude": ["**/*.test.ts", "test-utils"]
+  "exclude": ["**/*.test.ts", "test-utils", "**/__mocks__/*"]
 }
