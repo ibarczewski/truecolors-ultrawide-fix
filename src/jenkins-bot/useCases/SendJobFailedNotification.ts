@@ -5,20 +5,16 @@ import {
 } from '../../common/templates/TaskCreated';
 import { JobNotificationDTO } from '../common/JobNotification.interface';
 
-export interface SendJobCompletedNotificationDTO extends JobNotificationDTO {
-  numberOfGitChanges?: number;
-}
-
-export default class SendJobCompletedNotificationUseCase {
+export default class SendJobFailedNotificationUseCase {
   private template: TaskCreatedTemplate;
   constructor(template: TaskCreatedTemplate) {
     this.template = template;
   }
-  async execute(request: SendJobCompletedNotificationDTO, bot: Bot) {
+  async execute(request: JobNotificationDTO, bot: Bot) {
     try {
       const data: TaskCreatedTemplateData = {
         projectName: request.jobName,
-        title: `Job ${request.buildPhase}`,
+        title: `Job ${request.buildPhase} 🌧️`,
         metadata: [
           {
             key: 'Build number:',
@@ -26,22 +22,14 @@ export default class SendJobCompletedNotificationUseCase {
               ? `[${request.buildNumber}](${request.buildURL})`
               : `${request.buildNumber}`
           },
-          { key: 'Status:', value: request.buildStatus },
-          ...(request.numberOfGitChanges
-            ? [
-                {
-                  key: 'Number of changes:',
-                  value: `${request.numberOfGitChanges}`
-                }
-              ]
-            : [])
+          { key: 'Status:', value: request.buildStatus }
         ],
         ...(request.buildURL && {
           actions: [
             {
               type: 'Action.OpenUrl',
-              title: 'Open in Jenkins',
-              url: request.buildURL
+              title: 'See the Console Output',
+              url: `${request.buildURL}console`
             }
           ]
         })

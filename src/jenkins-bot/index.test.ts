@@ -131,4 +131,41 @@ describe('jenkins bot', () => {
 
     expect(mockBot.sendCard.mock.calls).toMatchSnapshot();
   });
+
+  test('when the job fails, posts a card', async () => {
+    const app = createMockJenkinsBotApp();
+
+    const expectedJobNumber = 16;
+
+    await request(app)
+      .post('/jenkins/fooRoomId')
+      .set('User-Agent', 'supertest')
+      .send({
+        name: 'asgard',
+        url: 'job/asgard/',
+        build: {
+          full_url: `http://localhost:8080/job/asgard/${expectedJobNumber}/`,
+          number: expectedJobNumber,
+          phase: 'COMPLETED',
+          status: 'FAILED',
+          url: `job/asgard/${expectedJobNumber}/`,
+          scm: {
+            url: 'https://github.com/evgeny-goldin/asgard.git',
+            branch: 'origin/master',
+            commit: 'c6d86dc654b12425e706bcf951adfe5a8627a517'
+          },
+          artifacts: {
+            'asgard.war': {
+              archive: `http://localhost:8080/job/asgard/${expectedJobNumber}/artifact/asgard.war`
+            },
+            'asgard-standalone.jar': {
+              archive: `http://localhost:8080/job/asgard/${expectedJobNumber}/artifact/asgard-standalone.jar`,
+              s3: 'https://s3-eu-west-1.amazonaws.com/evgenyg-bakery/asgard/asgard-standalone.jar'
+            }
+          }
+        }
+      });
+
+    expect(mockBot.sendCard.mock.calls).toMatchSnapshot();
+  });
 });

@@ -3,18 +3,30 @@ import { Bot } from '../../common/Bot';
 import BotApplication from '../../common/BotApplication';
 import JenkinsRestAPIService from '../services/JenkinsAPIService';
 import SendJobCompletedNotificationUseCase from '../useCases/SendJobCompletedNotification';
+import SendJobFailedNotificationUseCase from '../useCases/SendJobFailedNotification';
+
+enum JenkinsJobPhase {
+  QUEUED = 'QUEUED',
+  STARTED = 'QUEUED',
+  COMPLETED = 'COMPLETED',
+  FINALIZED = 'FINALIZED'
+}
+
+enum JenkinsJobStatus {
+  SUCCESS = 'SUCCESS',
+  FAILED = 'FAILED'
+}
 
 interface JenkinsNotificationSCM {
   url: string;
   branch: string;
   commit: string;
 }
-
 interface JenkinsNotificationBuild {
   full_url: string;
   number: number;
-  phase: 'QUEUED' | 'STARTED' | 'COMPLETED' | 'FINALIZED';
-  status: 'SUCCESS' | 'FAILED';
+  phase: JenkinsJobPhase;
+  status: JenkinsJobStatus;
   url: string;
   scm: JenkinsNotificationSCM;
   artifacts: any; // complex object where keys are probably only known by admin
@@ -28,11 +40,15 @@ interface JenkinsNotificationPayload {
 
 export default class JenkinsNotificationController {
   private sendJobCompletedNotificationUseCase: SendJobCompletedNotificationUseCase;
+  private sendJobFailedNotificationUseCase: SendJobFailedNotificationUseCase;
   constructor(
-    sendJobCompletedNotificationUseCase: SendJobCompletedNotificationUseCase
+    sendJobCompletedNotificationUseCase: SendJobCompletedNotificationUseCase,
+    sendJobFailedNotificationUseCase: SendJobFailedNotificationUseCase
   ) {
     this.sendJobCompletedNotificationUseCase =
       sendJobCompletedNotificationUseCase;
+
+    this.sendJobFailedNotificationUseCase = sendJobFailedNotificationUseCase;
   }
   async execute(
     req: Request<
@@ -48,29 +64,42 @@ export default class JenkinsNotificationController {
       try {
         const { name, build } = req.body;
 
-        let numberOfGitChanges;
-        if (req.params.settingsEnvelopeID) {
-          const jenkinsAPI = new JenkinsRestAPIService(
-            req.params.settingsEnvelopeID,
-            botApplication.getWebexSDK()
+        if (build.status === JenkinsJobStatus.FAILED) {
+          await this.sendJobFailedNotificationUseCase.execute(
+            {
+              jobName: name,
+              buildNumber: build.number,
+              buildPhase: build.phase,
+              buildStatus: build.status,
+              buildURL: build.full_url
+            },
+            bot
           );
+        } else {
+          let numberOfGitChanges;
+          if (req.params.settingsEnvelopeID) {
+            const jenkinsAPI = new JenkinsRestAPIService(
+              req.params.settingsEnvelopeID,
+              botApplication.getWebexSDK()
+            );
 
-          ({ numberOfGitChanges } = await jenkinsAPI.getBuildData(
-            build.full_url
-          ));
+            ({ numberOfGitChanges } = await jenkinsAPI.getBuildData(
+              build.full_url
+            ));
+          }
+
+          await this.sendJobCompletedNotificationUseCase.execute(
+            {
+              jobName: name,
+              buildNumber: build.number,
+              buildPhase: build.phase,
+              buildStatus: build.status,
+              buildURL: build.full_url,
+              numberOfGitChanges
+            },
+            bot
+          );
         }
-
-        await this.sendJobCompletedNotificationUseCase.execute(
-          {
-            jobName: name,
-            buildNumber: build.number,
-            buildPhase: build.phase,
-            buildStatus: build.status,
-            buildURL: build.full_url,
-            numberOfGitChanges
-          },
-          bot
-        );
       } catch (e) {
         console.log(e);
       }
