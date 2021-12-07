@@ -1,8 +1,8 @@
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { Bot } from '../../common/Bot';
-import { BotFramework } from '../../common/BotFramework';
-import { taskCreatedTemplate } from '../../common/templates';
-import { TaskCreatedTemplateData } from '../../common/templates/TaskCreated';
+import BotApplication from '../../common/BotApplication';
+import JenkinsRestAPIService from '../services/JenkinsAPIService';
+import SendJobCompletedNotificationUseCase from '../useCases/SendJobCompletedNotification';
 
 interface JenkinsNotificationSCM {
   url: string;
@@ -26,41 +26,51 @@ interface JenkinsNotificationPayload {
   build: JenkinsNotificationBuild;
 }
 
-export class JenkinsNotificationController {
-  execute(
-    req: Request<{ roomId: string }, {}, JenkinsNotificationPayload>,
-    res: Response,
-    framework: BotFramework
+export default class JenkinsNotificationController {
+  private sendJobCompletedNotificationUseCase: SendJobCompletedNotificationUseCase;
+  constructor(
+    sendJobCompletedNotificaitonUseCase: SendJobCompletedNotificationUseCase
   ) {
-    const bot: Bot = framework.getBotByRoomId(req.params.roomId);
+    this.sendJobCompletedNotificationUseCase =
+      sendJobCompletedNotificaitonUseCase;
+  }
+  async execute(
+    req: Request<
+      { roomId: string; settingsEnvelopeID?: string },
+      {},
+      JenkinsNotificationPayload
+    >,
+    res,
+    botApplication: BotApplication
+  ) {
+    const bot: Bot = botApplication.getBotByRoomId(req.params.roomId);
     if (bot) {
       try {
         const { name, build } = req.body;
-        const data: TaskCreatedTemplateData = {
-          projectName: name,
-          title: `Job ${build.phase}`,
-          metadata: [
-            {
-              key: 'Build number:',
-              value: !!build.full_url
-                ? `[${build.number}](${build.full_url})`
-                : `${build.number}`
-            },
-            { key: 'Status:', value: build.status }
-          ],
-          ...(build.full_url && {
-            actions: [
-              {
-                type: 'Action.OpenUrl',
-                title: 'Open in Jenkins',
-                url: build.full_url
-              }
-            ]
-          })
-        };
 
-        const jobCompletedCard = taskCreatedTemplate.buildCard(data);
-        bot.sendCard(jobCompletedCard);
+        let numberOfGitChanges;
+        if (req.params.settingsEnvelopeID) {
+          const jenkinsAPI = new JenkinsRestAPIService(
+            req.params.settingsEnvelopeID,
+            botApplication.getWebexSDK()
+          );
+
+          ({ numberOfGitChanges } = await jenkinsAPI.getBuildData(
+            build.full_url
+          ));
+        }
+
+        await this.sendJobCompletedNotificationUseCase.execute(
+          {
+            jobName: name,
+            buildNumber: build.number,
+            buildPhase: build.phase,
+            buildStatus: build.status,
+            buildURL: build.full_url,
+            numberOfGitChanges
+          },
+          bot
+        );
       } catch (e) {
         console.log(e);
       }

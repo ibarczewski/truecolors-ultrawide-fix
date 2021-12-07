@@ -1,19 +1,22 @@
 import request from 'supertest';
+import { handlers } from './handlers';
+import { routes } from './routes';
+import { mockBot } from 'webex-node-bot-framework';
+import BotApplication from '../common/BotApplication';
+import BotsApplication from '../common/BotsApplication';
 
-import app from '../app';
+jest.mock('webex-node-bot-framework');
 
-const mockBot = {
-  sendCard: jest.fn()
-};
-jest.mock('webex-node-bot-framework', () =>
-  jest.fn().mockImplementation(() => ({
-    start: jest.fn(),
-    getBotByRoomId: jest.fn().mockImplementation(() => mockBot),
-    on: jest.fn(),
-    hears: jest.fn(),
-    debug: jest.fn()
-  }))
-);
+function createMockGithubBotApp() {
+  const githubEnterpriseBot = new BotApplication(
+    'github',
+    'foo',
+    null,
+    routes,
+    handlers
+  );
+  return new BotsApplication([githubEnterpriseBot]).expressApp;
+}
 
 describe('issue assigned notification', () => {
   afterEach(() => {
@@ -21,6 +24,7 @@ describe('issue assigned notification', () => {
   });
 
   test('when issue is assigned, posts an issue assigned notification card', async () => {
+    const app = createMockGithubBotApp();
     await request(app)
       .post('/github/foo')
       .send({
@@ -48,6 +52,8 @@ describe('issue assigned notification', () => {
   });
 
   test('to be deprecated: when issue is unassigned, does not post issue assigned', async () => {
+    const app = createMockGithubBotApp();
+
     await request(app)
       .post('/github/foo')
       .send({
@@ -75,6 +81,7 @@ describe('issue assigned notification', () => {
   });
 
   test('when pull request opened, posts a pull request notification card', async () => {
+    const app = createMockGithubBotApp();
     await request(app)
       .post('/github/foo')
       .send({

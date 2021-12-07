@@ -1,5 +1,16 @@
-import { JenkinsNotificationController } from './JenkinsNotificationController';
+import {
+  sendJenkinsWebhookURLUseCase,
+  sendJobCompletedNotificaitonUseCase
+} from '../useCases';
+import JenkinsCardFormController from './JenkinsCardFormController';
+import JenkinsNotificationController from './JenkinsNotificationController';
 
-const jenkinsNotificationController = new JenkinsNotificationController();
+const jenkinsNotificationController = new JenkinsNotificationController(
+  sendJobCompletedNotificaitonUseCase
+);
 
-export { jenkinsNotificationController };
+const jenkinsCardFormController = new JenkinsCardFormController(
+  sendJenkinsWebhookURLUseCase
+);
+
+export { jenkinsNotificationController, jenkinsCardFormController };

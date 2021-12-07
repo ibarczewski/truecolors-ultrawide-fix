@@ -3,7 +3,7 @@ const config = {
   verbose: true,
   testEnvironment: 'node',
   testMatch: ['<rootDir>/src/**/*.test.ts'],
-  testPathIgnorePatterns: ['/node_modules/'],
+  testPathIgnorePatterns: ['/node_modules/']
 };
 
 module.exports = config;

@@ -1,8 +1,8 @@
 import Framework from 'webex-node-bot-framework';
 import webhook from 'webex-node-bot-framework/webhook';
 import { Request, Response, Router } from 'express';
-import frameworksCollection from '../frameworksCollection';
 import { Bot } from './Bot';
+import BotCardFormController from './BotCardFormController';
 
 export interface BotRoute {
   action: 'get' | 'post';
@@ -11,22 +11,28 @@ export interface BotRoute {
 }
 
 export interface BotRouteController {
-  execute: (req: Request, res: Response, framework: BotFramework) => void;
+  execute: (
+    req: Request,
+    res: Response,
+    botApplication: BotApplication
+  ) => void;
 }
 
 export interface BotHandler {
   command: string;
   handler: (bot: Bot, ...rest) => void;
 }
-export class BotFramework {
+export default class BotApplication {
   private framework: Framework;
   private responded: boolean;
-  private slug: string;
+  public slug: string;
   private commands: string[];
   public router: Router;
+  private formController: BotCardFormController;
   constructor(
     slug: string,
     token: string,
+    formController: BotCardFormController,
     routes?: BotRoute[],
     handlers?: BotHandler[]
   ) {
@@ -39,12 +45,18 @@ export class BotFramework {
       token,
       port: process.env.PORT
     });
-
-    frameworksCollection.add(this.framework);
+    this.formController = formController;
 
     this.initializer();
 
-    this.router.post('/', webhook(this.framework));
+    const attachmentActionsMiddleware = (req, res, next) => {
+      if (req.body.resource === 'attachmentActions') {
+        this.formController?.execute(req.body, this);
+      }
+      next();
+    };
+
+    this.router.post('/', attachmentActionsMiddleware, webhook(this.framework));
     this.router.get('/', (req, res) => {
       res.send(this.slug + 'is alive.');
     });
@@ -120,5 +132,9 @@ export class BotFramework {
   }
   public stop() {
     return this.framework.stop();
+  }
+
+  public getWebexSDK() {
+    return this.framework.getWebexSDK();
   }
 }
