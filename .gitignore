@@ -46,4 +46,7 @@ dist
 *.pem
 
 .env
+
 tmp-git
+
+seedjob.groovy*
