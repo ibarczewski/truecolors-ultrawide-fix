@@ -73,4 +73,27 @@ describe('issue assigned notification', () => {
 
     expect(mockBot.sendCard).not.toHaveBeenCalled();
   });
+
+  test('when pull request opened, posts a pull request notification card', async () => {
+    await request(app)
+      .post('/github/foo')
+      .send({
+        action: 'opened',
+        pull_request: {
+          title: 'fooTitle',
+          html_url: 'fooHtml',
+          number: 5
+        },
+        repository: {
+          name: 'fooRepoName',
+          html_url: 'fooURL'
+        },
+        sender: {
+          login: 'barUser',
+          html_url: 'barUserUrl'
+        }
+      });
+
+    expect(mockBot.sendCard.mock.calls).toMatchSnapshot();
+  });
 });
