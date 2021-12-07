@@ -7,7 +7,7 @@ import SendJobCompletedNotificationUseCase from './SendJobCompletedNotification'
 const taskCreatedTemplate = new TaskCreatedTemplate();
 const configTemplate = new JenkinsConfigurationTemplate();
 
-const sendJobCompletedNotificaitonUseCase =
+const sendJobCompletedNotificationUseCase =
   new SendJobCompletedNotificationUseCase(taskCreatedTemplate);
 
 const sendJenkinsConfigurationFormUseCase =
@@ -16,7 +16,7 @@ const sendJenkinsConfigurationFormUseCase =
 const sendJenkinsWebhookURLUseCase = new SendJenkinsWebhookURLUseCase();
 
 export {
-  sendJobCompletedNotificaitonUseCase,
+  sendJobCompletedNotificationUseCase,
   sendJenkinsConfigurationFormUseCase,
   sendJenkinsWebhookURLUseCase
 };

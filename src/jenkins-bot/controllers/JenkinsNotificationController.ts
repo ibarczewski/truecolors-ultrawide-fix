@@ -29,10 +29,10 @@ interface JenkinsNotificationPayload {
 export default class JenkinsNotificationController {
   private sendJobCompletedNotificationUseCase: SendJobCompletedNotificationUseCase;
   constructor(
-    sendJobCompletedNotificaitonUseCase: SendJobCompletedNotificationUseCase
+    sendJobCompletedNotificationUseCase: SendJobCompletedNotificationUseCase
   ) {
     this.sendJobCompletedNotificationUseCase =
-      sendJobCompletedNotificaitonUseCase;
+      sendJobCompletedNotificationUseCase;
   }
   async execute(
     req: Request<
