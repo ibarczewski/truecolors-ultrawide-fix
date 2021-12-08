@@ -1,7 +1,5 @@
-import {
-  JenkinsJobPhase,
-  JenkinsJobStatus
-} from '../controllers/JenkinsNotificationController';
+import { JenkinsJobPhase } from './JenkinsJobPhase';
+import { JenkinsJobStatus } from './JenkinsJobStatus';
 
 export interface JobCompletedNotificationDTO {
   jobName: string;

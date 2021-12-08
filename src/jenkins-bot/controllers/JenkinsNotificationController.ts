@@ -4,18 +4,8 @@ import BotApplication from '../../common/BotApplication';
 import JenkinsRestAPIService from '../services/JenkinsAPIService';
 import SendJobCompletedSuccessNotificationUseCase from '../useCases/SendJobCompletedSuccessNotification';
 import SendJobCompletedFailureNotificationUseCase from '../useCases/SendJobCompletedFailureNotification';
-
-export enum JenkinsJobPhase {
-  QUEUED = 'QUEUED',
-  STARTED = 'STARTED',
-  COMPLETED = 'COMPLETED',
-  FINALIZED = 'FINALIZED'
-}
-
-export enum JenkinsJobStatus {
-  SUCCESS = 'SUCCESS',
-  FAILURE = 'FAILURE'
-}
+import { JenkinsJobPhase } from '../useCases/JenkinsJobPhase';
+import { JenkinsJobStatus } from '../useCases/JenkinsJobStatus';
 
 interface JenkinsNotificationSCM {
   url: string;
