@@ -147,7 +147,7 @@ describe('jenkins bot', () => {
           full_url: `http://localhost:8080/job/asgard/${expectedJobNumber}/`,
           number: expectedJobNumber,
           phase: 'COMPLETED',
-          status: 'FAILED',
+          status: 'FAILURE',
           url: `job/asgard/${expectedJobNumber}/`,
           scm: {
             url: 'https://github.com/evgeny-goldin/asgard.git',

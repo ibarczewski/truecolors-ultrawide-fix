@@ -3,18 +3,23 @@ import {
   TaskCreatedTemplate,
   TaskCreatedTemplateData
 } from '../../common/templates/TaskCreated';
-import { JobNotificationDTO } from '../common/JobNotification.interface';
+import { JobCompletedNotificationDTO } from './JobCompletedNotificationDTO.';
 
-export default class SendJobFailedNotificationUseCase {
+interface JobCompletedSuccessNotificationDTO
+  extends JobCompletedNotificationDTO {
+  numberOfGitChanges?: number;
+}
+
+export default class SendJobCompletedSuccessNotificationUseCase {
   private template: TaskCreatedTemplate;
   constructor(template: TaskCreatedTemplate) {
     this.template = template;
   }
-  async execute(request: JobNotificationDTO, bot: Bot) {
+  async execute(request: JobCompletedSuccessNotificationDTO, bot: Bot) {
     try {
       const data: TaskCreatedTemplateData = {
         projectName: request.jobName,
-        title: `Job ${request.buildPhase} 🌧️`,
+        title: `Job ${request.buildPhase} ☀️`,
         metadata: [
           {
             key: 'Build number:',
@@ -22,14 +27,22 @@ export default class SendJobFailedNotificationUseCase {
               ? `[${request.buildNumber}](${request.buildURL})`
               : `${request.buildNumber}`
           },
-          { key: 'Status:', value: request.buildStatus }
+          { key: 'Status:', value: request.buildStatus },
+          ...(request.numberOfGitChanges
+            ? [
+                {
+                  key: 'Number of changes:',
+                  value: `${request.numberOfGitChanges}`
+                }
+              ]
+            : [])
         ],
         ...(request.buildURL && {
           actions: [
             {
               type: 'Action.OpenUrl',
-              title: 'See the Console Output',
-              url: `${request.buildURL}console`
+              title: 'Open in Jenkins',
+              url: request.buildURL
             }
           ]
         })
