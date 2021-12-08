@@ -3,7 +3,7 @@ import {
   TaskCreatedTemplate,
   TaskCreatedTemplateData
 } from '../../common/templates/TaskCreated';
-import { JobCompletedNotificationDTO } from './JobCompletedNotificationDTO.';
+import { JobCompletedNotificationDTO } from './JobCompletedNotificationDTO';
 
 interface JobCompletedSuccessNotificationDTO
   extends JobCompletedNotificationDTO {
