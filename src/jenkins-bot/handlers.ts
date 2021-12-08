@@ -1,4 +1,5 @@
 import { BotHandler } from '../common/BotApplication';
+import fetch from 'node-fetch';
 import { sendJenkinsConfigurationFormUseCase } from './useCases';
 
 export const handlers: BotHandler[] = [
@@ -17,7 +18,7 @@ export const handlers: BotHandler[] = [
           method: 'post',
           body: JSON.stringify({
             build: {
-              full_url: 'https://google.com',
+              full_url: 'https://google.com/',
               number: 3,
               phase: 'COMPLETED',
               status: 'SUCCESS'
@@ -40,10 +41,10 @@ export const handlers: BotHandler[] = [
           method: 'post',
           body: JSON.stringify({
             build: {
-              full_url: 'https://google.com',
+              full_url: 'https://google.com/',
               number: 4,
               phase: 'COMPLETED',
-              status: 'FAILED'
+              status: 'FAILURE'
             },
             name: 'fake jenkins job name'
           }),
