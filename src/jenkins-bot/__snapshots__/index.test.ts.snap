@@ -20,7 +20,7 @@ Array [
                   "color": "Light",
                   "size": "Large",
                   "spacing": "Small",
-                  "text": "Job COMPLETED",
+                  "text": "Job COMPLETED ☀️",
                   "type": "TextBlock",
                   "weight": "Bolder",
                   "wrap": true,
@@ -123,7 +123,7 @@ Array [
                   "color": "Light",
                   "size": "Large",
                   "spacing": "Small",
-                  "text": "Job COMPLETED",
+                  "text": "Job COMPLETED ☀️",
                   "type": "TextBlock",
                   "weight": "Bolder",
                   "wrap": true,
@@ -182,6 +182,97 @@ Array [
               "title": "Open in Jenkins",
               "type": "Action.OpenUrl",
               "url": "http://localhost:8080/job/asgard/17/",
+            },
+          ],
+          "type": "ActionSet",
+        },
+      ],
+      "type": "AdaptiveCard",
+      "version": "1.2",
+    },
+  ],
+]
+`;
+
+exports[`jenkins bot when the job fails, posts a card 1`] = `
+Array [
+  Array [
+    Object {
+      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+      "body": Array [
+        Object {
+          "columns": Array [
+            Object {
+              "items": Array [
+                Object {
+                  "color": "Accent",
+                  "text": "asgard",
+                  "type": "TextBlock",
+                  "weight": "Lighter",
+                },
+                Object {
+                  "color": "Light",
+                  "size": "Large",
+                  "spacing": "Small",
+                  "text": "Job COMPLETED 🌧️",
+                  "type": "TextBlock",
+                  "weight": "Bolder",
+                  "wrap": true,
+                },
+              ],
+              "type": "Column",
+              "width": "stretch",
+            },
+          ],
+          "type": "ColumnSet",
+        },
+        Object {
+          "columns": Array [
+            Object {
+              "items": Array [
+                Object {
+                  "color": "Light",
+                  "text": "Build number:",
+                  "type": "TextBlock",
+                },
+                Object {
+                  "color": "Light",
+                  "spacing": "Small",
+                  "text": "Status:",
+                  "type": "TextBlock",
+                },
+              ],
+              "type": "Column",
+              "width": 35,
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "color": "Light",
+                  "text": "[16](http://localhost:8080/job/asgard/16/)",
+                  "type": "TextBlock",
+                },
+                Object {
+                  "color": "Light",
+                  "spacing": "Small",
+                  "text": "FAILURE",
+                  "type": "TextBlock",
+                },
+              ],
+              "type": "Column",
+              "width": 65,
+            },
+          ],
+          "horizontalAlignment": "Center",
+          "spacing": "Padding",
+          "type": "ColumnSet",
+        },
+        Object {
+          "actions": Array [
+            Object {
+              "title": "See the Console Output",
+              "type": "Action.OpenUrl",
+              "url": "http://localhost:8080/job/asgard/16/console",
             },
           ],
           "type": "ActionSet",
