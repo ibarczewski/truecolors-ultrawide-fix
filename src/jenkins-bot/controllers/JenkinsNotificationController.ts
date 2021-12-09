@@ -17,7 +17,7 @@ interface JenkinsNotificationBuild {
   full_url: string;
   number: number;
   phase: JenkinsJobPhase;
-  status: JenkinsJobStatus;
+  status?: JenkinsJobStatus;
   url: string;
   scm: JenkinsNotificationSCM;
   artifacts: any; // complex object where keys are probably only known by admin
