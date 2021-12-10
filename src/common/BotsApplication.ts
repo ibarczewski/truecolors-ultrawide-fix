@@ -18,7 +18,7 @@ export default class BotsApplication {
   }
 
   public listen(port) {
-    this.expressApp.listen(port, () => {
+    this.server = this.expressApp.listen(port, () => {
       this.runningBotApplications.forEach((botApplication) => {
         botApplication.debug('botApplication listening on port %s', port);
       });
@@ -29,7 +29,7 @@ export default class BotsApplication {
     this.runningBotApplications.forEach((botApplication) => {
       botApplication.debug('stoppping...');
     });
-    this.server.close();
+    this.server?.close();
     Promise.all(
       this.runningBotApplications.map((framework) => framework.stop)
     ).then(() => {
