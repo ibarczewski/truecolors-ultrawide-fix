@@ -23,7 +23,7 @@ export default class SendJobQueuedNotificationUseCase {
             key: 'Build number:',
             value: !!request.buildURL
               ? `[${request.buildNumber}](${request.buildURL})`
-              : `${request}`
+              : `${request.buildNumber}`
           }
         ],
         ...(request.buildURL && {
