@@ -10,7 +10,7 @@ export const handlers: BotHandler[] = [
     }
   },
   {
-    command: 'demo job completed',
+    command: 'demo job completed success',
     handler: (bot) => {
       try {
         // NOTE: using node-fetch here to use our app end to end (rather than simply sending a card directly)
@@ -33,7 +33,7 @@ export const handlers: BotHandler[] = [
     }
   },
   {
-    command: 'demo job failed',
+    command: 'demo job completed failure',
     handler: (bot) => {
       try {
         // NOTE: using node-fetch here to use our app end to end (rather than simply sending a card directly)
@@ -45,6 +45,28 @@ export const handlers: BotHandler[] = [
               number: 4,
               phase: 'COMPLETED',
               status: 'FAILURE'
+            },
+            name: 'fake jenkins job name'
+          }),
+          headers: { 'Content-Type': 'application/json' }
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  },
+  {
+    command: 'demo job queued',
+    handler: (bot) => {
+      try {
+        // NOTE: using node-fetch here to use our app end to end (rather than simply sending a card directly)
+        fetch(`${process.env.FRAMEWORK_WEBHOOK_URL}/jenkins/${bot.room.id}`, {
+          method: 'post',
+          body: JSON.stringify({
+            build: {
+              full_url: 'https://google.com/',
+              number: 4,
+              phase: 'QUEUED'
             },
             name: 'fake jenkins job name'
           }),

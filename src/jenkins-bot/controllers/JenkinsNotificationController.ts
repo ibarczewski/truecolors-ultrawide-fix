@@ -6,6 +6,7 @@ import SendJobCompletedSuccessNotificationUseCase from '../useCases/SendJobCompl
 import SendJobCompletedFailureNotificationUseCase from '../useCases/SendJobCompletedFailureNotification';
 import { JenkinsJobPhase } from '../useCases/JenkinsJobPhase';
 import { JenkinsJobStatus } from '../useCases/JenkinsJobStatus';
+import SendJobQueuedNotificationUseCase from '../useCases/SendJobQueuedNotification';
 
 interface JenkinsNotificationSCM {
   url: string;
@@ -16,7 +17,7 @@ interface JenkinsNotificationBuild {
   full_url: string;
   number: number;
   phase: JenkinsJobPhase;
-  status: JenkinsJobStatus;
+  status?: JenkinsJobStatus;
   url: string;
   scm: JenkinsNotificationSCM;
   artifacts: any; // complex object where keys are probably only known by admin
@@ -31,15 +32,19 @@ interface JenkinsNotificationPayload {
 export default class JenkinsNotificationController {
   private sendJobCompletedSuccessNotificationUseCase: SendJobCompletedSuccessNotificationUseCase;
   private sendJobCompletedFailureNotificationUseCase: SendJobCompletedFailureNotificationUseCase;
+  private sendJobQueuedNotificationUseCase: SendJobQueuedNotificationUseCase;
   constructor(
     sendJobCompletedNotificationUseCase: SendJobCompletedSuccessNotificationUseCase,
-    sendJobCompletedFailureNotificationUseCase: SendJobCompletedFailureNotificationUseCase
+    sendJobCompletedFailureNotificationUseCase: SendJobCompletedFailureNotificationUseCase,
+    sendJobQueuedNotificationUseCase: SendJobQueuedNotificationUseCase
   ) {
     this.sendJobCompletedSuccessNotificationUseCase =
       sendJobCompletedNotificationUseCase;
 
     this.sendJobCompletedFailureNotificationUseCase =
       sendJobCompletedFailureNotificationUseCase;
+
+    this.sendJobQueuedNotificationUseCase = sendJobQueuedNotificationUseCase;
   }
   async execute(
     req: Request<
@@ -67,6 +72,17 @@ export default class JenkinsNotificationController {
         }
 
         switch (build.phase) {
+          case JenkinsJobPhase.QUEUED:
+            await this.sendJobQueuedNotificationUseCase.execute(
+              {
+                buildNumber: build.number,
+                jobName: name,
+                buildPhase: build.phase,
+                buildURL: build.full_url
+              },
+              bot
+            );
+            break;
           case JenkinsJobPhase.COMPLETED:
             switch (build.status) {
               case JenkinsJobStatus.FAILURE:
