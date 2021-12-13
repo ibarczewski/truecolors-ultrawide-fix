@@ -285,6 +285,75 @@ Array [
 ]
 `;
 
+exports[`jenkins bot when the job is queued, but the build URL does not exist, only show the build number 1`] = `
+Array [
+  Array [
+    Object {
+      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+      "body": Array [
+        Object {
+          "columns": Array [
+            Object {
+              "items": Array [
+                Object {
+                  "color": "Accent",
+                  "text": "asgard",
+                  "type": "TextBlock",
+                  "weight": "Lighter",
+                },
+                Object {
+                  "color": "Light",
+                  "size": "Large",
+                  "spacing": "Small",
+                  "text": "Job QUEUED",
+                  "type": "TextBlock",
+                  "weight": "Bolder",
+                  "wrap": true,
+                },
+              ],
+              "type": "Column",
+              "width": "stretch",
+            },
+          ],
+          "type": "ColumnSet",
+        },
+        Object {
+          "columns": Array [
+            Object {
+              "items": Array [
+                Object {
+                  "color": "Light",
+                  "text": "Build number:",
+                  "type": "TextBlock",
+                },
+              ],
+              "type": "Column",
+              "width": 35,
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "color": "Light",
+                  "text": "16",
+                  "type": "TextBlock",
+                },
+              ],
+              "type": "Column",
+              "width": 65,
+            },
+          ],
+          "horizontalAlignment": "Center",
+          "spacing": "Padding",
+          "type": "ColumnSet",
+        },
+      ],
+      "type": "AdaptiveCard",
+      "version": "1.2",
+    },
+  ],
+]
+`;
+
 exports[`jenkins bot when the job is queued, posts a card 1`] = `
 Array [
   Array [
