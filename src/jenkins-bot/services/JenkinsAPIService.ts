@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import { Commit } from '../templates/JobCompletedTemplate';
+import { JenkinsPipelineJobStatus } from '../useCases/JenkinsPipelineJobStatus';
 
 type JenkinsAPI = (params: { path: string; isWfapi: boolean }) => Promise<any>;
 
@@ -73,6 +74,8 @@ export default class JenkinsRestAPIService {
       isWfapi: true
     });
 
-    return data.stages.some((stage) => stage.status === 'FAILED');
+    return data.stages.some(
+      (stage) => stage.status === JenkinsPipelineJobStatus.FAILED
+    );
   }
 }
