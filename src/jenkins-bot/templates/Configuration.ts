@@ -40,6 +40,12 @@ export default class JenkinsConfigurationTemplate
           placeholder: 'Jenkins API Key',
           maxLength: 0,
           id: 'apiKey'
+        },
+        {
+          type: 'Input.Text',
+          placeholder: 'Jenkins URL (e.g., http://localhost:8080/)',
+          maxLength: 0,
+          id: 'jenkinsUrl'
         }
       ],
       actions: [
