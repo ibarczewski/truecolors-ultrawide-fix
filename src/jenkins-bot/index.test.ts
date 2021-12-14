@@ -167,7 +167,11 @@ describe('jenkins bot', () => {
 
   test('when the job completes and there is commit data, shows the commit message author and sha', async () => {
     jest.spyOn(mockWebex.attachmentActions, 'get').mockResolvedValue({
-      inputs: { username: 'tester', apiKey: 'fooKey' }
+      inputs: {
+        username: 'tester',
+        apiKey: 'fooKey',
+        jenkinsUrl: 'http://localhost:8080/'
+      }
     });
 
     const app = createMockJenkinsBotApp();
