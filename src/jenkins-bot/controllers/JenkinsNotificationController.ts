@@ -8,6 +8,7 @@ import { JenkinsJobPhase } from '../useCases/JenkinsJobPhase';
 import { JenkinsJobStatus } from '../useCases/JenkinsJobStatus';
 import SendJobQueuedNotificationUseCase from '../useCases/SendJobQueuedNotification';
 import { Commit } from '../templates/JobCompletedTemplate';
+import SendJobCompletedPartiallyFailedNotificationUseCase from '../useCases/SendJobCompletedPartiallyFailedNotification';
 
 interface JenkinsNotificationSCM {
   url: string;
@@ -35,10 +36,12 @@ export default class JenkinsNotificationController {
   private sendJobCompletedSuccessNotificationUseCase: SendJobCompletedSuccessNotificationUseCase;
   private sendJobCompletedFailureNotificationUseCase: SendJobCompletedFailureNotificationUseCase;
   private sendJobQueuedNotificationUseCase: SendJobQueuedNotificationUseCase;
+  private sendJobCompletedPartiallyFailedNotificationUseCase: SendJobCompletedPartiallyFailedNotificationUseCase;
   constructor(
     sendJobCompletedNotificationUseCase: SendJobCompletedSuccessNotificationUseCase,
     sendJobCompletedFailureNotificationUseCase: SendJobCompletedFailureNotificationUseCase,
-    sendJobQueuedNotificationUseCase: SendJobQueuedNotificationUseCase
+    sendJobQueuedNotificationUseCase: SendJobQueuedNotificationUseCase,
+    sendJobCompletedPartiallyFailedNotificationUseCase: SendJobCompletedPartiallyFailedNotificationUseCase
   ) {
     this.sendJobCompletedSuccessNotificationUseCase =
       sendJobCompletedNotificationUseCase;
@@ -47,6 +50,9 @@ export default class JenkinsNotificationController {
       sendJobCompletedFailureNotificationUseCase;
 
     this.sendJobQueuedNotificationUseCase = sendJobQueuedNotificationUseCase;
+
+    this.sendJobCompletedPartiallyFailedNotificationUseCase =
+      sendJobCompletedPartiallyFailedNotificationUseCase;
   }
   async execute(
     req: Request<
@@ -63,11 +69,17 @@ export default class JenkinsNotificationController {
         const { name, build } = req.body;
 
         let jenkinsAPI: JenkinsRestAPIService;
+        let hasFailedJobs;
         if (req.params.settingsEnvelopeID) {
           jenkinsAPI = new JenkinsRestAPIService(
             req.params.settingsEnvelopeID,
             botApplication.getWebexSDK()
           );
+          try {
+            hasFailedJobs = await jenkinsAPI.getBuildDataTheOtherWay(build.url);
+          } catch {
+            hasFailedJobs = false;
+          }
         }
 
         switch (build.phase) {
@@ -112,20 +124,34 @@ export default class JenkinsNotificationController {
                 );
                 break;
               case JenkinsJobStatus.SUCCESS:
-                await this.sendJobCompletedSuccessNotificationUseCase.execute(
-                  {
-                    jobName: name,
-                    buildNumber: build.number,
-                    buildPhase: build.phase,
-                    buildStatus: build.status,
-                    buildURL: build.full_url,
-                    repoName,
-                    repoURL,
-                    numberOfGitChanges: build.scm?.changes?.length,
-                    commits
-                  },
-                  bot
-                );
+                if (hasFailedJobs) {
+                  await this.sendJobCompletedPartiallyFailedNotificationUseCase.execute(
+                    {
+                      jobName: name,
+                      buildNumber: build.number,
+                      buildPhase: build.phase,
+                      buildStatus: build.status,
+                      buildURL: build.full_url
+                    },
+                    bot
+                  );
+                } else {
+                  await this.sendJobCompletedSuccessNotificationUseCase.execute(
+                    {
+                      jobName: name,
+                      buildNumber: build.number,
+                      buildPhase: build.phase,
+                      buildStatus: build.status,
+                      buildURL: build.full_url,
+                      repoName,
+                      repoURL,
+                      numberOfGitChanges: build.scm?.changes?.length,
+                      commits
+                    },
+                    bot
+                  );
+                }
+
                 break;
               default:
                 break;
