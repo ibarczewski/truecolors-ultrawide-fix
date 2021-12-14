@@ -12,7 +12,7 @@ interface JenkinsStageData {
   status: string;
 }
 
-interface JenkinsOtherWayBuildData {
+interface JenkinsPipelineData {
   stages: JenkinsStageData[];
 }
 
@@ -68,7 +68,7 @@ export default class JenkinsRestAPIService {
     };
   }
 
-  async getBuildDataTheOtherWay(buildUrl): Promise<JenkinsOtherWayBuildData> {
+  async getPipelineBuildData(buildUrl): Promise<JenkinsPipelineData> {
     const { data } = await this.jenkinsAPI({
       path: buildUrl,
       isWfapi: true

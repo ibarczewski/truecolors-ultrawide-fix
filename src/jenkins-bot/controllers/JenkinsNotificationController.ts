@@ -76,7 +76,7 @@ export default class JenkinsNotificationController {
             botApplication.getWebexSDK()
           );
           try {
-            hasFailedJobs = await jenkinsAPI.getBuildDataTheOtherWay(build.url);
+            hasFailedJobs = await jenkinsAPI.getPipelineBuildData(build.url);
           } catch {
             hasFailedJobs = false;
           }
