@@ -7,14 +7,32 @@ import { routes } from './routes';
 import { handlers } from './handlers';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
+import { JenkinsNotificationPayload } from './controllers/JenkinsNotificationController';
+import { JenkinsJobPhase } from './useCases/JenkinsJobPhase';
+import { JenkinsJobStatus } from './useCases/JenkinsJobStatus';
+import faker from 'faker';
 
 const server = setupServer(
   rest.get(
     'http://localhost:8080/job/asgard/:buildNumber/api/json',
     (req, res, ctx) => {
       const body = {};
-      if (req.params.buildNumber === '18') {
-        body['changeSets'] = [{ kind: 'git', items: ['foo', 'bar', 'baz'] }];
+      if (req.params.buildNumber === '22') {
+        faker.seed(22);
+
+        const items = [];
+
+        for (let i = 0; i < 55; i++) {
+          items.push({
+            id: faker.git.commitSha(),
+            author: {
+              fullName: faker.internet.userName()
+            },
+            authorEmail: faker.internet.email(),
+            msg: faker.git.commitMessage()
+          });
+        }
+        body['changeSet'] = { items };
       }
 
       return res(ctx.status(200), ctx.json(body));
@@ -70,11 +88,7 @@ describe('jenkins bot', () => {
           phase: 'COMPLETED',
           status: 'SUCCESS',
           url: `job/asgard/${expectedJobNumber}/`,
-          scm: {
-            url: 'https://github.com/evgeny-goldin/asgard.git',
-            branch: 'origin/master',
-            commit: 'c6d86dc654b12425e706bcf951adfe5a8627a517'
-          },
+          scm: {},
           artifacts: {
             'asgard.war': {
               archive: `http://localhost:8080/job/asgard/${expectedJobNumber}/artifact/asgard.war`
@@ -90,27 +104,25 @@ describe('jenkins bot', () => {
     expect(mockBot.sendCard.mock.calls).toMatchSnapshot();
   });
 
-  test('if job has changes and user has set up their api key and username, include number of changes on the card', async () => {
-    jest.spyOn(mockWebex.attachmentActions, 'get').mockResolvedValue({
-      inputs: { username: 'tester', apiKey: 'fooKey' }
-    });
+  test('if job has scm data, include number of changes and repo name on the card', async () => {
     const app = createMockJenkinsBotApp();
 
     const expectedJobNumber = 18;
 
-    const jobCompletedNotification = {
+    const jobCompletedNotification: JenkinsNotificationPayload = {
       name: 'asgard',
       url: 'job/asgard/',
       build: {
         full_url: `http://localhost:8080/job/asgard/${expectedJobNumber}/`,
         number: expectedJobNumber,
-        phase: 'COMPLETED',
-        status: 'SUCCESS',
+        phase: JenkinsJobPhase.COMPLETED,
+        status: JenkinsJobStatus.SUCCESS,
         url: `job/asgard/${expectedJobNumber}/`,
         scm: {
           url: 'https://github.com/evgeny-goldin/asgard.git',
           branch: 'origin/master',
-          commit: 'c6d86dc654b12425e706bcf951adfe5a8627a517'
+          commit: 'c6d86dc654b12425e706bcf951adfe5a8627a517',
+          changes: ['1', '2', '3.txt']
         },
         artifacts: {
           'asgard.war': {
@@ -125,7 +137,51 @@ describe('jenkins bot', () => {
     };
 
     await request(app)
-      .post('/jenkins/fooRoomId/fooSettingsEnvelopeId')
+      .post('/jenkins/fooRoomId')
+      .set('User-Agent', 'supertest')
+      .send(jobCompletedNotification);
+
+    expect(mockBot.sendCard.mock.calls).toMatchSnapshot();
+  });
+
+  test('when the job completes and there is commit data, shows the commit message author and sha', async () => {
+    jest.spyOn(mockWebex.attachmentActions, 'get').mockResolvedValue({
+      inputs: { username: 'tester', apiKey: 'fooKey' }
+    });
+
+    const app = createMockJenkinsBotApp();
+
+    const expectedJobNumber = 22;
+
+    const jobCompletedNotification: JenkinsNotificationPayload = {
+      name: 'asgard',
+      url: 'job/asgard/',
+      build: {
+        full_url: `http://localhost:8080/job/asgard/${expectedJobNumber}/`,
+        number: expectedJobNumber,
+        phase: JenkinsJobPhase.COMPLETED,
+        status: JenkinsJobStatus.SUCCESS,
+        url: `job/asgard/${expectedJobNumber}/`,
+        scm: {
+          url: 'https://github.com/evgeny-goldin/asgard.git',
+          branch: 'origin/master',
+          commit: 'c6d86dc654b12425e706bcf951adfe5a8627a517',
+          changes: Array.from(Array(55).keys())
+        },
+        artifacts: {
+          'asgard.war': {
+            archive: `http://localhost:8080/job/asgard/${expectedJobNumber}/artifact/asgard.war`
+          },
+          'asgard-standalone.jar': {
+            archive: `http://localhost:8080/job/asgard/${expectedJobNumber}/artifact/asgard-standalone.jar`,
+            s3: 'https://s3-eu-west-1.amazonaws.com/evgenyg-bakery/asgard/asgard-standalone.jar'
+          }
+        }
+      }
+    };
+
+    await request(app)
+      .post('/jenkins/fooRoomId/fooEnvelopeId')
       .set('User-Agent', 'supertest')
       .send(jobCompletedNotification);
 

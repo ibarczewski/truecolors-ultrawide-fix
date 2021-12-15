@@ -1,38 +1,26 @@
 import { Bot } from '../../common/Bot';
-import {
-  TaskCreatedTemplate,
-  TaskCreatedTemplateData
-} from '../../common/templates/TaskCreated';
+import JobCompletedTemplate, {
+  JobCompletedTemplateData
+} from '../templates/JobCompletedTemplate';
+import { JenkinsJobStatus } from './JenkinsJobStatus';
 import { JobCompletedNotificationDTO } from './JobCompletedNotificationDTO';
 
 export default class SendJobCompletedFailureNotificationUseCase {
-  private template: TaskCreatedTemplate;
-  constructor(template: TaskCreatedTemplate) {
+  private template: JobCompletedTemplate;
+  constructor(template: JobCompletedTemplate) {
     this.template = template;
   }
   async execute(request: JobCompletedNotificationDTO, bot: Bot) {
     try {
-      const data: TaskCreatedTemplateData = {
-        projectName: request.jobName,
-        title: `Job ${request.buildPhase} 🌧️`,
-        metadata: [
-          {
-            key: 'Build number:',
-            value: !!request.buildURL
-              ? `[${request.buildNumber}](${request.buildURL})`
-              : `${request.buildNumber}`
-          },
-          { key: 'Status:', value: request.buildStatus }
-        ],
-        ...(request.buildURL && {
-          actions: [
-            {
-              type: 'Action.OpenUrl',
-              title: 'See the Console Output',
-              url: `${request.buildURL}console`
-            }
-          ]
-        })
+      const data: JobCompletedTemplateData = {
+        jobStatus: JenkinsJobStatus.FAILURE,
+        buildNumber: request.buildNumber,
+        buildURL: request.buildURL,
+        commits: request.commits,
+        jobName: request.jobName,
+        numberOfChanges: request.numberOfGitChanges,
+        scm: request.repoName,
+        scmURL: request.repoURL
       };
 
       const jobCompletedCard = this.template.buildCard(data);

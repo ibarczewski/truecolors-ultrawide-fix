@@ -7,11 +7,13 @@ import SendJobCompletedFailureNotificationUseCase from '../useCases/SendJobCompl
 import { JenkinsJobPhase } from '../useCases/JenkinsJobPhase';
 import { JenkinsJobStatus } from '../useCases/JenkinsJobStatus';
 import SendJobQueuedNotificationUseCase from '../useCases/SendJobQueuedNotification';
+import { Commit } from '../templates/JobCompletedTemplate';
 
 interface JenkinsNotificationSCM {
   url: string;
   branch: string;
   commit: string;
+  changes: any[];
 }
 interface JenkinsNotificationBuild {
   full_url: string;
@@ -23,7 +25,7 @@ interface JenkinsNotificationBuild {
   artifacts: any; // complex object where keys are probably only known by admin
 }
 
-interface JenkinsNotificationPayload {
+export interface JenkinsNotificationPayload {
   name: string;
   url: string;
   build: JenkinsNotificationBuild;
@@ -59,16 +61,13 @@ export default class JenkinsNotificationController {
     if (bot) {
       try {
         const { name, build } = req.body;
-        let numberOfGitChanges;
+
+        let jenkinsAPI: JenkinsRestAPIService;
         if (req.params.settingsEnvelopeID) {
-          const jenkinsAPI = new JenkinsRestAPIService(
+          jenkinsAPI = new JenkinsRestAPIService(
             req.params.settingsEnvelopeID,
             botApplication.getWebexSDK()
           );
-
-          ({ numberOfGitChanges } = await jenkinsAPI.getBuildData(
-            build.full_url
-          ));
         }
 
         switch (build.phase) {
@@ -84,6 +83,17 @@ export default class JenkinsNotificationController {
             );
             break;
           case JenkinsJobPhase.COMPLETED:
+            let commits: Commit[];
+            let repoName;
+            let repoURL;
+            if (build.scm?.url) {
+              const url = new URL(build.scm.url);
+              repoName = /(?<=\/)(.*?)(?=\.)/.exec(url.pathname)[0];
+              repoURL = build.scm.url?.replace('.git', '');
+            }
+            if (jenkinsAPI) {
+              ({ commits } = await jenkinsAPI.getBuildData(build.full_url));
+            }
             switch (build.status) {
               case JenkinsJobStatus.FAILURE:
                 await this.sendJobCompletedFailureNotificationUseCase.execute(
@@ -92,7 +102,11 @@ export default class JenkinsNotificationController {
                     buildNumber: build.number,
                     buildPhase: build.phase,
                     buildStatus: build.status,
-                    buildURL: build.full_url
+                    buildURL: build.full_url,
+                    repoName,
+                    repoURL,
+                    numberOfGitChanges: build.scm?.changes?.length,
+                    commits
                   },
                   bot
                 );
@@ -105,7 +119,10 @@ export default class JenkinsNotificationController {
                     buildPhase: build.phase,
                     buildStatus: build.status,
                     buildURL: build.full_url,
-                    numberOfGitChanges
+                    repoName,
+                    repoURL,
+                    numberOfGitChanges: build.scm?.changes?.length,
+                    commits
                   },
                   bot
                 );

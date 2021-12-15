@@ -1,51 +1,26 @@
 import { Bot } from '../../common/Bot';
-import {
-  TaskCreatedTemplate,
-  TaskCreatedTemplateData
-} from '../../common/templates/TaskCreated';
+import JobCompletedTemplate, {
+  JobCompletedTemplateData
+} from '../templates/JobCompletedTemplate';
+import { JenkinsJobStatus } from './JenkinsJobStatus';
 import { JobCompletedNotificationDTO } from './JobCompletedNotificationDTO';
 
-interface JobCompletedSuccessNotificationDTO
-  extends JobCompletedNotificationDTO {
-  numberOfGitChanges?: number;
-}
-
 export default class SendJobCompletedSuccessNotificationUseCase {
-  private template: TaskCreatedTemplate;
-  constructor(template: TaskCreatedTemplate) {
+  private template: JobCompletedTemplate;
+  constructor(template: JobCompletedTemplate) {
     this.template = template;
   }
-  async execute(request: JobCompletedSuccessNotificationDTO, bot: Bot) {
+  async execute(request: JobCompletedNotificationDTO, bot: Bot) {
     try {
-      const data: TaskCreatedTemplateData = {
-        projectName: request.jobName,
-        title: `Job ${request.buildPhase} ☀️`,
-        metadata: [
-          {
-            key: 'Build number:',
-            value: !!request.buildURL
-              ? `[${request.buildNumber}](${request.buildURL})`
-              : `${request.buildNumber}`
-          },
-          { key: 'Status:', value: request.buildStatus },
-          ...(request.numberOfGitChanges
-            ? [
-                {
-                  key: 'Number of changes:',
-                  value: `${request.numberOfGitChanges}`
-                }
-              ]
-            : [])
-        ],
-        ...(request.buildURL && {
-          actions: [
-            {
-              type: 'Action.OpenUrl',
-              title: 'Open in Jenkins',
-              url: request.buildURL
-            }
-          ]
-        })
+      const data: JobCompletedTemplateData = {
+        jobStatus: JenkinsJobStatus.SUCCESS,
+        buildNumber: request.buildNumber,
+        buildURL: request.buildURL,
+        commits: request.commits,
+        jobName: request.jobName,
+        numberOfChanges: request.numberOfGitChanges,
+        scm: request.repoName,
+        scmURL: request.repoURL
       };
 
       const jobCompletedCard = this.template.buildCard(data);

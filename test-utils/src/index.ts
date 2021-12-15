@@ -3,7 +3,11 @@ import { GitHubEnterpriseTestUtilities } from './git-test-utils';
 
 const available_commands = {
   'create new issue': { method: 'createNewIssue', args: [process.argv[3]] },
-  'open pull request': { method: 'openPullRequest', args: [] }
+  'open pull request': { method: 'openPullRequest', args: [] },
+  'mock commits': {
+    method: 'nCommitsToBranch',
+    args: [process.argv[3], process.argv[4]]
+  }
 };
 
 export default (async function () {

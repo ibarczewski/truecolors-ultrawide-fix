@@ -110,4 +110,21 @@ export class GitHubEnterpriseTestUtilities implements GitTestUtilities {
 
     console.log(newIssueRes.status);
   }
+
+  public async nCommitsToBranch(n: number, branch: string) {
+    console.log(`committing ${n} changes to ${branch}`);
+    const git = simpleGit('./tmp-git/test-repo');
+
+    await git.checkoutBranch(branch, `origin/${branch}`);
+    for (let i = 0; i < n; i++) {
+      fs.writeFileSync(
+        './tmp-git/test-repo/tester.txt',
+        faker.lorem.paragraph()
+      );
+      await git.add('tester.txt');
+      await git.commit(faker.git.commitMessage());
+    }
+
+    await git.push('origin', branch, ['--force']);
+  }
 }
