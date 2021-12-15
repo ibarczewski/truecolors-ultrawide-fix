@@ -43,7 +43,7 @@ Array [
               "items": Array [
                 Object {
                   "spacing": "None",
-                  "text": "18",
+                  "text": "[18](http://localhost:8080/job/asgard/18/)",
                   "type": "TextBlock",
                 },
               ],
@@ -210,7 +210,7 @@ Array [
               "items": Array [
                 Object {
                   "spacing": "None",
-                  "text": "17",
+                  "text": "[17](http://localhost:8080/job/asgard/17/)",
                   "type": "TextBlock",
                 },
               ],
@@ -315,7 +315,7 @@ Array [
               "items": Array [
                 Object {
                   "spacing": "None",
-                  "text": "22",
+                  "text": "[22](http://localhost:8080/job/asgard/22/)",
                   "type": "TextBlock",
                 },
               ],
@@ -705,7 +705,7 @@ Array [
               "items": Array [
                 Object {
                   "spacing": "None",
-                  "text": "16",
+                  "text": "[16](http://localhost:8080/job/asgard/16/)",
                   "type": "TextBlock",
                 },
               ],

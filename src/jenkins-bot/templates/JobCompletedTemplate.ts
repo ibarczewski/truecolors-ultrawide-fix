@@ -68,7 +68,7 @@ export default class JobCompletedTemplate
               items: [
                 {
                   type: 'TextBlock',
-                  text: `${data.buildNumber}`,
+                  text: `[${data.buildNumber}](${data.buildURL})`,
                   spacing: 'None'
                 }
               ]
