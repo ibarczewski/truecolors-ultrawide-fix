@@ -99,10 +99,10 @@ export default class JenkinsNotificationController {
               repoURL = build.scm.url?.replace('.git', '');
             }
             if (jenkinsAPI) {
-              ({ commits } = await jenkinsAPI.getBuildData(build.url));
-              ({ hasFailedStage } = await jenkinsAPI.getPipelineBuildData(
-                build.url
-              ));
+              [{ commits }, { hasFailedStage }] = await Promise.all([
+                jenkinsAPI.getBuildData(build.url),
+                jenkinsAPI.getPipelineBuildData(build.url)
+              ]);
             }
             switch (build.status) {
               case JenkinsJobStatus.FAILURE:
