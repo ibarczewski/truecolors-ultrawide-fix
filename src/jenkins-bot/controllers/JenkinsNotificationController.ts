@@ -69,17 +69,11 @@ export default class JenkinsNotificationController {
         const { name, build } = req.body;
 
         let jenkinsAPI: JenkinsRestAPIService;
-        let hasFailedJobs;
         if (req.params.settingsEnvelopeID) {
           jenkinsAPI = new JenkinsRestAPIService(
             req.params.settingsEnvelopeID,
             botApplication.getWebexSDK()
           );
-          try {
-            hasFailedJobs = await jenkinsAPI.getPipelineBuildData(build.url);
-          } catch {
-            hasFailedJobs = false;
-          }
         }
 
         switch (build.phase) {
@@ -98,13 +92,17 @@ export default class JenkinsNotificationController {
             let commits: Commit[];
             let repoName;
             let repoURL;
+            let hasFailedStage;
             if (build.scm?.url) {
               const url = new URL(build.scm.url);
               repoName = /(?<=\/)(.*?)(?=\.)/.exec(url.pathname)[0];
               repoURL = build.scm.url?.replace('.git', '');
             }
             if (jenkinsAPI) {
-              ({ commits } = await jenkinsAPI.getBuildData(build.full_url));
+              ({ commits } = await jenkinsAPI.getBuildData(build.url));
+              ({ hasFailedStage } = await jenkinsAPI.getPipelineBuildData(
+                build.url
+              ));
             }
             switch (build.status) {
               case JenkinsJobStatus.FAILURE:
@@ -124,7 +122,7 @@ export default class JenkinsNotificationController {
                 );
                 break;
               case JenkinsJobStatus.SUCCESS:
-                if (hasFailedJobs) {
+                if (hasFailedStage) {
                   await this.sendJobCompletedPartiallyFailedNotificationUseCase.execute(
                     {
                       jobName: name,

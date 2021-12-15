@@ -1,4 +1,4 @@
-export enum JenkinsPipelineJobStatus {
+export enum JenkinsPipelineStageStatus {
   SUCCESS = 'SUCCESS',
   FAILED = 'FAILED'
 }

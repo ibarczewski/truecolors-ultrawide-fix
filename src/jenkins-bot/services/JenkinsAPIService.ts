@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import { Commit } from '../templates/JobCompletedTemplate';
-import { JenkinsPipelineJobStatus } from '../useCases/JenkinsPipelineJobStatus';
+import { JenkinsPipelineStageStatus } from '../useCases/JenkinsPipelineStageStatus';
 
 type JenkinsAPI = (params: { path: string; isWfapi: boolean }) => Promise<any>;
 
@@ -12,8 +12,8 @@ interface JenkinsStageData {
   status: string;
 }
 
-interface JenkinsPipelineData {
-  stages: JenkinsStageData[];
+interface JenkinsBuildPipelineInfo {
+  hasFailedStage: boolean;
 }
 
 export default class JenkinsRestAPIService {
@@ -68,14 +68,23 @@ export default class JenkinsRestAPIService {
     };
   }
 
-  async getPipelineBuildData(buildUrl): Promise<JenkinsPipelineData> {
-    const { data } = await this.jenkinsAPI({
-      path: buildUrl,
-      isWfapi: true
-    });
+  async getPipelineBuildData(
+    buildPath: string
+  ): Promise<JenkinsBuildPipelineInfo> {
+    try {
+      const { data } = await this.jenkinsAPI({
+        path: buildPath,
+        isWfapi: true
+      });
 
-    return data.stages.some(
-      (stage) => stage.status === JenkinsPipelineJobStatus.FAILED
-    );
+      const hasFailedStage = data.stages.some(
+        (stage: JenkinsStageData) =>
+          stage.status === JenkinsPipelineStageStatus.FAILED
+      );
+
+      return { hasFailedStage };
+    } catch {
+      return { hasFailedStage: false };
+    }
   }
 }

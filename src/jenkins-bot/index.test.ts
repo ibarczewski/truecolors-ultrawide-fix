@@ -11,6 +11,7 @@ import { JenkinsNotificationPayload } from './controllers/JenkinsNotificationCon
 import { JenkinsJobPhase } from './useCases/JenkinsJobPhase';
 import { JenkinsJobStatus } from './useCases/JenkinsJobStatus';
 import faker from 'faker';
+import { JenkinsPipelineStageStatus } from './useCases/JenkinsPipelineStageStatus';
 
 const apiJsonEndpointHandler = rest.get(
   'http://localhost:8080/job/asgard/:buildNumber/api/json',
@@ -34,14 +35,6 @@ const apiJsonEndpointHandler = rest.get(
       body['changeSet'] = { items };
     }
 
-    if (req.params.buildNumber === '20') {
-      body['stages'] = [
-        { status: JenkinsJobStatus.SUCCESS },
-        { status: JenkinsJobStatus.FAILURE },
-        { status: JenkinsJobStatus.SUCCESS }
-      ];
-    }
-
     return res(ctx.status(200), ctx.json(body));
   }
 );
@@ -50,8 +43,12 @@ const wfApiEndpointHandler = rest.get(
   'http://localhost:8080/job/asgard/:buildNumber/wfapi',
   (req, res, ctx) => {
     const body = {};
-    if (req.params.buildNumber === '18') {
-      body['changeSets'] = [{ kind: 'git', items: ['foo', 'bar', 'baz'] }];
+    if (req.params.buildNumber === '20') {
+      body['stages'] = [
+        { status: JenkinsPipelineStageStatus.SUCCESS },
+        { status: JenkinsPipelineStageStatus.FAILED },
+        { status: JenkinsPipelineStageStatus.SUCCESS }
+      ];
     }
 
     return res(ctx.status(200), ctx.json(body));
@@ -287,11 +284,18 @@ describe('jenkins bot', () => {
   });
 
   test('when the job partially fails, posts a card', async () => {
+    jest.spyOn(mockWebex.attachmentActions, 'get').mockResolvedValue({
+      inputs: {
+        username: 'tester',
+        apiKey: 'fooKey',
+        jenkinsUrl: 'http://localhost:8080/'
+      }
+    });
     const app = createMockJenkinsBotApp();
     const expectedJobNumber = 20;
 
     await request(app)
-      .post('/jenkins/fooRoomId')
+      .post('/jenkins/fooRoomId/fooEnvelopeId')
       .set('User-Agent', 'supertest')
       .send({
         name: 'asgard',

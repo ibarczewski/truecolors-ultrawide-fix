@@ -964,7 +964,7 @@ Array [
                   "color": "Light",
                   "size": "Large",
                   "spacing": "Small",
-                  "text": "Job COMPLETED ☀️",
+                  "text": "Job COMPLETED ⛅",
                   "type": "TextBlock",
                   "weight": "Bolder",
                   "wrap": true,
@@ -1020,9 +1020,9 @@ Array [
         Object {
           "actions": Array [
             Object {
-              "title": "Open in Jenkins",
+              "title": "See the Console Output",
               "type": "Action.OpenUrl",
-              "url": "http://localhost:8080/job/asgard/20/",
+              "url": "http://localhost:8080/job/asgard/20/console",
             },
           ],
           "type": "ActionSet",
