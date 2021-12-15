@@ -18,15 +18,16 @@ export class GitHubEnterpriseTestUtilities implements GitTestUtilities {
   private git: SimpleGit;
   private githubAPI: GithubAPI;
   constructor(repoURL: string, accessToken: string) {
-    const parts =
+    const [, , protocol, , domain, , owner, repo] =
       /((git@|http(s)?:\/\/)([\w\.@]+)(\/|:))([\w,\-,\_]+)\/([\w,\-,\_]+)(.git){0,1}((\/){0,1})/.exec(
         repoURL
       );
-    this.repoURL = `${parts[2]}${accessToken}@${parts[4]}/${parts[6]}/${parts[7]}.git`;
+
+    this.repoURL = `${protocol}${accessToken}@${domain}/${owner}/${repo}.git`;
 
     this.githubAPI = async ({ path, method, body }) => {
       const response = await fetch(
-        `https://github.com/api/v3/repos/${parts[6]}/${parts[7]}${path}`,
+        `${protocol}${domain}/api/v3/repos/${owner}/${repo}${path}`,
         {
           headers: {
             authorization: `token ${accessToken}`
@@ -65,9 +66,11 @@ export class GitHubEnterpriseTestUtilities implements GitTestUtilities {
   }
 
   public async openPullRequest() {
+    let headBranch;
+    let baseBranch;
     try {
-      const baseBranch = faker.git.branch();
-      const headBranch = faker.git.branch();
+      baseBranch = faker.git.branch();
+      headBranch = faker.git.branch();
 
       await this.git.checkoutBranch(baseBranch, 'origin/master');
       await this.git.push('origin', baseBranch);
@@ -89,12 +92,12 @@ export class GitHubEnterpriseTestUtilities implements GitTestUtilities {
           title: faker.git.commitMessage()
         }
       });
-
+    } catch (err) {
+      console.log(err);
+    } finally {
       // cleanup
       await this.git.push('origin', headBranch, ['--delete']);
       await this.git.push('origin', baseBranch, ['--delete']);
-    } catch (err) {
-      console.log(err);
     }
   }
 

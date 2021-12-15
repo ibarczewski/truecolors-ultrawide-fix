@@ -22,7 +22,7 @@ const server = setupServer(
 
         const items = [];
 
-        for (let i = 0; i < 55; i++) {
+        Array.from(Array(55)).forEach(() => {
           items.push({
             id: faker.git.commitSha(),
             author: {
@@ -31,7 +31,7 @@ const server = setupServer(
             authorEmail: faker.internet.email(),
             msg: faker.git.commitMessage()
           });
-        }
+        });
         body['changeSet'] = { items };
       }
 
