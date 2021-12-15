@@ -1,9 +1,10 @@
 import fetch from 'node-fetch';
+import { Commit } from '../templates/JobCompletedTemplate';
 
 type JenkinsAPI = (params: { path: string }) => Promise<any>;
 
 interface JenkinsBuildData {
-  numberOfGitChanges: number;
+  commits: Commit[];
 }
 
 export default class JenkinsRestAPIService {
@@ -35,19 +36,24 @@ export default class JenkinsRestAPIService {
         }
       });
       const data = await res.json();
-      console.log(data);
       return { data, status: res.status };
     };
   }
 
   async getBuildData(buildUrl): Promise<JenkinsBuildData> {
     const { data } = await this.jenkinsAPI({ path: buildUrl });
-    const numberOfGitChanges = data.changeSets?.find(
-      (changeSet) => changeSet.kind === 'git'
-    )?.items?.length;
+
+    const commits: Commit[] = data.changeSet?.items?.map((changeSetItem) => {
+      return {
+        sha: changeSetItem.id,
+        author: changeSetItem.author.fullName,
+        authorEmail: changeSetItem.authorEmail,
+        message: changeSetItem.msg
+      };
+    });
 
     return {
-      numberOfGitChanges
+      commits
     };
   }
 }

@@ -3,7 +3,11 @@ import { GitHubEnterpriseTestUtilities } from './git-test-utils';
 
 const available_commands = {
   'create new issue': { method: 'createNewIssue', args: [process.argv[3]] },
-  'open pull request': { method: 'openPullRequest', args: [] }
+  'open pull request': { method: 'openPullRequest', args: [] },
+  'mock commits': {
+    method: 'nCommitsToBranch',
+    args: [process.argv[3], process.argv[4]]
+  }
 };
 
 export default (async function () {
@@ -25,8 +29,8 @@ export default (async function () {
   }
 
   const gitTestUtils = new GitHubEnterpriseTestUtilities(
-    process.env.TEST_GIT_REPOSITORY!,
-    process.env.GITHUB_ACCESS_TOKEN!
+    TEST_GIT_REPOSITORY!,
+    GITHUB_ACCESS_TOKEN!
   );
 
   const commands = {};

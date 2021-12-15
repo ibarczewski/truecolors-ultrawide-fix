@@ -59,9 +59,8 @@ ssh to vm with `ssh -i ./deploy/ec2/Bot-PoC.pem ec2-user@ec2-18-235-1-183.comput
 ### Prerequisites
 
 - environment variables in .env
-- - GITHUB_ACCESS_TOKEN={personal access token from [access token settings](https://sqbu-github.cisco.com/settings/tokens/new?scopes=repo) }
-- - TEST_GIT_REPO={ssh address of github enterprise repo for testing}
-- ssh access to TEST_GIT_REPO
+- - GITHUB_ACCESS_TOKEN={personal access token from [access token settings](https://github.com/settings/tokens/new?scopes=repo) }
+- - TEST_GIT_REPO={https address of github enterprise repo for testing}
 
 ### Development
 

@@ -1,29 +1,84 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`jenkins bot if job has changes and user has set up their api key and username, include number of changes on the card 1`] = `
+exports[`jenkins bot if job has scm data, include number of changes and repo name on the card 1`] = `
 Array [
   Array [
     Object {
       "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
       "body": Array [
         Object {
+          "items": Array [
+            Object {
+              "color": "Light",
+              "text": "asgard",
+              "type": "TextBlock",
+              "wrap": true,
+            },
+            Object {
+              "size": "Large",
+              "spacing": "ExtraLarge",
+              "text": "Job COMPLETED ☀️",
+              "type": "TextBlock",
+              "weight": "Bolder",
+              "wrap": true,
+            },
+          ],
+          "spacing": "None",
+          "type": "Container",
+        },
+        Object {
           "columns": Array [
             Object {
               "items": Array [
                 Object {
-                  "color": "Accent",
-                  "text": "asgard",
+                  "color": "Light",
+                  "text": "Build number",
                   "type": "TextBlock",
-                  "weight": "Lighter",
                 },
+              ],
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "spacing": "None",
+                  "text": "[18](http://localhost:8080/job/asgard/18/)",
+                  "type": "TextBlock",
+                },
+              ],
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
                 Object {
                   "color": "Light",
-                  "size": "Large",
-                  "spacing": "Small",
-                  "text": "Job COMPLETED ☀️",
+                  "text": "  |",
                   "type": "TextBlock",
-                  "weight": "Bolder",
-                  "wrap": true,
+                },
+              ],
+              "spacing": "None",
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "color": "Light",
+                  "text": "Status",
+                  "type": "TextBlock",
+                },
+              ],
+              "spacing": "None",
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "text": "SUCCESS",
+                  "type": "TextBlock",
                 },
               ],
               "type": "Column",
@@ -33,64 +88,73 @@ Array [
           "type": "ColumnSet",
         },
         Object {
+          "bleed": true,
           "columns": Array [
             Object {
               "items": Array [
                 Object {
                   "color": "Light",
-                  "text": "Build number:",
-                  "type": "TextBlock",
-                },
-                Object {
-                  "color": "Light",
-                  "spacing": "Small",
-                  "text": "Status:",
-                  "type": "TextBlock",
-                },
-                Object {
-                  "color": "Light",
-                  "spacing": "Small",
-                  "text": "Number of changes:",
+                  "text": "SCM",
                   "type": "TextBlock",
                 },
               ],
               "type": "Column",
-              "width": 35,
+              "width": "auto",
             },
             Object {
               "items": Array [
                 Object {
-                  "color": "Light",
-                  "text": "[18](http://localhost:8080/job/asgard/18/)",
+                  "text": "[evgeny-goldin/asgard](https://github.com/evgeny-goldin/asgard)",
                   "type": "TextBlock",
+                  "wrap": true,
                 },
+              ],
+              "type": "Column",
+              "width": "stretch",
+            },
+          ],
+          "spacing": "Small",
+          "type": "ColumnSet",
+        },
+        Object {
+          "columns": Array [
+            Object {
+              "items": Array [
                 Object {
                   "color": "Light",
-                  "spacing": "Small",
-                  "text": "SUCCESS",
+                  "text": "Number of changes",
                   "type": "TextBlock",
+                  "wrap": true,
                 },
+              ],
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
                 Object {
-                  "color": "Light",
-                  "spacing": "Small",
                   "text": "3",
                   "type": "TextBlock",
                 },
               ],
               "type": "Column",
-              "width": 65,
+              "width": "auto",
             },
           ],
-          "horizontalAlignment": "Center",
-          "spacing": "Padding",
+          "spacing": "Small",
           "type": "ColumnSet",
         },
         Object {
           "actions": Array [
             Object {
-              "title": "Open in Jenkins",
+              "title": "Build Details",
               "type": "Action.OpenUrl",
               "url": "http://localhost:8080/job/asgard/18/",
+            },
+            Object {
+              "title": "All Changes",
+              "type": "Action.OpenUrl",
+              "url": "http://localhost:8080/job/asgard/18/changes",
             },
           ],
           "type": "ActionSet",
@@ -110,23 +174,78 @@ Array [
       "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
       "body": Array [
         Object {
+          "items": Array [
+            Object {
+              "color": "Light",
+              "text": "asgard",
+              "type": "TextBlock",
+              "wrap": true,
+            },
+            Object {
+              "size": "Large",
+              "spacing": "ExtraLarge",
+              "text": "Job COMPLETED ☀️",
+              "type": "TextBlock",
+              "weight": "Bolder",
+              "wrap": true,
+            },
+          ],
+          "spacing": "None",
+          "type": "Container",
+        },
+        Object {
           "columns": Array [
             Object {
               "items": Array [
                 Object {
-                  "color": "Accent",
-                  "text": "asgard",
+                  "color": "Light",
+                  "text": "Build number",
                   "type": "TextBlock",
-                  "weight": "Lighter",
                 },
+              ],
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "spacing": "None",
+                  "text": "[17](http://localhost:8080/job/asgard/17/)",
+                  "type": "TextBlock",
+                },
+              ],
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
                 Object {
                   "color": "Light",
-                  "size": "Large",
-                  "spacing": "Small",
-                  "text": "Job COMPLETED ☀️",
+                  "text": "  |",
                   "type": "TextBlock",
-                  "weight": "Bolder",
-                  "wrap": true,
+                },
+              ],
+              "spacing": "None",
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "color": "Light",
+                  "text": "Status",
+                  "type": "TextBlock",
+                },
+              ],
+              "spacing": "None",
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "text": "SUCCESS",
+                  "type": "TextBlock",
                 },
               ],
               "type": "Column",
@@ -136,52 +255,401 @@ Array [
           "type": "ColumnSet",
         },
         Object {
+          "actions": Array [
+            Object {
+              "title": "Build Details",
+              "type": "Action.OpenUrl",
+              "url": "http://localhost:8080/job/asgard/17/",
+            },
+          ],
+          "type": "ActionSet",
+        },
+      ],
+      "type": "AdaptiveCard",
+      "version": "1.2",
+    },
+  ],
+]
+`;
+
+exports[`jenkins bot when the job completes and there is commit data, shows the commit message author and sha 1`] = `
+Array [
+  Array [
+    Object {
+      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+      "body": Array [
+        Object {
+          "items": Array [
+            Object {
+              "color": "Light",
+              "text": "asgard",
+              "type": "TextBlock",
+              "wrap": true,
+            },
+            Object {
+              "size": "Large",
+              "spacing": "ExtraLarge",
+              "text": "Job COMPLETED ☀️",
+              "type": "TextBlock",
+              "weight": "Bolder",
+              "wrap": true,
+            },
+          ],
+          "spacing": "None",
+          "type": "Container",
+        },
+        Object {
           "columns": Array [
             Object {
               "items": Array [
                 Object {
                   "color": "Light",
-                  "text": "Build number:",
-                  "type": "TextBlock",
-                },
-                Object {
-                  "color": "Light",
-                  "spacing": "Small",
-                  "text": "Status:",
+                  "text": "Build number",
                   "type": "TextBlock",
                 },
               ],
               "type": "Column",
-              "width": 35,
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "spacing": "None",
+                  "text": "[22](http://localhost:8080/job/asgard/22/)",
+                  "type": "TextBlock",
+                },
+              ],
+              "type": "Column",
+              "width": "auto",
             },
             Object {
               "items": Array [
                 Object {
                   "color": "Light",
-                  "text": "[17](http://localhost:8080/job/asgard/17/)",
+                  "text": "  |",
                   "type": "TextBlock",
                 },
+              ],
+              "spacing": "None",
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
                 Object {
                   "color": "Light",
-                  "spacing": "Small",
+                  "text": "Status",
+                  "type": "TextBlock",
+                },
+              ],
+              "spacing": "None",
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
+                Object {
                   "text": "SUCCESS",
                   "type": "TextBlock",
                 },
               ],
               "type": "Column",
-              "width": 65,
+              "width": "stretch",
             },
           ],
-          "horizontalAlignment": "Center",
-          "spacing": "Padding",
           "type": "ColumnSet",
+        },
+        Object {
+          "bleed": true,
+          "columns": Array [
+            Object {
+              "items": Array [
+                Object {
+                  "color": "Light",
+                  "text": "SCM",
+                  "type": "TextBlock",
+                },
+              ],
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "text": "[evgeny-goldin/asgard](https://github.com/evgeny-goldin/asgard)",
+                  "type": "TextBlock",
+                  "wrap": true,
+                },
+              ],
+              "type": "Column",
+              "width": "stretch",
+            },
+          ],
+          "spacing": "Small",
+          "type": "ColumnSet",
+        },
+        Object {
+          "columns": Array [
+            Object {
+              "items": Array [
+                Object {
+                  "color": "Light",
+                  "text": "Number of changes",
+                  "type": "TextBlock",
+                  "wrap": true,
+                },
+              ],
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "text": "55",
+                  "type": "TextBlock",
+                },
+              ],
+              "type": "Column",
+              "width": "auto",
+            },
+          ],
+          "spacing": "Small",
+          "type": "ColumnSet",
+        },
+        Object {
+          "items": Array [
+            Object {
+              "items": Array [
+                Object {
+                  "columns": Array [
+                    Object {
+                      "items": Array [
+                        Object {
+                          "text": "[3b7b6ad](https://github.com/evgeny-goldin/asgard/commit/3b7b6adc2d5e43b037cc0281d1bd3702c5f6b04e)",
+                          "type": "TextBlock",
+                          "wrap": true,
+                        },
+                      ],
+                      "type": "Column",
+                      "width": "auto",
+                    },
+                    Object {
+                      "items": Array [
+                        Object {
+                          "color": "light",
+                          "horizontalAlignment": "Center",
+                          "text": "|",
+                          "type": "TextBlock",
+                        },
+                      ],
+                      "spacing": "None",
+                      "type": "Column",
+                      "width": "auto",
+                    },
+                    Object {
+                      "items": Array [
+                        Object {
+                          "text": "[Octavia_West38](mailto:Letha_Boyer@gmail.com)",
+                          "type": "TextBlock",
+                          "wrap": true,
+                        },
+                      ],
+                      "spacing": "None",
+                      "type": "Column",
+                      "width": "auto",
+                    },
+                  ],
+                  "type": "ColumnSet",
+                },
+                Object {
+                  "maxLines": 2,
+                  "spacing": "None",
+                  "text": "quantify redundant feed",
+                  "type": "TextBlock",
+                  "wrap": true,
+                },
+              ],
+              "type": "Container",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "columns": Array [
+                    Object {
+                      "items": Array [
+                        Object {
+                          "text": "[f1becfe](https://github.com/evgeny-goldin/asgard/commit/f1becfeafc8082ad2bf852b738b4e087c1708abd)",
+                          "type": "TextBlock",
+                          "wrap": true,
+                        },
+                      ],
+                      "type": "Column",
+                      "width": "auto",
+                    },
+                    Object {
+                      "items": Array [
+                        Object {
+                          "color": "light",
+                          "horizontalAlignment": "Center",
+                          "text": "|",
+                          "type": "TextBlock",
+                        },
+                      ],
+                      "spacing": "None",
+                      "type": "Column",
+                      "width": "auto",
+                    },
+                    Object {
+                      "items": Array [
+                        Object {
+                          "text": "[Jaiden.Cassin](mailto:Jaquelin24@hotmail.com)",
+                          "type": "TextBlock",
+                          "wrap": true,
+                        },
+                      ],
+                      "spacing": "None",
+                      "type": "Column",
+                      "width": "auto",
+                    },
+                  ],
+                  "type": "ColumnSet",
+                },
+                Object {
+                  "maxLines": 2,
+                  "spacing": "None",
+                  "text": "transmit haptic pixel",
+                  "type": "TextBlock",
+                  "wrap": true,
+                },
+              ],
+              "type": "Container",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "columns": Array [
+                    Object {
+                      "items": Array [
+                        Object {
+                          "text": "[a70fcbe](https://github.com/evgeny-goldin/asgard/commit/a70fcbe362d8b51ec155b3db9d5b92dd8065af6f)",
+                          "type": "TextBlock",
+                          "wrap": true,
+                        },
+                      ],
+                      "type": "Column",
+                      "width": "auto",
+                    },
+                    Object {
+                      "items": Array [
+                        Object {
+                          "color": "light",
+                          "horizontalAlignment": "Center",
+                          "text": "|",
+                          "type": "TextBlock",
+                        },
+                      ],
+                      "spacing": "None",
+                      "type": "Column",
+                      "width": "auto",
+                    },
+                    Object {
+                      "items": Array [
+                        Object {
+                          "text": "[Ressie67](mailto:Casey_Wisoky@gmail.com)",
+                          "type": "TextBlock",
+                          "wrap": true,
+                        },
+                      ],
+                      "spacing": "None",
+                      "type": "Column",
+                      "width": "auto",
+                    },
+                  ],
+                  "type": "ColumnSet",
+                },
+                Object {
+                  "maxLines": 2,
+                  "spacing": "None",
+                  "text": "compress back-end panel",
+                  "type": "TextBlock",
+                  "wrap": true,
+                },
+              ],
+              "type": "Container",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "columns": Array [
+                    Object {
+                      "items": Array [
+                        Object {
+                          "text": "[28c9672](https://github.com/evgeny-goldin/asgard/commit/28c96728758e141d8a6b102a9ff8dec7832c9cc0)",
+                          "type": "TextBlock",
+                          "wrap": true,
+                        },
+                      ],
+                      "type": "Column",
+                      "width": "auto",
+                    },
+                    Object {
+                      "items": Array [
+                        Object {
+                          "color": "light",
+                          "horizontalAlignment": "Center",
+                          "text": "|",
+                          "type": "TextBlock",
+                        },
+                      ],
+                      "spacing": "None",
+                      "type": "Column",
+                      "width": "auto",
+                    },
+                    Object {
+                      "items": Array [
+                        Object {
+                          "text": "[Nichole.Schamberger](mailto:Rowland.Cronin@yahoo.com)",
+                          "type": "TextBlock",
+                          "wrap": true,
+                        },
+                      ],
+                      "spacing": "None",
+                      "type": "Column",
+                      "width": "auto",
+                    },
+                  ],
+                  "type": "ColumnSet",
+                },
+                Object {
+                  "maxLines": 2,
+                  "spacing": "None",
+                  "text": "override primary bus",
+                  "type": "TextBlock",
+                  "wrap": true,
+                },
+              ],
+              "type": "Container",
+            },
+          ],
+          "type": "Container",
+        },
+        Object {
+          "size": "Small",
+          "spacing": "Small",
+          "text": "...and 51 more",
+          "type": "TextBlock",
         },
         Object {
           "actions": Array [
             Object {
-              "title": "Open in Jenkins",
+              "title": "Build Details",
               "type": "Action.OpenUrl",
-              "url": "http://localhost:8080/job/asgard/17/",
+              "url": "http://localhost:8080/job/asgard/22/",
+            },
+            Object {
+              "title": "All Changes",
+              "type": "Action.OpenUrl",
+              "url": "http://localhost:8080/job/asgard/22/changes",
             },
           ],
           "type": "ActionSet",
@@ -201,23 +669,78 @@ Array [
       "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
       "body": Array [
         Object {
+          "items": Array [
+            Object {
+              "color": "Light",
+              "text": "asgard",
+              "type": "TextBlock",
+              "wrap": true,
+            },
+            Object {
+              "size": "Large",
+              "spacing": "ExtraLarge",
+              "text": "Job COMPLETED 🌧️",
+              "type": "TextBlock",
+              "weight": "Bolder",
+              "wrap": true,
+            },
+          ],
+          "spacing": "None",
+          "type": "Container",
+        },
+        Object {
           "columns": Array [
             Object {
               "items": Array [
                 Object {
-                  "color": "Accent",
-                  "text": "asgard",
+                  "color": "Light",
+                  "text": "Build number",
                   "type": "TextBlock",
-                  "weight": "Lighter",
                 },
+              ],
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "spacing": "None",
+                  "text": "[16](http://localhost:8080/job/asgard/16/)",
+                  "type": "TextBlock",
+                },
+              ],
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
                 Object {
                   "color": "Light",
-                  "size": "Large",
-                  "spacing": "Small",
-                  "text": "Job COMPLETED 🌧️",
+                  "text": "  |",
                   "type": "TextBlock",
-                  "weight": "Bolder",
-                  "wrap": true,
+                },
+              ],
+              "spacing": "None",
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "color": "Light",
+                  "text": "Status",
+                  "type": "TextBlock",
+                },
+              ],
+              "spacing": "None",
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "text": "FAILURE",
+                  "type": "TextBlock",
                 },
               ],
               "type": "Column",
@@ -227,52 +750,40 @@ Array [
           "type": "ColumnSet",
         },
         Object {
+          "bleed": true,
           "columns": Array [
             Object {
               "items": Array [
                 Object {
                   "color": "Light",
-                  "text": "Build number:",
-                  "type": "TextBlock",
-                },
-                Object {
-                  "color": "Light",
-                  "spacing": "Small",
-                  "text": "Status:",
+                  "text": "SCM",
                   "type": "TextBlock",
                 },
               ],
               "type": "Column",
-              "width": 35,
+              "width": "auto",
             },
             Object {
               "items": Array [
                 Object {
-                  "color": "Light",
-                  "text": "[16](http://localhost:8080/job/asgard/16/)",
+                  "text": "[evgeny-goldin/asgard](https://github.com/evgeny-goldin/asgard)",
                   "type": "TextBlock",
-                },
-                Object {
-                  "color": "Light",
-                  "spacing": "Small",
-                  "text": "FAILURE",
-                  "type": "TextBlock",
+                  "wrap": true,
                 },
               ],
               "type": "Column",
-              "width": 65,
+              "width": "stretch",
             },
           ],
-          "horizontalAlignment": "Center",
-          "spacing": "Padding",
+          "spacing": "Small",
           "type": "ColumnSet",
         },
         Object {
           "actions": Array [
             Object {
-              "title": "See the Console Output",
+              "title": "Build Details",
               "type": "Action.OpenUrl",
-              "url": "http://localhost:8080/job/asgard/16/console",
+              "url": "http://localhost:8080/job/asgard/16/",
             },
           ],
           "type": "ActionSet",

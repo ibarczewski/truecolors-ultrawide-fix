@@ -5,18 +5,20 @@ import SendJenkinsWebhookURLUseCase from './SendJenkinsWebhookURL';
 import SendJobCompletedSuccessNotificationUseCase from './SendJobCompletedSuccessNotification';
 import SendJobCompletedFailureNotificationUseCase from './SendJobCompletedFailureNotification';
 import SendJobQueuedNotificationUseCase from './SendJobQueuedNotification';
+import JobCompletedTemplate from '../templates/JobCompletedTemplate';
 
 const taskCreatedTemplate = new TaskCreatedTemplate();
 const configTemplate = new JenkinsConfigurationTemplate();
+const jobCompletedTemplate = new JobCompletedTemplate();
 
 const sendJobCompletedSuccessNotificationUseCase =
-  new SendJobCompletedSuccessNotificationUseCase(taskCreatedTemplate);
+  new SendJobCompletedSuccessNotificationUseCase(jobCompletedTemplate);
 
 const sendJenkinsConfigurationFormUseCase =
   new SendJenkinsConfigurationFormUseCase(configTemplate);
 
 const sendJobCompletedFailureNotificationUseCase =
-  new SendJobCompletedFailureNotificationUseCase(taskCreatedTemplate);
+  new SendJobCompletedFailureNotificationUseCase(jobCompletedTemplate);
 
 const sendJobQueuedNotificationUseCase = new SendJobQueuedNotificationUseCase(
   taskCreatedTemplate
