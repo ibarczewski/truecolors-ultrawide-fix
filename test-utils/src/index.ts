@@ -29,8 +29,8 @@ export default (async function () {
   }
 
   const gitTestUtils = new GitHubEnterpriseTestUtilities(
-    process.env.TEST_GIT_REPOSITORY!,
-    process.env.GITHUB_ACCESS_TOKEN!
+    TEST_GIT_REPOSITORY!,
+    GITHUB_ACCESS_TOKEN!
   );
 
   const commands = {};

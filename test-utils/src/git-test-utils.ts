@@ -16,20 +16,17 @@ export interface GitTestUtilities {
 export class GitHubEnterpriseTestUtilities implements GitTestUtilities {
   private repoURL: string;
   private git: SimpleGit;
-  private repoOrgURL: string;
-  private repoOwner: string;
-  private repoName: string;
   private githubAPI: GithubAPI;
   constructor(repoURL: string, accessToken: string) {
-    this.repoURL = repoURL;
-
-    this.repoOrgURL = /(?<=\@)(.*?)(?=\:)/.exec(repoURL)[0];
-    this.repoOwner = /(?<=\:)(.*?)(?=\/)/.exec(repoURL)[0];
-    this.repoName = /(?<=\/)(.*?)(?=\.)/.exec(repoURL)[0];
+    const parts =
+      /((git@|http(s)?:\/\/)([\w\.@]+)(\/|:))([\w,\-,\_]+)\/([\w,\-,\_]+)(.git){0,1}((\/){0,1})/.exec(
+        repoURL
+      );
+    this.repoURL = `${parts[2]}${accessToken}@${parts[4]}/${parts[6]}/${parts[7]}.git`;
 
     this.githubAPI = async ({ path, method, body }) => {
       const response = await fetch(
-        `https://${this.repoOrgURL}/api/v3/repos/${this.repoOwner}/${this.repoName}${path}`,
+        `https://github.com/api/v3/repos/${parts[6]}/${parts[7]}${path}`,
         {
           headers: {
             authorization: `token ${accessToken}`
@@ -51,25 +48,37 @@ export class GitHubEnterpriseTestUtilities implements GitTestUtilities {
     fs.rmSync('./tmp-git', { recursive: true, force: true });
     fs.mkdirSync('./tmp-git');
     this.git = simpleGit('./tmp-git');
-    await this.git.clone(this.repoURL, './test-repo');
+    await this.git.clone(this.repoURL, './test-repo', {});
+    this.git = simpleGit('./tmp-git/test-repo');
+    await this.git.addConfig(
+      'user.name',
+      faker.internet.userName(),
+      false,
+      'local'
+    );
+    await this.git.addConfig(
+      'user.email',
+      faker.internet.email(),
+      false,
+      'local'
+    );
   }
 
   public async openPullRequest() {
     try {
       const baseBranch = faker.git.branch();
       const headBranch = faker.git.branch();
-      const git = simpleGit('./tmp-git/test-repo');
 
-      await git.checkoutBranch(baseBranch, 'origin/master');
-      await git.push('origin', baseBranch);
+      await this.git.checkoutBranch(baseBranch, 'origin/master');
+      await this.git.push('origin', baseBranch);
 
-      await git.checkoutBranch(headBranch, baseBranch);
+      await this.git.checkoutBranch(headBranch, baseBranch);
 
       fs.writeFileSync('./tmp-git/test-repo/tester.txt', 'making it better');
-      await git.add('tester.txt');
+      await this.git.add('tester.txt');
 
-      await git.commit(faker.git.commitMessage());
-      await git.push('origin', headBranch);
+      await this.git.commit(faker.git.commitMessage());
+      await this.git.push('origin', headBranch);
 
       const res = await this.githubAPI({
         method: 'post',
@@ -82,8 +91,8 @@ export class GitHubEnterpriseTestUtilities implements GitTestUtilities {
       });
 
       // cleanup
-      await git.push('origin', headBranch, ['--delete']);
-      await git.push('origin', baseBranch, ['--delete']);
+      await this.git.push('origin', headBranch, ['--delete']);
+      await this.git.push('origin', baseBranch, ['--delete']);
     } catch (err) {
       console.log(err);
     }
@@ -113,18 +122,18 @@ export class GitHubEnterpriseTestUtilities implements GitTestUtilities {
 
   public async nCommitsToBranch(n: number, branch: string) {
     console.log(`committing ${n} changes to ${branch}`);
-    const git = simpleGit('./tmp-git/test-repo');
 
-    await git.checkoutBranch(branch, `origin/${branch}`);
+    await this.git.checkoutBranch(branch, 'origin/main');
+
     for (let i = 0; i < n; i++) {
       fs.writeFileSync(
         './tmp-git/test-repo/tester.txt',
         faker.lorem.paragraph()
       );
-      await git.add('tester.txt');
-      await git.commit(faker.git.commitMessage());
+      await this.git.add('tester.txt');
+      await this.git.commit(faker.git.commitMessage());
     }
 
-    await git.push('origin', branch, ['--force']);
+    await this.git.push('origin', branch, ['--force']);
   }
 }
