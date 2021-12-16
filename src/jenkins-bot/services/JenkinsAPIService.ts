@@ -2,7 +2,10 @@ import fetch from 'node-fetch';
 import { Commit } from '../templates/JobCompletedTemplate';
 import { JenkinsPipelineStageStatus } from '../useCases/JenkinsPipelineStageStatus';
 
-type JenkinsAPI = (params: { path: string; isWfapi: boolean }) => Promise<any>;
+type JenkinsAPI = (params: {
+  path: string;
+  endpoint: JenkinsRestEndpoint;
+}) => Promise<any>;
 
 interface JenkinsBuildData {
   commits: Commit[];
@@ -16,6 +19,11 @@ interface JenkinsBuildPipelineInfo {
   hasFailedStage: boolean;
 }
 
+enum JenkinsRestEndpoint {
+  WFAPI = 'wfapi',
+  JSON = 'api/json'
+}
+
 export default class JenkinsRestAPIService {
   private jenkinsAPI: JenkinsAPI;
   private username: string;
@@ -23,7 +31,13 @@ export default class JenkinsRestAPIService {
   private jenkinsUrl: string;
 
   constructor(jenkinsAPISettingsEnvelopeID: string, webex) {
-    this.jenkinsAPI = async ({ path, isWfapi }) => {
+    this.jenkinsAPI = async ({
+      path,
+      endpoint
+    }: {
+      path: string;
+      endpoint: JenkinsRestEndpoint;
+    }) => {
       if (!this.username || !this.apiKey || !this.jenkinsUrl) {
         try {
           const jenkinsAPISettingsMessage = await webex.attachmentActions.get(
@@ -35,9 +49,7 @@ export default class JenkinsRestAPIService {
         } catch (error) {}
       }
 
-      const route = isWfapi ? 'wfapi' : 'api/json';
-
-      const res = await fetch(this.jenkinsUrl + path + route, {
+      const res = await fetch(this.jenkinsUrl + path + endpoint, {
         headers: {
           Authorization:
             'Basic ' +
@@ -53,7 +65,10 @@ export default class JenkinsRestAPIService {
   }
 
   async getBuildData(buildUrl): Promise<JenkinsBuildData> {
-    const { data } = await this.jenkinsAPI({ path: buildUrl, isWfapi: false });
+    const { data } = await this.jenkinsAPI({
+      path: buildUrl,
+      endpoint: JenkinsRestEndpoint.JSON
+    });
     const commits: Commit[] = data.changeSet?.items?.map((changeSetItem) => {
       return {
         sha: changeSetItem.id,
@@ -74,7 +89,7 @@ export default class JenkinsRestAPIService {
     try {
       const { data } = await this.jenkinsAPI({
         path: buildPath,
-        isWfapi: true
+        endpoint: JenkinsRestEndpoint.WFAPI
       });
 
       const hasFailedStage = data.stages.some(
