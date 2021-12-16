@@ -43,7 +43,7 @@ Array [
               "items": Array [
                 Object {
                   "spacing": "None",
-                  "text": "[18](http://localhost:8080/job/asgard/18/)",
+                  "text": "[1](http://localhost:8080/job/asgard/1/)",
                   "type": "TextBlock",
                 },
               ],
@@ -149,12 +149,146 @@ Array [
             Object {
               "title": "Build Details",
               "type": "Action.OpenUrl",
-              "url": "http://localhost:8080/job/asgard/18/",
+              "url": "http://localhost:8080/job/asgard/1/",
             },
             Object {
               "title": "All Changes",
               "type": "Action.OpenUrl",
-              "url": "http://localhost:8080/job/asgard/18/changes",
+              "url": "http://localhost:8080/job/asgard/1/changes",
+            },
+          ],
+          "type": "ActionSet",
+        },
+      ],
+      "type": "AdaptiveCard",
+      "version": "1.2",
+    },
+  ],
+]
+`;
+
+exports[`jenkins bot when api request to wfapi fails, assume job did not partially fail 1`] = `
+Array [
+  Array [
+    Object {
+      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+      "body": Array [
+        Object {
+          "items": Array [
+            Object {
+              "color": "Light",
+              "text": "asgard",
+              "type": "TextBlock",
+              "wrap": true,
+            },
+            Object {
+              "size": "Large",
+              "spacing": "ExtraLarge",
+              "text": "Job COMPLETED ☀️",
+              "type": "TextBlock",
+              "weight": "Bolder",
+              "wrap": true,
+            },
+          ],
+          "spacing": "None",
+          "type": "Container",
+        },
+        Object {
+          "columns": Array [
+            Object {
+              "items": Array [
+                Object {
+                  "color": "Light",
+                  "text": "Build number",
+                  "type": "TextBlock",
+                },
+              ],
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "spacing": "None",
+                  "text": "[4](http://localhost:8080/job/asgard/4/)",
+                  "type": "TextBlock",
+                },
+              ],
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "color": "Light",
+                  "text": "  |",
+                  "type": "TextBlock",
+                },
+              ],
+              "spacing": "None",
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "color": "Light",
+                  "text": "Status",
+                  "type": "TextBlock",
+                },
+              ],
+              "spacing": "None",
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "text": "SUCCESS",
+                  "type": "TextBlock",
+                },
+              ],
+              "type": "Column",
+              "width": "stretch",
+            },
+          ],
+          "type": "ColumnSet",
+        },
+        Object {
+          "bleed": true,
+          "columns": Array [
+            Object {
+              "items": Array [
+                Object {
+                  "color": "Light",
+                  "text": "SCM",
+                  "type": "TextBlock",
+                },
+              ],
+              "type": "Column",
+              "width": "auto",
+            },
+            Object {
+              "items": Array [
+                Object {
+                  "text": "[evgeny-goldin/asgard](https://github.com/evgeny-goldin/asgard)",
+                  "type": "TextBlock",
+                  "wrap": true,
+                },
+              ],
+              "type": "Column",
+              "width": "stretch",
+            },
+          ],
+          "spacing": "Small",
+          "type": "ColumnSet",
+        },
+        Object {
+          "actions": Array [
+            Object {
+              "title": "Build Details",
+              "type": "Action.OpenUrl",
+              "url": "http://localhost:8080/job/asgard/4/",
             },
           ],
           "type": "ActionSet",
@@ -210,7 +344,7 @@ Array [
               "items": Array [
                 Object {
                   "spacing": "None",
-                  "text": "[17](http://localhost:8080/job/asgard/17/)",
+                  "text": "[1](http://localhost:8080/job/asgard/1/)",
                   "type": "TextBlock",
                 },
               ],
@@ -259,7 +393,7 @@ Array [
             Object {
               "title": "Build Details",
               "type": "Action.OpenUrl",
-              "url": "http://localhost:8080/job/asgard/17/",
+              "url": "http://localhost:8080/job/asgard/1/",
             },
           ],
           "type": "ActionSet",
@@ -315,7 +449,7 @@ Array [
               "items": Array [
                 Object {
                   "spacing": "None",
-                  "text": "[22](http://localhost:8080/job/asgard/22/)",
+                  "text": "[3](http://localhost:8080/job/asgard/3/)",
                   "type": "TextBlock",
                 },
               ],
@@ -644,12 +778,12 @@ Array [
             Object {
               "title": "Build Details",
               "type": "Action.OpenUrl",
-              "url": "http://localhost:8080/job/asgard/22/",
+              "url": "http://localhost:8080/job/asgard/3/",
             },
             Object {
               "title": "All Changes",
               "type": "Action.OpenUrl",
-              "url": "http://localhost:8080/job/asgard/22/changes",
+              "url": "http://localhost:8080/job/asgard/3/changes",
             },
           ],
           "type": "ActionSet",
@@ -705,7 +839,7 @@ Array [
               "items": Array [
                 Object {
                   "spacing": "None",
-                  "text": "[16](http://localhost:8080/job/asgard/16/)",
+                  "text": "[1](http://localhost:8080/job/asgard/1/)",
                   "type": "TextBlock",
                 },
               ],
@@ -783,7 +917,7 @@ Array [
             Object {
               "title": "Build Details",
               "type": "Action.OpenUrl",
-              "url": "http://localhost:8080/job/asgard/16/",
+              "url": "http://localhost:8080/job/asgard/1/",
             },
           ],
           "type": "ActionSet",
@@ -999,7 +1133,7 @@ Array [
               "items": Array [
                 Object {
                   "color": "Light",
-                  "text": "[20](http://localhost:8080/job/asgard/20/)",
+                  "text": "[2](http://localhost:8080/job/asgard/2/)",
                   "type": "TextBlock",
                 },
                 Object {
@@ -1022,7 +1156,7 @@ Array [
             Object {
               "title": "See the Console Output",
               "type": "Action.OpenUrl",
-              "url": "http://localhost:8080/job/asgard/20/console",
+              "url": "http://localhost:8080/job/asgard/2/console",
             },
           ],
           "type": "ActionSet",
