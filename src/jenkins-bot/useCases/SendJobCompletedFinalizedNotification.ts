@@ -1,26 +1,38 @@
 import { Bot } from '../../common/Bot';
-import JobCompletedTemplate, {
-  JobCompletedTemplateData
-} from '../templates/JobCompletedTemplate';
-import { JenkinsJobStatus } from './JenkinsJobStatus';
+import {
+  TaskCreatedTemplate,
+  TaskCreatedTemplateData
+} from '../../common/templates/TaskCreated';
 import { JobCompletedNotificationDTO } from './JobCompletedNotificationDTO';
-
+interface JobCompletedFinalizedNotificationDTO
+  extends Omit<JobCompletedNotificationDTO, 'buildStatus'> {}
 export default class SendJobCompletedFinalizedNotificationUseCase {
-  private template: JobCompletedTemplate;
-  constructor(template: JobCompletedTemplate) {
+  private template: TaskCreatedTemplate;
+  constructor(template: TaskCreatedTemplate) {
     this.template = template;
   }
-  async execute(request: JobCompletedNotificationDTO, bot: Bot) {
+  async execute(request: JobCompletedFinalizedNotificationDTO, bot: Bot) {
     try {
-      const data: JobCompletedTemplateData = {
-        jobStatus: JenkinsJobStatus.SUCCESS,
-        buildNumber: request.buildNumber,
-        buildURL: request.buildURL,
-        commits: request.commits,
-        jobName: request.jobName,
-        numberOfChanges: request.numberOfGitChanges,
-        scm: request.repoName,
-        scmURL: request.repoURL
+      const data: TaskCreatedTemplateData = {
+        projectName: request.jobName,
+        title: `Job FINALIZED`,
+        metadata: [
+          {
+            key: 'Build number:',
+            value: !!request.buildURL
+              ? `[${request.buildNumber}](${request.buildURL})`
+              : `${request.buildNumber}`
+          }
+        ],
+        ...(request.buildURL && {
+          actions: [
+            {
+              type: 'Action.OpenUrl',
+              title: 'Open in Jenkins',
+              url: request.buildURL
+            }
+          ]
+        })
       };
 
       const jobCompletedCard = this.template.buildCard(data);
