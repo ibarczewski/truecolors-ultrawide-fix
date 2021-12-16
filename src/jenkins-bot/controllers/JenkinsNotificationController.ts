@@ -167,7 +167,8 @@ export default class JenkinsNotificationController {
                 jobName: name,
                 buildNumber: build.number,
                 buildPhase: build.phase,
-                buildURL: build.full_url
+                buildURL: build.full_url,
+                buildStatus: build.status
               },
               bot
             );

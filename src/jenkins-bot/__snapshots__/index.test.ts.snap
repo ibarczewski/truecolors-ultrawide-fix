@@ -447,6 +447,12 @@ Array [
                   "text": "Build number:",
                   "type": "TextBlock",
                 },
+                Object {
+                  "color": "Light",
+                  "spacing": "Small",
+                  "text": "Status:",
+                  "type": "TextBlock",
+                },
               ],
               "type": "Column",
               "width": 35,
@@ -456,6 +462,12 @@ Array [
                 Object {
                   "color": "Light",
                   "text": "[1](http://localhost:8080/job/asgard/1/)",
+                  "type": "TextBlock",
+                },
+                Object {
+                  "color": "Light",
+                  "spacing": "Small",
+                  "text": "SUCCESS",
                   "type": "TextBlock",
                 },
               ],

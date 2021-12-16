@@ -4,14 +4,12 @@ import {
   TaskCreatedTemplateData
 } from '../../common/templates/TaskCreated';
 import { JobCompletedNotificationDTO } from './JobCompletedNotificationDTO';
-interface JobCompletedFinalizedNotificationDTO
-  extends Omit<JobCompletedNotificationDTO, 'buildStatus'> {}
 export default class SendJobCompletedFinalizedNotificationUseCase {
   private template: TaskCreatedTemplate;
   constructor(template: TaskCreatedTemplate) {
     this.template = template;
   }
-  async execute(request: JobCompletedFinalizedNotificationDTO, bot: Bot) {
+  async execute(request: JobCompletedNotificationDTO, bot: Bot) {
     try {
       const data: TaskCreatedTemplateData = {
         projectName: request.jobName,
@@ -22,6 +20,10 @@ export default class SendJobCompletedFinalizedNotificationUseCase {
             value: !!request.buildURL
               ? `[${request.buildNumber}](${request.buildURL})`
               : `${request.buildNumber}`
+          },
+          {
+            key: 'Status:',
+            value: request.buildStatus
           }
         ],
         ...(request.buildURL && {
