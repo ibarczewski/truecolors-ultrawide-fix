@@ -4,14 +4,10 @@ import SendJenkinsConfigurationFormUseCase from './SendJenkinsConfigurationForm'
 import SendJenkinsWebhookURLUseCase from './SendJenkinsWebhookURL';
 import SendJobCompletedSuccessNotificationUseCase from './SendJobCompletedSuccessNotification';
 import SendJobCompletedFailureNotificationUseCase from './SendJobCompletedFailureNotification';
-import SendJobQueuedNotificationUseCase from './SendJobQueuedNotification';
+import SendJobQueuedNotificationUseCase from './SendJobQueuedStartedNotification';
 import JobCompletedTemplate from '../templates/JobCompletedTemplate';
 import SendJobCompletedPartiallyFailedNotificationUseCase from './SendJobCompletedPartiallyFailedNotification';
-<<<<<<< HEAD
 import SendJobCompletedFinalizedNotificationUseCase from './SendJobCompletedFinalizedNotification';
-=======
-import SendJobStartedNotificationUseCase from './SendJobStartedNotification';
->>>>>>> 97e7a4b (SPARK-287107 - added job started to the notification controller - IB SS)
 
 const taskCreatedTemplate = new TaskCreatedTemplate();
 const configTemplate = new JenkinsConfigurationTemplate();
@@ -26,7 +22,7 @@ const sendJenkinsConfigurationFormUseCase =
 const sendJobCompletedFailureNotificationUseCase =
   new SendJobCompletedFailureNotificationUseCase(jobCompletedTemplate);
 
-const sendJobQueuedNotificationUseCase = new SendJobQueuedNotificationUseCase(
+const sendJobQueuedStartedNotificationUseCase = new SendJobQueuedNotificationUseCase(
   taskCreatedTemplate
 );
 
@@ -35,7 +31,6 @@ const sendJobCompletedPartiallyFailedNotificationUseCase =
 
 const sendJobCompletedFinalizedNotificationUseCase =
   new SendJobCompletedFinalizedNotificationUseCase(taskCreatedTemplate);
-const sendJobStartedNotificationUseCase = new SendJobStartedNotificationUseCase(taskCreatedTemplate);
 
 const sendJenkinsWebhookURLUseCase = new SendJenkinsWebhookURLUseCase();
 
@@ -44,8 +39,7 @@ export {
   sendJenkinsConfigurationFormUseCase,
   sendJenkinsWebhookURLUseCase,
   sendJobCompletedFailureNotificationUseCase,
-  sendJobQueuedNotificationUseCase,
+  sendJobQueuedStartedNotificationUseCase,
   sendJobCompletedPartiallyFailedNotificationUseCase,
   sendJobCompletedFinalizedNotificationUseCase
-  sendJobStartedNotificationUseCase
 };

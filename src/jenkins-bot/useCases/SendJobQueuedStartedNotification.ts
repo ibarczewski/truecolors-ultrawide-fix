@@ -5,15 +5,15 @@ import {
 } from '../../common/templates/TaskCreated';
 import { JobCompletedNotificationDTO } from './JobCompletedNotificationDTO';
 
-interface JobStartedNotificationDTO
+interface JobQueuedStartedNotificationDTO
   extends Omit<JobCompletedNotificationDTO, 'buildStatus'> {}
 
-export default class SendJobStartedNotificationUseCase {
+export default class SendJobQueuedStartedNotificationUseCase {
   private template: TaskCreatedTemplate;
   constructor(template: TaskCreatedTemplate) {
     this.template = template;
   }
-  async execute(request: JobStartedNotificationDTO, bot: Bot) {
+  async execute(request: JobQueuedStartedNotificationDTO, bot: Bot) {
     try {
       const data: TaskCreatedTemplateData = {
         projectName: request.jobName,
@@ -37,8 +37,8 @@ export default class SendJobStartedNotificationUseCase {
         })
       };
 
-      const jobStartedCard = this.template.buildCard(data);
-      bot.sendCard(jobStartedCard);
+      const jobQueuedCard = this.template.buildCard(data);
+      bot.sendCard(jobQueuedCard);
     } catch (error) {
       console.log(error);
     }

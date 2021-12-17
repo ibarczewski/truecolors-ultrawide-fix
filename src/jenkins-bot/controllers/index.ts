@@ -2,10 +2,9 @@ import {
   sendJenkinsWebhookURLUseCase,
   sendJobCompletedSuccessNotificationUseCase,
   sendJobCompletedFailureNotificationUseCase,
-  sendJobQueuedNotificationUseCase,
+  sendJobQueuedStartedNotificationUseCase,
   sendJobCompletedPartiallyFailedNotificationUseCase,
   sendJobCompletedFinalizedNotificationUseCase,
-  sendJobStartedNotificationUseCase
 } from '../useCases';
 import JenkinsCardFormController from './JenkinsCardFormController';
 import JenkinsNotificationController from './JenkinsNotificationController';
@@ -13,10 +12,9 @@ import JenkinsNotificationController from './JenkinsNotificationController';
 const jenkinsNotificationController = new JenkinsNotificationController(
   sendJobCompletedSuccessNotificationUseCase,
   sendJobCompletedFailureNotificationUseCase,
-  sendJobQueuedNotificationUseCase,
+  sendJobQueuedStartedNotificationUseCase,
   sendJobCompletedPartiallyFailedNotificationUseCase,
   sendJobCompletedFinalizedNotificationUseCase,
-  sendJobStartedNotificationUseCase
 );
 
 const jenkinsCardFormController = new JenkinsCardFormController(

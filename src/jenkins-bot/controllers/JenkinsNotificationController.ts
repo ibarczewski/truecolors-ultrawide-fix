@@ -6,11 +6,10 @@ import SendJobCompletedSuccessNotificationUseCase from '../useCases/SendJobCompl
 import SendJobCompletedFailureNotificationUseCase from '../useCases/SendJobCompletedFailureNotification';
 import { JenkinsJobPhase } from '../useCases/JenkinsJobPhase';
 import { JenkinsJobStatus } from '../useCases/JenkinsJobStatus';
-import SendJobQueuedNotificationUseCase from '../useCases/SendJobQueuedNotification';
+import SendJobQueuedStartedNotificationUseCase from '../useCases/SendJobQueuedStartedNotification';
 import { Commit } from '../templates/JobCompletedTemplate';
 import SendJobCompletedPartiallyFailedNotificationUseCase from '../useCases/SendJobCompletedPartiallyFailedNotification';
 import SendJobCompletedFinalizedNotificationUseCase from '../useCases/SendJobCompletedFinalizedNotification';
-import SendJobStartedNotificationUseCase from '../useCases/SendJobStartedNotification';
 
 interface JenkinsNotificationSCM {
   url: string;
@@ -37,18 +36,16 @@ export interface JenkinsNotificationPayload {
 export default class JenkinsNotificationController {
   private sendJobCompletedSuccessNotificationUseCase: SendJobCompletedSuccessNotificationUseCase;
   private sendJobCompletedFailureNotificationUseCase: SendJobCompletedFailureNotificationUseCase;
-  private sendJobQueuedNotificationUseCase: SendJobQueuedNotificationUseCase;
+  private sendJobQueuedStartedNotificationUseCase: SendJobQueuedStartedNotificationUseCase;
   private sendJobCompletedPartiallyFailedNotificationUseCase: SendJobCompletedPartiallyFailedNotificationUseCase;
   private sendJobFinalizedNotificationUseCase: SendJobCompletedFinalizedNotificationUseCase;
-  private sendJobStartedNotificationUseCase: SendJobStartedNotificationUseCase;
 
   constructor(
     sendJobCompletedNotificationUseCase: SendJobCompletedSuccessNotificationUseCase,
     sendJobCompletedFailureNotificationUseCase: SendJobCompletedFailureNotificationUseCase,
-    sendJobQueuedNotificationUseCase: SendJobQueuedNotificationUseCase,
+    sendJobQueuedStartedNotificationUseCase: SendJobQueuedStartedNotificationUseCase,
     sendJobCompletedPartiallyFailedNotificationUseCase: SendJobCompletedPartiallyFailedNotificationUseCase,
-    sendJobFinalizedNotificationUseCase: SendJobCompletedFinalizedNotificationUseCase,
-    sendJobStartedNotificationUseCase: SendJobStartedNotificationUseCase
+    sendJobFinalizedNotificationUseCase: SendJobCompletedFinalizedNotificationUseCase
   ) {
     this.sendJobCompletedSuccessNotificationUseCase =
       sendJobCompletedNotificationUseCase;
@@ -56,14 +53,14 @@ export default class JenkinsNotificationController {
     this.sendJobCompletedFailureNotificationUseCase =
       sendJobCompletedFailureNotificationUseCase;
 
-    this.sendJobQueuedNotificationUseCase = sendJobQueuedNotificationUseCase;
+    this.sendJobQueuedStartedNotificationUseCase =
+      sendJobQueuedStartedNotificationUseCase;
 
     this.sendJobCompletedPartiallyFailedNotificationUseCase =
       sendJobCompletedPartiallyFailedNotificationUseCase;
 
     this.sendJobFinalizedNotificationUseCase =
       sendJobFinalizedNotificationUseCase;
-    this.sendJobStartedNotificationUseCase = sendJobStartedNotificationUseCase;
   }
   async execute(
     req: Request<
@@ -88,18 +85,8 @@ export default class JenkinsNotificationController {
 
         switch (build.phase) {
           case JenkinsJobPhase.QUEUED:
-            await this.sendJobQueuedNotificationUseCase.execute(
-              {
-                buildNumber: build.number,
-                jobName: name,
-                buildPhase: build.phase,
-                buildURL: build.full_url
-              },
-              bot
-            );
-            break;
           case JenkinsJobPhase.STARTED:
-            await this.sendJobStartedNotificationUseCase.execute(
+            await this.sendJobQueuedStartedNotificationUseCase.execute(
               {
                 buildNumber: build.number,
                 jobName: name,
