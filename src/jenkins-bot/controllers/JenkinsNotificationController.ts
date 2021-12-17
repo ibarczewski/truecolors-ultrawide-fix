@@ -74,8 +74,6 @@ export default class JenkinsNotificationController {
       try {
         const { name, build } = req.body;
         let jenkinsAPI: JenkinsRestAPIService;
-        let repoName;
-        let repoURL;
         if (req.params.settingsEnvelopeID) {
           jenkinsAPI = new JenkinsRestAPIService(
             req.params.settingsEnvelopeID,
@@ -97,7 +95,8 @@ export default class JenkinsNotificationController {
             break;
           case JenkinsJobPhase.COMPLETED:
             let commits: Commit[];
-
+            let repoName;
+            let repoURL;
             let hasFailedStage;
             if (build.scm?.url) {
               const url = new URL(build.scm.url);

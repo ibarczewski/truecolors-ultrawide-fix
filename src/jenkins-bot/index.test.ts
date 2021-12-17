@@ -415,7 +415,7 @@ describe('jenkins bot', () => {
     expect(mockBot.sendCard.mock.calls).toMatchSnapshot();
   });
 
-  test.only('when task is finalized, posts a card', async () => {
+  test('when task is finalized, posts a card', async () => {
     const app = createMockJenkinsBotApp();
 
     const expectedJobNumber = MockBuildNumber.DEFAULT;
