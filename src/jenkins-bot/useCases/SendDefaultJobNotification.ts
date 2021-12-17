@@ -5,42 +5,47 @@ import {
 } from '../../common/templates/TaskCreated';
 import { JobCompletedNotificationDTO } from './JobCompletedNotificationDTO';
 
-interface DefaultJobNotificationDTO
+export interface DefaultJobNotificationDTO
   extends Omit<JobCompletedNotificationDTO, 'buildStatus'> {}
 
 export default class SendDefaultJobNotification {
-  private template: TaskCreatedTemplate;
+  protected template: TaskCreatedTemplate;
   constructor(template: TaskCreatedTemplate) {
     this.template = template;
   }
   async execute(request: DefaultJobNotificationDTO, bot: Bot) {
     try {
-      const data: TaskCreatedTemplateData = {
-        projectName: request.jobName,
-        title: `Job ${request.buildPhase}`,
-        metadata: [
-          {
-            key: 'Build number:',
-            value: !!request.buildURL
-              ? `[${request.buildNumber}](${request.buildURL})`
-              : `${request.buildNumber}`
-          }
-        ],
-        ...(request.buildURL && {
-          actions: [
-            {
-              type: 'Action.OpenUrl',
-              title: 'Open in Jenkins',
-              url: request.buildURL
-            }
-          ]
-        })
-      };
-
-      const jobQueuedCard = this.template.buildCard(data);
-      bot.sendCard(jobQueuedCard);
+      this.sendCard(request, bot);
     } catch (error) {
       console.log(error);
     }
+  }
+
+  protected sendCard(request, bot, additionalMetadata = []) {
+    const data: TaskCreatedTemplateData = {
+      projectName: request.jobName,
+      title: `Job ${request.buildPhase}`,
+      metadata: [
+        {
+          key: 'Build number:',
+          value: !!request.buildURL
+            ? `[${request.buildNumber}](${request.buildURL})`
+            : `${request.buildNumber}`
+        },
+        ...additionalMetadata
+      ],
+      ...(request.buildURL && {
+        actions: [
+          {
+            type: 'Action.OpenUrl',
+            title: 'Open in Jenkins',
+            url: request.buildURL
+          }
+        ]
+      })
+    };
+
+    const jobCard = this.template.buildCard(data);
+    bot.sendCard(jobCard);
   }
 }
