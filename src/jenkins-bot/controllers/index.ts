@@ -4,7 +4,8 @@ import {
   sendJobCompletedFailureNotificationUseCase,
   sendJobQueuedNotificationUseCase,
   sendJobCompletedPartiallyFailedNotificationUseCase,
-  sendJobCompletedFinalizedNotificationUseCase
+  sendJobCompletedFinalizedNotificationUseCase,
+  sendJobStartedNotificationUseCase
 } from '../useCases';
 import JenkinsCardFormController from './JenkinsCardFormController';
 import JenkinsNotificationController from './JenkinsNotificationController';
@@ -14,7 +15,8 @@ const jenkinsNotificationController = new JenkinsNotificationController(
   sendJobCompletedFailureNotificationUseCase,
   sendJobQueuedNotificationUseCase,
   sendJobCompletedPartiallyFailedNotificationUseCase,
-  sendJobCompletedFinalizedNotificationUseCase
+  sendJobCompletedFinalizedNotificationUseCase,
+  sendJobStartedNotificationUseCase
 );
 
 const jenkinsCardFormController = new JenkinsCardFormController(
