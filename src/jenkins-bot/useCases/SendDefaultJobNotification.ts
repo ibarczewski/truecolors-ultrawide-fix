@@ -5,15 +5,15 @@ import {
 } from '../../common/templates/TaskCreated';
 import { JobCompletedNotificationDTO } from './JobCompletedNotificationDTO';
 
-interface JobQueuedStartedNotificationDTO
+interface DefaultJobNotificationDTO
   extends Omit<JobCompletedNotificationDTO, 'buildStatus'> {}
 
-export default class SendJobQueuedStartedNotificationUseCase {
+export default class SendDefaultJobNotification {
   private template: TaskCreatedTemplate;
   constructor(template: TaskCreatedTemplate) {
     this.template = template;
   }
-  async execute(request: JobQueuedStartedNotificationDTO, bot: Bot) {
+  async execute(request: DefaultJobNotificationDTO, bot: Bot) {
     try {
       const data: TaskCreatedTemplateData = {
         projectName: request.jobName,

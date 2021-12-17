@@ -4,10 +4,11 @@ import SendJenkinsConfigurationFormUseCase from './SendJenkinsConfigurationForm'
 import SendJenkinsWebhookURLUseCase from './SendJenkinsWebhookURL';
 import SendJobCompletedSuccessNotificationUseCase from './SendJobCompletedSuccessNotification';
 import SendJobCompletedFailureNotificationUseCase from './SendJobCompletedFailureNotification';
-import SendJobQueuedNotificationUseCase from './SendJobQueuedStartedNotification';
+import SendJobQueuedNotificationUseCase from './SendJobQueuedNotification';
 import JobCompletedTemplate from '../templates/JobCompletedTemplate';
 import SendJobCompletedPartiallyFailedNotificationUseCase from './SendJobCompletedPartiallyFailedNotification';
 import SendJobCompletedFinalizedNotificationUseCase from './SendJobCompletedFinalizedNotification';
+import SendJobStartedNotificationUseCase from './SendJobStartedNotification';
 
 const taskCreatedTemplate = new TaskCreatedTemplate();
 const configTemplate = new JenkinsConfigurationTemplate();
@@ -22,7 +23,11 @@ const sendJenkinsConfigurationFormUseCase =
 const sendJobCompletedFailureNotificationUseCase =
   new SendJobCompletedFailureNotificationUseCase(jobCompletedTemplate);
 
-const sendJobQueuedStartedNotificationUseCase = new SendJobQueuedNotificationUseCase(
+const sendJobQueuedNotificationUseCase = new SendJobQueuedNotificationUseCase(
+  taskCreatedTemplate
+);
+
+const sendJobStartedNotificationUseCase = new SendJobStartedNotificationUseCase(
   taskCreatedTemplate
 );
 
@@ -39,7 +44,8 @@ export {
   sendJenkinsConfigurationFormUseCase,
   sendJenkinsWebhookURLUseCase,
   sendJobCompletedFailureNotificationUseCase,
-  sendJobQueuedStartedNotificationUseCase,
+  sendJobQueuedNotificationUseCase,
+  sendJobStartedNotificationUseCase,
   sendJobCompletedPartiallyFailedNotificationUseCase,
   sendJobCompletedFinalizedNotificationUseCase
 };
