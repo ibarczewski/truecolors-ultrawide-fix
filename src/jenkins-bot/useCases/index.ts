@@ -7,6 +7,7 @@ import SendJobCompletedFailureNotificationUseCase from './SendJobCompletedFailur
 import SendJobQueuedNotificationUseCase from './SendJobQueuedNotification';
 import JobCompletedTemplate from '../templates/JobCompletedTemplate';
 import SendJobCompletedPartiallyFailedNotificationUseCase from './SendJobCompletedPartiallyFailedNotification';
+import SendJobCompletedFinalizedNotificationUseCase from './SendJobCompletedFinalizedNotification';
 
 const taskCreatedTemplate = new TaskCreatedTemplate();
 const configTemplate = new JenkinsConfigurationTemplate();
@@ -28,6 +29,9 @@ const sendJobQueuedNotificationUseCase = new SendJobQueuedNotificationUseCase(
 const sendJobCompletedPartiallyFailedNotificationUseCase =
   new SendJobCompletedPartiallyFailedNotificationUseCase(taskCreatedTemplate);
 
+const sendJobCompletedFinalizedNotificationUseCase =
+  new SendJobCompletedFinalizedNotificationUseCase(taskCreatedTemplate);
+
 const sendJenkinsWebhookURLUseCase = new SendJenkinsWebhookURLUseCase();
 
 export {
@@ -36,5 +40,6 @@ export {
   sendJenkinsWebhookURLUseCase,
   sendJobCompletedFailureNotificationUseCase,
   sendJobQueuedNotificationUseCase,
-  sendJobCompletedPartiallyFailedNotificationUseCase
+  sendJobCompletedPartiallyFailedNotificationUseCase,
+  sendJobCompletedFinalizedNotificationUseCase
 };

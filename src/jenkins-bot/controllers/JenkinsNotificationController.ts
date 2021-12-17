@@ -9,6 +9,7 @@ import { JenkinsJobStatus } from '../useCases/JenkinsJobStatus';
 import SendJobQueuedNotificationUseCase from '../useCases/SendJobQueuedNotification';
 import { Commit } from '../templates/JobCompletedTemplate';
 import SendJobCompletedPartiallyFailedNotificationUseCase from '../useCases/SendJobCompletedPartiallyFailedNotification';
+import SendJobCompletedFinalizedNotificationUseCase from '../useCases/SendJobCompletedFinalizedNotification';
 
 interface JenkinsNotificationSCM {
   url: string;
@@ -37,11 +38,13 @@ export default class JenkinsNotificationController {
   private sendJobCompletedFailureNotificationUseCase: SendJobCompletedFailureNotificationUseCase;
   private sendJobQueuedNotificationUseCase: SendJobQueuedNotificationUseCase;
   private sendJobCompletedPartiallyFailedNotificationUseCase: SendJobCompletedPartiallyFailedNotificationUseCase;
+  private sendJobFinalizedNotificationUseCase: SendJobCompletedFinalizedNotificationUseCase;
   constructor(
     sendJobCompletedNotificationUseCase: SendJobCompletedSuccessNotificationUseCase,
     sendJobCompletedFailureNotificationUseCase: SendJobCompletedFailureNotificationUseCase,
     sendJobQueuedNotificationUseCase: SendJobQueuedNotificationUseCase,
-    sendJobCompletedPartiallyFailedNotificationUseCase: SendJobCompletedPartiallyFailedNotificationUseCase
+    sendJobCompletedPartiallyFailedNotificationUseCase: SendJobCompletedPartiallyFailedNotificationUseCase,
+    sendJobFinalizedNotificationUseCase: SendJobCompletedFinalizedNotificationUseCase
   ) {
     this.sendJobCompletedSuccessNotificationUseCase =
       sendJobCompletedNotificationUseCase;
@@ -53,6 +56,9 @@ export default class JenkinsNotificationController {
 
     this.sendJobCompletedPartiallyFailedNotificationUseCase =
       sendJobCompletedPartiallyFailedNotificationUseCase;
+
+    this.sendJobFinalizedNotificationUseCase =
+      sendJobFinalizedNotificationUseCase;
   }
   async execute(
     req: Request<
@@ -67,7 +73,6 @@ export default class JenkinsNotificationController {
     if (bot) {
       try {
         const { name, build } = req.body;
-
         let jenkinsAPI: JenkinsRestAPIService;
         if (req.params.settingsEnvelopeID) {
           jenkinsAPI = new JenkinsRestAPIService(
@@ -154,6 +159,18 @@ export default class JenkinsNotificationController {
               default:
                 break;
             }
+            break;
+          case JenkinsJobPhase.FINALIZED:
+            await this.sendJobFinalizedNotificationUseCase.execute(
+              {
+                jobName: name,
+                buildNumber: build.number,
+                buildPhase: build.phase,
+                buildURL: build.full_url,
+                buildStatus: build.status
+              },
+              bot
+            );
           default:
             break;
         }
