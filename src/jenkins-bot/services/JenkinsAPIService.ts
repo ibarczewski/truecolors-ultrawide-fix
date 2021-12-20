@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import { Commit } from '../templates/JobCompletedTemplate';
-import { JenkinsPipelineStageStatus } from '../useCases/JenkinsPipelineStageStatus';
+import { JenkinsPipelineStageStatus } from '../common/JenkinsPipelineStageStatus';
 
 type JenkinsAPI = (params: {
   path: string;

@@ -8,10 +8,10 @@ import { handlers } from './handlers';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
 import { JenkinsNotificationPayload } from './controllers/JenkinsNotificationController';
-import { JenkinsJobPhase } from './useCases/JenkinsJobPhase';
-import { JenkinsJobStatus } from './useCases/JenkinsJobStatus';
+import { JenkinsJobPhase } from './common/JenkinsJobPhase';
+import { JenkinsJobStatus } from './common/JenkinsJobStatus';
 import faker from 'faker';
-import { JenkinsPipelineStageStatus } from './useCases/JenkinsPipelineStageStatus';
+import { JenkinsPipelineStageStatus } from './common/JenkinsPipelineStageStatus';
 
 enum MockBuildNumber {
   DEFAULT = 1,
@@ -433,6 +433,42 @@ describe('jenkins bot', () => {
           status: JenkinsJobStatus.SUCCESS,
           url: `job/asgard/${expectedJobNumber}/`,
           scm: {},
+          artifacts: {
+            'asgard.war': {
+              archive: `http://localhost:8080/job/asgard/${expectedJobNumber}/artifact/asgard.war`
+            },
+            'asgard-standalone.jar': {
+              archive: `http://localhost:8080/job/asgard/${expectedJobNumber}/artifact/asgard-standalone.jar`,
+              s3: 'https://s3-eu-west-1.amazonaws.com/evgenyg-bakery/asgard/asgard-standalone.jar'
+            }
+          }
+        }
+      });
+
+    expect(mockBot.sendCard.mock.calls).toMatchSnapshot();
+  });
+
+  test('when the job is started, posts a card', async () => {
+    const app = createMockJenkinsBotApp();
+    const expectedJobNumber = 16;
+
+    await request(app)
+      .post('/jenkins/fooRoomId')
+      .set('User-Agent', 'supertest')
+      .send({
+        name: 'asgard',
+        url: 'job/asgard/',
+        build: {
+          full_url: `http://localhost:8080/job/asgard/${expectedJobNumber}/`,
+          number: expectedJobNumber,
+          phase: 'STARTED',
+          status: '',
+          url: `job/asgard/${expectedJobNumber}/`,
+          scm: {
+            url: 'https://github.com/evgeny-goldin/asgard.git',
+            branch: 'origin/master',
+            commit: 'c6d86dc654b12425e706bcf951adfe5a8627a517'
+          },
           artifacts: {
             'asgard.war': {
               archive: `http://localhost:8080/job/asgard/${expectedJobNumber}/artifact/asgard.war`

@@ -3,14 +3,20 @@ import {
   TaskCreatedTemplate,
   TaskCreatedTemplateData
 } from '../../common/templates/TaskCreated';
-import { JobCompletedNotificationDTO } from './JobCompletedNotificationDTO';
+import { JenkinsJobStatus } from '../common/JenkinsJobStatus';
+import { DefaultJobNotificationDTO } from './common/DefaultJobNotificationDTO';
+
+interface JobCompletedPartiallyFailedNotificationDTO
+  extends DefaultJobNotificationDTO {
+  buildStatus: JenkinsJobStatus;
+}
 
 export default class SendJobCompletedPartiallyFailedNotificationUseCase {
   private template: TaskCreatedTemplate;
   constructor(template: TaskCreatedTemplate) {
     this.template = template;
   }
-  async execute(request: JobCompletedNotificationDTO, bot: Bot) {
+  async execute(request: JobCompletedPartiallyFailedNotificationDTO, bot: Bot) {
     try {
       const data: TaskCreatedTemplateData = {
         projectName: request.jobName,

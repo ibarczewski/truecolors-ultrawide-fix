@@ -4,12 +4,13 @@ import BotApplication from '../../common/BotApplication';
 import JenkinsRestAPIService from '../services/JenkinsAPIService';
 import SendJobCompletedSuccessNotificationUseCase from '../useCases/SendJobCompletedSuccessNotification';
 import SendJobCompletedFailureNotificationUseCase from '../useCases/SendJobCompletedFailureNotification';
-import { JenkinsJobPhase } from '../useCases/JenkinsJobPhase';
-import { JenkinsJobStatus } from '../useCases/JenkinsJobStatus';
+import { JenkinsJobPhase } from '../common/JenkinsJobPhase';
+import { JenkinsJobStatus } from '../common/JenkinsJobStatus';
 import SendJobQueuedNotificationUseCase from '../useCases/SendJobQueuedNotification';
+import SendJobStartedNotificationUseCase from '../useCases/SendJobStartedNotification';
 import { Commit } from '../templates/JobCompletedTemplate';
 import SendJobCompletedPartiallyFailedNotificationUseCase from '../useCases/SendJobCompletedPartiallyFailedNotification';
-import SendJobCompletedFinalizedNotificationUseCase from '../useCases/SendJobCompletedFinalizedNotification';
+import SendJobFinalizedNotificationUseCase from '../useCases/SendJobFinalizedNotification';
 
 interface JenkinsNotificationSCM {
   url: string;
@@ -37,14 +38,17 @@ export default class JenkinsNotificationController {
   private sendJobCompletedSuccessNotificationUseCase: SendJobCompletedSuccessNotificationUseCase;
   private sendJobCompletedFailureNotificationUseCase: SendJobCompletedFailureNotificationUseCase;
   private sendJobQueuedNotificationUseCase: SendJobQueuedNotificationUseCase;
+  private sendJobStartedNotificationUseCase: SendJobStartedNotificationUseCase;
   private sendJobCompletedPartiallyFailedNotificationUseCase: SendJobCompletedPartiallyFailedNotificationUseCase;
-  private sendJobFinalizedNotificationUseCase: SendJobCompletedFinalizedNotificationUseCase;
+  private sendJobFinalizedNotificationUseCase: SendJobFinalizedNotificationUseCase;
+
   constructor(
     sendJobCompletedNotificationUseCase: SendJobCompletedSuccessNotificationUseCase,
     sendJobCompletedFailureNotificationUseCase: SendJobCompletedFailureNotificationUseCase,
     sendJobQueuedNotificationUseCase: SendJobQueuedNotificationUseCase,
     sendJobCompletedPartiallyFailedNotificationUseCase: SendJobCompletedPartiallyFailedNotificationUseCase,
-    sendJobFinalizedNotificationUseCase: SendJobCompletedFinalizedNotificationUseCase
+    sendJobFinalizedNotificationUseCase: SendJobFinalizedNotificationUseCase,
+    sendJobStartedNotificationUseCase: SendJobStartedNotificationUseCase
   ) {
     this.sendJobCompletedSuccessNotificationUseCase =
       sendJobCompletedNotificationUseCase;
@@ -59,6 +63,8 @@ export default class JenkinsNotificationController {
 
     this.sendJobFinalizedNotificationUseCase =
       sendJobFinalizedNotificationUseCase;
+
+    this.sendJobStartedNotificationUseCase = sendJobStartedNotificationUseCase;
   }
   async execute(
     req: Request<
@@ -73,13 +79,6 @@ export default class JenkinsNotificationController {
     if (bot) {
       try {
         const { name, build } = req.body;
-        let jenkinsAPI: JenkinsRestAPIService;
-        if (req.params.settingsEnvelopeID) {
-          jenkinsAPI = new JenkinsRestAPIService(
-            req.params.settingsEnvelopeID,
-            botApplication.getWebexSDK()
-          );
-        }
 
         switch (build.phase) {
           case JenkinsJobPhase.QUEUED:
@@ -93,11 +92,29 @@ export default class JenkinsNotificationController {
               bot
             );
             break;
+          case JenkinsJobPhase.STARTED:
+            await this.sendJobStartedNotificationUseCase.execute(
+              {
+                buildNumber: build.number,
+                jobName: name,
+                buildPhase: build.phase,
+                buildURL: build.full_url
+              },
+              bot
+            );
+            break;
           case JenkinsJobPhase.COMPLETED:
+            let jenkinsAPI: JenkinsRestAPIService;
             let commits: Commit[];
             let repoName;
             let repoURL;
             let hasFailedStage;
+            if (req.params.settingsEnvelopeID) {
+              jenkinsAPI = new JenkinsRestAPIService(
+                req.params.settingsEnvelopeID,
+                botApplication.getWebexSDK()
+              );
+            }
             if (build.scm?.url) {
               const url = new URL(build.scm.url);
               repoName = /(?<=\/)(.*?)(?=\.)/.exec(url.pathname)[0];
@@ -116,7 +133,6 @@ export default class JenkinsNotificationController {
                     jobName: name,
                     buildNumber: build.number,
                     buildPhase: build.phase,
-                    buildStatus: build.status,
                     buildURL: build.full_url,
                     repoName,
                     repoURL,
@@ -144,7 +160,6 @@ export default class JenkinsNotificationController {
                       jobName: name,
                       buildNumber: build.number,
                       buildPhase: build.phase,
-                      buildStatus: build.status,
                       buildURL: build.full_url,
                       repoName,
                       repoURL,
