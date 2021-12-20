@@ -2,10 +2,13 @@ import fetch from 'node-fetch';
 import { Commit } from '../templates/JobCompletedTemplate';
 import { JenkinsPipelineStageStatus } from '../common/JenkinsPipelineStageStatus';
 
-type JenkinsAPI = (params: {
+type JenkinsAPI = (params: JenkinsAPIRequestParams) => Promise<any>;
+
+type JenkinsAPIRequestParams = {
   path: string;
   endpoint: JenkinsRestEndpoint;
-}) => Promise<any>;
+  method?: 'get' | 'post';
+};
 
 interface JenkinsBuildData {
   commits: Commit[];
@@ -21,7 +24,8 @@ interface JenkinsBuildPipelineInfo {
 
 enum JenkinsRestEndpoint {
   WFAPI = 'wfapi',
-  JSON = 'api/json'
+  JSON = 'api/json',
+  DEFAULT = ''
 }
 
 export default class JenkinsRestAPIService {
@@ -33,11 +37,9 @@ export default class JenkinsRestAPIService {
   constructor(jenkinsAPISettingsEnvelopeID: string, webex) {
     this.jenkinsAPI = async ({
       path,
-      endpoint
-    }: {
-      path: string;
-      endpoint: JenkinsRestEndpoint;
-    }) => {
+      endpoint = JenkinsRestEndpoint.DEFAULT,
+      method = 'get'
+    }: JenkinsAPIRequestParams) => {
       if (!this.username || !this.apiKey || !this.jenkinsUrl) {
         try {
           const jenkinsAPISettingsMessage = await webex.attachmentActions.get(
@@ -50,6 +52,7 @@ export default class JenkinsRestAPIService {
       }
 
       const res = await fetch(this.jenkinsUrl + path + endpoint, {
+        method,
         headers: {
           Authorization:
             'Basic ' +
@@ -58,9 +61,17 @@ export default class JenkinsRestAPIService {
             )
         }
       });
-      const data = await res.json();
 
-      return { data, status: res.status };
+      let data;
+      let text;
+      try {
+        text = await res.text();
+        data = JSON.parse(text);
+      } catch (e) {
+        // do nothing, it's text probably
+      }
+
+      return { data, status: res.status, text };
     };
   }
 
@@ -100,6 +111,18 @@ export default class JenkinsRestAPIService {
       return { hasFailedStage };
     } catch {
       return { hasFailedStage: false };
+    }
+  }
+
+  async retryBuild(jobName: string): Promise<void> {
+    try {
+      await this.jenkinsAPI({
+        endpoint: JenkinsRestEndpoint.DEFAULT,
+        method: 'post',
+        path: `job/${jobName}/build`
+      });
+    } catch (e) {
+      console.log('could not trigger build', e);
     }
   }
 }

@@ -5,7 +5,13 @@ export type Metadata = {
   value: string;
 };
 
-export type Action = {
+export type SubmitAction = {
+  type: string;
+  title: string;
+  data: any;
+};
+
+export type OpenUrlAction = {
   type: string;
   title: string;
   url: string;
@@ -15,7 +21,7 @@ export type TaskCreatedTemplateData = {
   projectName: string;
   title: string;
   metadata: Metadata[];
-  actions?: Action[];
+  actions?: (OpenUrlAction | SubmitAction)[];
 };
 export class TaskCreatedTemplate implements Template<TaskCreatedTemplateData> {
   public buildCard(data: TaskCreatedTemplateData) {
@@ -33,12 +39,6 @@ export class TaskCreatedTemplate implements Template<TaskCreatedTemplateData> {
       },
       { leftSide: [], rightSide: [] }
     );
-
-    const actions = data.actions?.map(({ type, title, url }) => ({
-      type,
-      title,
-      url
-    }));
 
     const card = {
       type: 'AdaptiveCard',
@@ -92,7 +92,7 @@ export class TaskCreatedTemplate implements Template<TaskCreatedTemplateData> {
           ? [
               {
                 type: 'ActionSet',
-                actions
+                actions: data.actions
               }
             ]
           : [])

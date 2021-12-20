@@ -9,6 +9,7 @@ import { DefaultJobNotificationDTO } from './common/DefaultJobNotificationDTO';
 interface JobCompletedPartiallyFailedNotificationDTO
   extends DefaultJobNotificationDTO {
   buildStatus: JenkinsJobStatus;
+  envelopeId: string;
 }
 
 export default class SendJobCompletedPartiallyFailedNotificationUseCase {
@@ -30,15 +31,27 @@ export default class SendJobCompletedPartiallyFailedNotificationUseCase {
           },
           { key: 'Status:', value: request.buildStatus }
         ],
-        ...(request.buildURL && {
-          actions: [
-            {
-              type: 'Action.OpenUrl',
-              title: 'See the Console Output',
-              url: `${request.buildURL}console`
+
+        actions: [
+          ...(request.buildURL
+            ? [
+                {
+                  type: 'Action.OpenUrl',
+                  title: 'See the Console Output',
+                  url: `${request.buildURL}console`
+                }
+              ]
+            : []),
+          {
+            type: 'Action.Submit',
+            title: 'Retry',
+            data: {
+              id: 'retryBuild',
+              envelopeId: request.envelopeId,
+              jobName: request.jobName
             }
-          ]
-        })
+          }
+        ]
       };
 
       const jobCompletedCard = this.template.buildCard(data);

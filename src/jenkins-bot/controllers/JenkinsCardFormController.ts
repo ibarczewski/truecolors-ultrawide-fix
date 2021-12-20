@@ -2,13 +2,20 @@ import { Bot } from '../../common/Bot';
 import BotApplication from '../../common/BotApplication';
 import BotCardFormController from '../../common/BotCardFormController';
 import SendJenkinsWebhookURLUseCase from '../useCases/SendJenkinsWebhookURL';
+import RetryJenkinsBuildUseCase from '../useCases/RetryJenkinsBuild';
+import JenkinsRestAPIService from '../services/JenkinsAPIService';
 
 export default class JenkinsCardFormController
   implements BotCardFormController
 {
   private sendJenkinsWebhookURL: SendJenkinsWebhookURLUseCase;
-  constructor(sendJenkinsWebhookURL: SendJenkinsWebhookURLUseCase) {
+  private retryJenkinsBuild: RetryJenkinsBuildUseCase;
+  constructor(
+    sendJenkinsWebhookURL: SendJenkinsWebhookURLUseCase,
+    retryJenkinsBuild: RetryJenkinsBuildUseCase
+  ) {
     this.sendJenkinsWebhookURL = sendJenkinsWebhookURL;
+    this.retryJenkinsBuild = retryJenkinsBuild;
   }
   execute(body, botApplication: BotApplication) {
     const webex = botApplication.getWebexSDK();
@@ -17,14 +24,26 @@ export default class JenkinsCardFormController
       webex.attachmentActions
         .get(body.data.id)
         .then((message) => {
-          if (message.inputs.id === 'setJenkinsConfig') {
-            this.sendJenkinsWebhookURL.execute(
-              {
-                roomId: message.inputs.roomId,
-                settingsEnvelopeId: body.data.id
-              },
-              bot
-            );
+          switch (message.inputs.id) {
+            case 'setJenkinsConfig':
+              this.sendJenkinsWebhookURL.execute(
+                {
+                  roomId: message.inputs.roomId,
+                  settingsEnvelopeId: body.data.id
+                },
+                bot
+              );
+              break;
+            case 'retryBuild':
+              const jenkinsAPI = new JenkinsRestAPIService(
+                message.inputs.envelopeId,
+                webex
+              );
+              this.retryJenkinsBuild.execute({
+                jenkinsAPI,
+                jobName: message.inputs.jobName
+              });
+              break;
           }
         })
         .catch((err) => {});

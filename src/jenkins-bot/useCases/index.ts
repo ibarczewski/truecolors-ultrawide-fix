@@ -1,6 +1,7 @@
 import { TaskCreatedTemplate } from '../../common/templates/TaskCreated';
 import JenkinsConfigurationTemplate from '../templates/Configuration';
 import JobCompletedTemplate from '../templates/JobCompletedTemplate';
+import RetryJenkinsBuild from './RetryJenkinsBuild';
 import SendJenkinsConfigurationFormUseCase from './SendJenkinsConfigurationForm';
 import SendJenkinsWebhookURLUseCase from './SendJenkinsWebhookURL';
 import SendJobCompletedFailureNotificationUseCase from './SendJobCompletedFailureNotification';
@@ -14,6 +15,7 @@ const taskCreatedTemplate = new TaskCreatedTemplate();
 const configTemplate = new JenkinsConfigurationTemplate();
 const jobCompletedTemplate = new JobCompletedTemplate();
 
+const retryJenkinsBuildUseCase = new RetryJenkinsBuild();
 const sendJenkinsConfigurationFormUseCase =
   new SendJenkinsConfigurationFormUseCase(configTemplate);
 
@@ -40,6 +42,7 @@ const sendJobStartedNotificationUseCase = new SendJobStartedNotificationUseCase(
 );
 
 export {
+  retryJenkinsBuildUseCase,
   sendJenkinsConfigurationFormUseCase,
   sendJenkinsWebhookURLUseCase,
   sendJobCompletedFailureNotificationUseCase,
