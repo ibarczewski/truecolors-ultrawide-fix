@@ -8,10 +8,10 @@ import { handlers } from './handlers';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
 import { JenkinsNotificationPayload } from './controllers/JenkinsNotificationController';
-import { JenkinsJobPhase } from './useCases/JenkinsJobPhase';
-import { JenkinsJobStatus } from './useCases/JenkinsJobStatus';
+import { JenkinsJobPhase } from './common/JenkinsJobPhase';
+import { JenkinsJobStatus } from './common/JenkinsJobStatus';
 import faker from 'faker';
-import { JenkinsPipelineStageStatus } from './useCases/JenkinsPipelineStageStatus';
+import { JenkinsPipelineStageStatus } from './common/JenkinsPipelineStageStatus';
 
 enum MockBuildNumber {
   DEFAULT = 1,

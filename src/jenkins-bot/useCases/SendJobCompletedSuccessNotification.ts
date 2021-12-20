@@ -2,15 +2,18 @@ import { Bot } from '../../common/Bot';
 import JobCompletedTemplate, {
   JobCompletedTemplateData
 } from '../templates/JobCompletedTemplate';
-import { JenkinsJobStatus } from './JenkinsJobStatus';
-import { JobCompletedNotificationDTO } from './JobCompletedNotificationDTO';
+import { JenkinsJobStatus } from '../common/JenkinsJobStatus';
+import { JobCompletedNotificationDTO } from './common/JobCompletedNotificationDTO';
+
+interface JobCompletedSuccessNotificationDTO
+  extends Omit<JobCompletedNotificationDTO, 'buildStatus'> {}
 
 export default class SendJobCompletedSuccessNotificationUseCase {
   private template: JobCompletedTemplate;
   constructor(template: JobCompletedTemplate) {
     this.template = template;
   }
-  async execute(request: JobCompletedNotificationDTO, bot: Bot) {
+  async execute(request: JobCompletedSuccessNotificationDTO, bot: Bot) {
     try {
       const data: JobCompletedTemplateData = {
         jobStatus: JenkinsJobStatus.SUCCESS,

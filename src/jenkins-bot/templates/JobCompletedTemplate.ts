@@ -1,5 +1,5 @@
 import { Template } from '../../common/templates/Template';
-import { JenkinsJobStatus } from '../useCases/JenkinsJobStatus';
+import { JenkinsJobStatus } from '../common/JenkinsJobStatus';
 
 export interface Commit {
   sha: string;
