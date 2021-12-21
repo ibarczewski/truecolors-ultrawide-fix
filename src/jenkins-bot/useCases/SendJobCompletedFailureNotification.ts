@@ -26,10 +26,11 @@ export default class SendJobCompletedFailureNotificationUseCase {
         numberOfChanges: request.numberOfGitChanges,
         scm: request.repoName,
         scmURL: request.repoURL,
-        envelopeId: request.envelopeId
+        envelopeId: request.envelopeId,
+        showRetryAction: true
       };
 
-      const jobCompletedCard = this.template.buildCard(data, true);
+      const jobCompletedCard = this.template.buildCard(data);
       bot.sendCard(jobCompletedCard);
     } catch (error) {
       console.log(error);

@@ -19,12 +19,13 @@ export interface JobCompletedTemplateData {
   numberOfChanges: number;
   commits?: Commit[];
   envelopeId?: string;
+  showRetryAction?: boolean;
 }
 
 export default class JobCompletedTemplate
   implements Template<JobCompletedTemplateData>
 {
-  buildCard(data: JobCompletedTemplateData, showRetryOption: boolean = false) {
+  buildCard(data: JobCompletedTemplateData) {
     return {
       type: 'AdaptiveCard',
       body: [
@@ -269,7 +270,7 @@ export default class JobCompletedTemplate
                   }
                 ]
               : []),
-            ...(showRetryOption
+            ...(data.showRetryAction
               ? [
                   {
                     type: 'Action.Submit',

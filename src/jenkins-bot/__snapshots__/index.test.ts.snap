@@ -1013,7 +1013,7 @@ Array [
             Object {
               "data": Object {
                 "envelopeId": "fooEnvelopeId",
-                "id": "retryBuild",
+                "id": "jenkins/attachmentActions/retryBuild",
                 "jobName": "asgard",
               },
               "title": "Retry",
