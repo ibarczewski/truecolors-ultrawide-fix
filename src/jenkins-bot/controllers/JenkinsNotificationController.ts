@@ -150,7 +150,8 @@ export default class JenkinsNotificationController {
                       buildNumber: build.number,
                       buildPhase: build.phase,
                       buildStatus: build.status,
-                      buildURL: build.full_url
+                      buildURL: build.full_url,
+                      envelopeId: req.params.settingsEnvelopeID
                     },
                     bot
                   );

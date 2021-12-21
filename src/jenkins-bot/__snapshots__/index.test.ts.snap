@@ -1328,6 +1328,15 @@ Array [
               "type": "Action.OpenUrl",
               "url": "http://localhost:8080/job/asgard/2/console",
             },
+            Object {
+              "data": Object {
+                "envelopeId": "fooEnvelopeId",
+                "id": "jenkins/attachmentActions/retryBuild",
+                "jobName": "asgard",
+              },
+              "title": "Retry",
+              "type": "Action.Submit",
+            },
           ],
           "type": "ActionSet",
         },
