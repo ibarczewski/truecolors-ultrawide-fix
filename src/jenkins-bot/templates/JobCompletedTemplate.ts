@@ -1,5 +1,6 @@
 import { Template } from '../../common/templates/Template';
 import { JenkinsJobStatus } from '../common/JenkinsJobStatus';
+import { JenkinsAttachmentAction } from '../controllers/JenkinsCardFormController';
 
 export interface Commit {
   sha: string;
@@ -17,6 +18,8 @@ export interface JobCompletedTemplateData {
   scmURL: string;
   numberOfChanges: number;
   commits?: Commit[];
+  envelopeId?: string;
+  showRetryAction?: boolean;
 }
 
 export default class JobCompletedTemplate
@@ -264,6 +267,19 @@ export default class JobCompletedTemplate
                     type: 'Action.OpenUrl',
                     title: 'All Changes',
                     url: `${data.buildURL}changes`
+                  }
+                ]
+              : []),
+            ...(data.showRetryAction
+              ? [
+                  {
+                    type: 'Action.Submit',
+                    title: 'Retry',
+                    data: {
+                      id: `${JenkinsAttachmentAction.RETRY_BUILD}`,
+                      envelopeId: data.envelopeId,
+                      jobName: data.jobName
+                    }
                   }
                 ]
               : [])

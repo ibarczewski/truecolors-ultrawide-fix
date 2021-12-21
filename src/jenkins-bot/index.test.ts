@@ -134,6 +134,14 @@ describe('jenkins bot', () => {
   });
 
   test('if job has scm data, include number of changes and repo name on the card', async () => {
+    jest.spyOn(mockWebex.attachmentActions, 'get').mockResolvedValue({
+      inputs: {
+        username: 'tester',
+        apiKey: 'fooKey',
+        jenkinsUrl: 'http://localhost:8080/'
+      }
+    });
+
     const app = createMockJenkinsBotApp();
 
     const expectedJobNumber = MockBuildNumber.DEFAULT;
@@ -166,7 +174,7 @@ describe('jenkins bot', () => {
     };
 
     await request(app)
-      .post('/jenkins/fooRoomId')
+      .post('/jenkins/fooRoomId/fooEnvelopeId')
       .set('User-Agent', 'supertest')
       .send(jobCompletedNotification);
 
@@ -227,7 +235,7 @@ describe('jenkins bot', () => {
     const expectedJobNumber = MockBuildNumber.DEFAULT;
 
     await request(app)
-      .post('/jenkins/fooRoomId')
+      .post('/jenkins/fooRoomId/fooEnvelopeId')
       .set('User-Agent', 'supertest')
       .send({
         name: 'asgard',
@@ -263,7 +271,7 @@ describe('jenkins bot', () => {
     const expectedJobNumber = 16;
 
     await request(app)
-      .post('/jenkins/fooRoomId')
+      .post('/jenkins/fooRoomId/fooEnvelopeId')
       .set('User-Agent', 'supertest')
       .send({
         name: 'asgard',
