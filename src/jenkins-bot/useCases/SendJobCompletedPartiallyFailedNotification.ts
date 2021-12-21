@@ -4,6 +4,7 @@ import {
   TaskCreatedTemplateData
 } from '../../common/templates/TaskCreated';
 import { JenkinsJobStatus } from '../common/JenkinsJobStatus';
+import { JenkinsAttachmentAction } from '../controllers/JenkinsCardFormController';
 import { DefaultJobNotificationDTO } from './common/DefaultJobNotificationDTO';
 
 interface JobCompletedPartiallyFailedNotificationDTO
@@ -46,7 +47,7 @@ export default class SendJobCompletedPartiallyFailedNotificationUseCase {
             type: 'Action.Submit',
             title: 'Retry',
             data: {
-              id: 'retryBuild',
+              id: JenkinsAttachmentAction.RETRY_BUILD,
               envelopeId: request.envelopeId,
               jobName: request.jobName
             }

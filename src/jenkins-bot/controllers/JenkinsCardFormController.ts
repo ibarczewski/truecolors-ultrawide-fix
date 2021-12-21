@@ -5,6 +5,10 @@ import SendJenkinsWebhookURLUseCase from '../useCases/SendJenkinsWebhookURL';
 import RetryJenkinsBuildUseCase from '../useCases/RetryJenkinsBuild';
 import JenkinsRestAPIService from '../services/JenkinsAPIService';
 
+export enum JenkinsAttachmentAction {
+  SET_JENKINS_CONFIG = 'jenkins/attachmentActions/setJenkinsConfig',
+  RETRY_BUILD = 'jenkins/attachmentActions/retryBuild'
+}
 export default class JenkinsCardFormController
   implements BotCardFormController
 {
@@ -25,7 +29,7 @@ export default class JenkinsCardFormController
         .get(body.data.id)
         .then((message) => {
           switch (message.inputs.id) {
-            case 'setJenkinsConfig':
+            case JenkinsAttachmentAction.SET_JENKINS_CONFIG:
               this.sendJenkinsWebhookURL.execute(
                 {
                   roomId: message.inputs.roomId,
@@ -34,7 +38,7 @@ export default class JenkinsCardFormController
                 bot
               );
               break;
-            case 'retryBuild':
+            case JenkinsAttachmentAction.RETRY_BUILD:
               const jenkinsAPI = new JenkinsRestAPIService(
                 message.inputs.envelopeId,
                 webex

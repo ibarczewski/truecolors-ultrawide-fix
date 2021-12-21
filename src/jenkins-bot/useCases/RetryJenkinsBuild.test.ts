@@ -8,6 +8,7 @@ import { routes } from '../routes';
 
 import fetch from 'node-fetch';
 import { jenkinsCardFormController } from '../controllers';
+import { JenkinsAttachmentAction } from '../controllers/JenkinsCardFormController';
 
 jest.mock('node-fetch');
 jest.mock('webex-node-bot-framework');
@@ -29,7 +30,7 @@ describe('RetryJenkinsBuild', () => {
       .spyOn(mockWebex.attachmentActions, 'get')
       .mockResolvedValueOnce({
         inputs: {
-          id: 'retryBuild',
+          id: JenkinsAttachmentAction.RETRY_BUILD,
           envelopeId: 'foo-envelopeId',
           jobName: 'foo-jobName'
         }

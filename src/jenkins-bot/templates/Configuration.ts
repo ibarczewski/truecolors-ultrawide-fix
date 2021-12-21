@@ -1,4 +1,5 @@
 import { Template } from '../../common/templates/Template';
+import { JenkinsAttachmentAction } from '../controllers/JenkinsCardFormController';
 
 interface JenkinsConfigurationData {
   roomId: string;
@@ -54,7 +55,7 @@ export default class JenkinsConfigurationTemplate
           title: 'Submit',
           data: {
             cardType: 'input',
-            id: 'setJenkinsConfig'
+            id: JenkinsAttachmentAction.SET_JENKINS_CONFIG
           }
         }
       ]
