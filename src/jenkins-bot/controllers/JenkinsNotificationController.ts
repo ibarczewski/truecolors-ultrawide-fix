@@ -137,7 +137,8 @@ export default class JenkinsNotificationController {
                     repoName,
                     repoURL,
                     numberOfGitChanges: build.scm?.changes?.length,
-                    commits
+                    commits,
+                    envelopeId: req.params.settingsEnvelopeID
                   },
                   bot
                 );

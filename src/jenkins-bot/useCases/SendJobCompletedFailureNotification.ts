@@ -6,7 +6,9 @@ import { JenkinsJobStatus } from '../common/JenkinsJobStatus';
 import { JobCompletedNotificationDTO } from './common/JobCompletedNotificationDTO';
 
 interface JobCompletedFailureNotificationDTO
-  extends Omit<JobCompletedNotificationDTO, 'buildStatus'> {}
+  extends Omit<JobCompletedNotificationDTO, 'buildStatus'> {
+  envelopeId: string;
+}
 
 export default class SendJobCompletedFailureNotificationUseCase {
   private template: JobCompletedTemplate;
@@ -23,10 +25,11 @@ export default class SendJobCompletedFailureNotificationUseCase {
         jobName: request.jobName,
         numberOfChanges: request.numberOfGitChanges,
         scm: request.repoName,
-        scmURL: request.repoURL
+        scmURL: request.repoURL,
+        envelopeId: request.envelopeId
       };
 
-      const jobCompletedCard = this.template.buildCard(data);
+      const jobCompletedCard = this.template.buildCard(data, true);
       bot.sendCard(jobCompletedCard);
     } catch (error) {
       console.log(error);

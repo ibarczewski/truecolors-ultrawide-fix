@@ -1010,6 +1010,15 @@ Array [
               "type": "Action.OpenUrl",
               "url": "http://localhost:8080/job/asgard/1/",
             },
+            Object {
+              "data": Object {
+                "envelopeId": "fooEnvelopeId",
+                "id": "retryBuild",
+                "jobName": "asgard",
+              },
+              "title": "Retry",
+              "type": "Action.Submit",
+            },
           ],
           "type": "ActionSet",
         },
