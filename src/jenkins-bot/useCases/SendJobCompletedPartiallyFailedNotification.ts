@@ -38,7 +38,7 @@ export default class SendJobCompletedPartiallyFailedNotificationUseCase {
             ? [
                 {
                   type: 'Action.OpenUrl',
-                  title: 'See the Console Output',
+                  title: 'View Console Output',
                   url: `${request.buildURL}console`
                 }
               ]

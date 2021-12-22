@@ -37,7 +37,7 @@ export default class SendDefaultJobNotification<
           actions: [
             {
               type: 'Action.OpenUrl',
-              title: 'Open in Jenkins',
+              title: 'View Details',
               url: request.buildURL
             }
           ]

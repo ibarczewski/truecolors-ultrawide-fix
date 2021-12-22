@@ -258,7 +258,7 @@ export default class JobCompletedTemplate
           actions: [
             {
               type: 'Action.OpenUrl',
-              title: 'Build Details',
+              title: 'View Details',
               url: data.buildURL
             },
             ...(data.numberOfChanges > 0

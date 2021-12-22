@@ -147,7 +147,7 @@ Array [
         Object {
           "actions": Array [
             Object {
-              "title": "Build Details",
+              "title": "View Details",
               "type": "Action.OpenUrl",
               "url": "http://localhost:8080/job/asgard/1/",
             },
@@ -286,7 +286,7 @@ Array [
         Object {
           "actions": Array [
             Object {
-              "title": "Build Details",
+              "title": "View Details",
               "type": "Action.OpenUrl",
               "url": "http://localhost:8080/job/asgard/4/",
             },
@@ -391,7 +391,7 @@ Array [
         Object {
           "actions": Array [
             Object {
-              "title": "Build Details",
+              "title": "View Details",
               "type": "Action.OpenUrl",
               "url": "http://localhost:8080/job/asgard/1/",
             },
@@ -482,7 +482,7 @@ Array [
         Object {
           "actions": Array [
             Object {
-              "title": "Open in Jenkins",
+              "title": "View Details",
               "type": "Action.OpenUrl",
               "url": "http://localhost:8080/job/asgard/1/",
             },
@@ -867,7 +867,7 @@ Array [
         Object {
           "actions": Array [
             Object {
-              "title": "Build Details",
+              "title": "View Details",
               "type": "Action.OpenUrl",
               "url": "http://localhost:8080/job/asgard/3/",
             },
@@ -1006,7 +1006,7 @@ Array [
         Object {
           "actions": Array [
             Object {
-              "title": "Build Details",
+              "title": "View Details",
               "type": "Action.OpenUrl",
               "url": "http://localhost:8080/job/asgard/1/",
             },
@@ -1163,7 +1163,7 @@ Array [
         Object {
           "actions": Array [
             Object {
-              "title": "Open in Jenkins",
+              "title": "View Details",
               "type": "Action.OpenUrl",
               "url": "http://localhost:8080/job/asgard/16/",
             },
@@ -1242,7 +1242,7 @@ Array [
         Object {
           "actions": Array [
             Object {
-              "title": "Open in Jenkins",
+              "title": "View Details",
               "type": "Action.OpenUrl",
               "url": "http://localhost:8080/job/asgard/16/",
             },
@@ -1333,7 +1333,7 @@ Array [
         Object {
           "actions": Array [
             Object {
-              "title": "See the Console Output",
+              "title": "View Console Output",
               "type": "Action.OpenUrl",
               "url": "http://localhost:8080/job/asgard/2/console",
             },
