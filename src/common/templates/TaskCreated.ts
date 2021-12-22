@@ -60,9 +60,8 @@ export class TaskCreatedTemplate implements Template<TaskCreatedTemplateData> {
                   weight: 'Bolder',
                   text: data.title,
                   wrap: true,
-                  color: 'Light',
                   size: 'Large',
-                  spacing: 'Small'
+                  spacing: 'ExtraLarge'
                 }
               ],
               width: 'stretch'
