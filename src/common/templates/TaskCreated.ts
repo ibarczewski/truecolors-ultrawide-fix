@@ -52,8 +52,8 @@ export class TaskCreatedTemplate implements Template<TaskCreatedTemplateData> {
                 {
                   type: 'TextBlock',
                   text: data.projectName,
-                  weight: 'Lighter',
-                  color: 'Accent'
+                  wrap: true,
+                  color: 'Light'
                 },
                 {
                   type: 'TextBlock',
