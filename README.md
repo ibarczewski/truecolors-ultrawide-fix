@@ -29,3 +29,4 @@
 * There is no error handling. If you do something wrong, the application will crash.
 * You will have to rerun this each time the game is updated. The updates from Steam overwrite the binary file.
 * You cannot revert this change, so either have a backup prepared or delete the exe and repair the game through Steam. 
+ 
