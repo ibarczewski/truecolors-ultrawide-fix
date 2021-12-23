@@ -30,7 +30,7 @@ export class TaskCreatedTemplate implements Template<TaskCreatedTemplateData> {
         const metadataTemplate = {
           type: 'TextBlock',
           color: 'Light',
-          ...(index > 0 && { spacing: 'Small' })
+          ...(index > 0 && { spacing: 'None' })
         };
 
         previousRows.leftSide.push({ ...metadataTemplate, text: key });
@@ -74,17 +74,17 @@ export class TaskCreatedTemplate implements Template<TaskCreatedTemplateData> {
             columns: [
               {
                 type: 'Column',
-                width: 35,
+                width: 'auto',
                 items: metadataTable.leftSide
               },
               {
                 type: 'Column',
-                width: 65,
+                width: 'auto',
                 items: metadataTable.rightSide
               }
             ],
             spacing: 'Padding',
-            horizontalAlignment: 'Center'
+            horizontalAlignment: 'Left'
           }
         ]),
         ...(data.actions

@@ -19,7 +19,7 @@ export default class SendDefaultJobNotification<
         title: `Job ${request.buildPhase}`,
         metadata: [
           {
-            key: 'Build number:',
+            key: 'Build number',
             value: !!request.buildURL
               ? `[${request.buildNumber}](${request.buildURL})`
               : `${request.buildNumber}`
@@ -27,7 +27,7 @@ export default class SendDefaultJobNotification<
           ...(request.buildStatus
             ? [
                 {
-                  key: 'Status:',
+                  key: 'Status',
                   value: request.buildStatus
                 }
               ]
@@ -37,7 +37,7 @@ export default class SendDefaultJobNotification<
           actions: [
             {
               type: 'Action.OpenUrl',
-              title: 'Open in Jenkins',
+              title: 'View Details',
               url: request.buildURL
             }
           ]

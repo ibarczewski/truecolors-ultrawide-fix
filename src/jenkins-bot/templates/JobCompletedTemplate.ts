@@ -61,7 +61,14 @@ export default class JobCompletedTemplate
                 {
                   type: 'TextBlock',
                   text: 'Build number',
-                  color: 'Light'
+                  color: 'Light',
+                  spacing: 'None'
+                },
+                {
+                  type: 'TextBlock',
+                  text: 'Status',
+                  color: 'Light',
+                  spacing: 'None'
                 }
               ]
             },
@@ -73,40 +80,11 @@ export default class JobCompletedTemplate
                   type: 'TextBlock',
                   text: `[${data.buildNumber}](${data.buildURL})`,
                   spacing: 'None'
-                }
-              ]
-            },
-            {
-              type: 'Column',
-              width: 'auto',
-              items: [
+                },
                 {
                   type: 'TextBlock',
-                  text: '  |',
-                  color: 'Light'
-                }
-              ],
-              spacing: 'None'
-            },
-            {
-              type: 'Column',
-              width: 'auto',
-              items: [
-                {
-                  type: 'TextBlock',
-                  text: 'Status',
-                  color: 'Light'
-                }
-              ],
-              spacing: 'None'
-            },
-            {
-              type: 'Column',
-              width: 'stretch',
-              items: [
-                {
-                  type: 'TextBlock',
-                  text: `${data.jobStatus}`
+                  text: `${data.jobStatus}`,
+                  spacing: 'None'
                 }
               ]
             }
@@ -149,7 +127,7 @@ export default class JobCompletedTemplate
           ? [
               {
                 type: 'ColumnSet',
-                spacing: 'Small',
+                spacing: 'None',
                 columns: [
                   {
                     type: 'Column',
@@ -255,10 +233,11 @@ export default class JobCompletedTemplate
           : []),
         {
           type: 'ActionSet',
+          spacing: 'None',
           actions: [
             {
               type: 'Action.OpenUrl',
-              title: 'View Details',
+              title: 'Build Details',
               url: data.buildURL
             },
             ...(data.numberOfChanges > 0
