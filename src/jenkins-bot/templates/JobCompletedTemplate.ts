@@ -94,7 +94,7 @@ export default class JobCompletedTemplate
           ? [
               {
                 type: 'ColumnSet',
-                spacing: 'None',
+                spacing: 'Small',
                 columns: [
                   {
                     type: 'Column',
