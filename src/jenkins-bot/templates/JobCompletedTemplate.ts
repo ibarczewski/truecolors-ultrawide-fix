@@ -105,8 +105,7 @@ export default class JobCompletedTemplate
                         text: 'SCM',
                         color: 'Light'
                       }
-                    ],
-                    spacing: 'None'
+                    ]
                   },
                   {
                     type: 'Column',
@@ -117,8 +116,7 @@ export default class JobCompletedTemplate
                         text: `[${data.scm}](${data.scmURL})`,
                         wrap: true
                       }
-                    ],
-                    spacing: 'None'
+                    ]
                   }
                 ],
                 bleed: true
