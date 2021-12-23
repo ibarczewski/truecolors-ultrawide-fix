@@ -94,7 +94,7 @@ export default class JobCompletedTemplate
           ? [
               {
                 type: 'ColumnSet',
-                spacing: 'Small',
+                spacing: 'None',
                 columns: [
                   {
                     type: 'Column',
@@ -105,7 +105,8 @@ export default class JobCompletedTemplate
                         text: 'SCM',
                         color: 'Light'
                       }
-                    ]
+                    ],
+                    spacing: 'None'
                   },
                   {
                     type: 'Column',
@@ -116,7 +117,8 @@ export default class JobCompletedTemplate
                         text: `[${data.scm}](${data.scmURL})`,
                         wrap: true
                       }
-                    ]
+                    ],
+                    spacing: 'None'
                   }
                 ],
                 bleed: true
