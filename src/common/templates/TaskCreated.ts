@@ -29,11 +29,14 @@ export class TaskCreatedTemplate implements Template<TaskCreatedTemplateData> {
       (previousRows, { key, value }, index) => {
         const metadataTemplate = {
           type: 'TextBlock',
-          color: 'Light',
           ...(index > 0 && { spacing: 'None' })
         };
 
-        previousRows.leftSide.push({ ...metadataTemplate, text: key });
+        previousRows.leftSide.push({
+          ...metadataTemplate,
+          color: 'Light',
+          text: key
+        });
         previousRows.rightSide.push({ ...metadataTemplate, text: value });
         return previousRows;
       },
