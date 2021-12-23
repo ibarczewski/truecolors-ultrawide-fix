@@ -25,12 +25,12 @@ export default class SendJobCompletedPartiallyFailedNotificationUseCase {
         title: `Job ${request.buildPhase} ⛅`,
         metadata: [
           {
-            key: 'Build number:',
+            key: 'Build number',
             value: !!request.buildURL
               ? `[${request.buildNumber}](${request.buildURL})`
               : `${request.buildNumber}`
           },
-          { key: 'Status:', value: request.buildStatus }
+          { key: 'Status', value: request.buildStatus }
         ],
 
         actions: [
